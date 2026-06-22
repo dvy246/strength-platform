@@ -2,10 +2,12 @@
 // src/pages/calculators/ideal-bodyweight.astro
 import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
 import { IdealBodyweight } from '@/components/calculators/IdealBodyweight';
+import { idealWeightFAQs } from '@/data/faqs';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
 ---
 
 <CalculatorLayout
-  title="Ideal Bodyweight & Target Lifts Calculator | StrengthAtlas"
+  title="Ideal Bodyweight & Target Lifts Calculator | StrengthChecker"
   description="Determine your recommended, athletic, and strength-focused weight classes based on height and experience, and view corresponding target standards."
   calculatorName="Ideal Bodyweight"
   canonicalPath="/calculators/ideal-bodyweight"
@@ -52,5 +54,9 @@ import { IdealBodyweight } from '@/components/calculators/IdealBodyweight';
         By matching your height structure to standard log-normal curves, the platform identifies the exact weight targets required to rank up your lifting tier (Beginner, Intermediate, Advanced). This bridges the gap between bodyweight structure and gym performance.
       </p>
     </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={idealWeightFAQs} title="Ideal Weight & Bodyweight FAQs" />
+    </div>
   </div>
 </CalculatorLayout>

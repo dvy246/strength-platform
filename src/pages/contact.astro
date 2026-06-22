@@ -1,0 +1,183 @@
+---
+// src/pages/contact.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+
+const breadcrumbs = [{ name: 'Contact Us', path: '/contact' }];
+---
+
+<PageLayout
+  title="Contact Us | StrengthChecker"
+  description="Have questions, suggestions, or feedback about our strength standards or calculators? Reach out to the StrengthChecker team."
+  canonicalPath="/contact"
+>
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 mt-6">
+        {/* Info Column */}
+        <div class="lg:col-span-5 space-y-6">
+          <div>
+            <h1 class="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+              Get in <span class="text-gradient">Touch</span>
+            </h1>
+            <p class="mt-3 text-base text-muted-foreground leading-relaxed">
+              We value your feedback. Whether you are a strength coach requesting standard integrations, a researcher pointing out study sources, or a lifter reporting a bug, feel free to drop us a line.
+            </p>
+          </div>
+
+          <div class="space-y-4 pt-6">
+            <div class="flex items-start space-x-4">
+              <div class="p-2 border border-border bg-card rounded-xl text-primary mt-1">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-foreground">Email Address</h3>
+                <a href="mailto:support@strengthchecker.com" class="text-sm text-primary hover:underline">
+                  support@strengthchecker.com
+                </a>
+              </div>
+            </div>
+
+            <div class="flex items-start space-x-4">
+              <div class="p-2 border border-border bg-card rounded-xl text-primary mt-1">
+                <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                </svg>
+              </div>
+              <div>
+                <h3 class="text-sm font-semibold text-foreground">Calculations Validity</h3>
+                <p class="text-xs text-muted-foreground leading-relaxed">
+                  All math adjustments (log-normal parameters, age scaling multipliers) are strictly verified for conformity.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Form Column */}
+        <div class="lg:col-span-7">
+          <div class="p-6 md:p-8 border border-border rounded-2xl bg-card/60 shadow-md relative overflow-hidden">
+            {/* Form */}
+            <form id="contact-form" class="space-y-6">
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div class="space-y-2">
+                  <label for="name" class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Your Name</label>
+                  <input
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    placeholder="John Doe"
+                    class="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-medium transition-all"
+                  />
+                </div>
+                <div class="space-y-2">
+                  <label for="email" class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Email Address</label>
+                  <input
+                    type="email"
+                    id="email"
+                    name="email"
+                    required
+                    placeholder="john@example.com"
+                    class="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-medium transition-all"
+                  />
+                </div>
+              </div>
+
+              <div class="space-y-2">
+                <label for="subject" class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Subject</label>
+                <input
+                  type="text"
+                  id="subject"
+                  name="subject"
+                  required
+                  placeholder="How can we help?"
+                  class="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-medium transition-all"
+                />
+              </div>
+
+              <div class="space-y-2">
+                <label for="message" class="text-xs font-bold text-muted-foreground uppercase tracking-wider">Message</label>
+                <textarea
+                  id="message"
+                  name="message"
+                  rows="5"
+                  required
+                  placeholder="Your message details..."
+                  class="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-medium transition-all resize-none"
+                ></textarea>
+              </div>
+
+              <button
+                type="submit"
+                id="submit-btn"
+                class="w-full inline-flex items-center justify-center rounded-xl bg-primary px-4 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/95 shadow-sm active:scale-[0.99] select-none transition-all"
+              >
+                <span>Send Message</span>
+              </button>
+            </form>
+
+            {/* Success state */}
+            <div
+              id="success-message"
+              class="hidden absolute inset-0 bg-card flex flex-col items-center justify-center p-8 text-center space-y-4 animate-fade-in"
+            >
+              <div class="h-16 w-16 bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 rounded-full flex items-center justify-center shadow-lg shadow-emerald-500/5">
+                <svg class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+              </div>
+              <h3 class="text-xl font-bold text-foreground">Message Sent Successfully!</h3>
+              <p class="text-sm text-muted-foreground max-w-sm">
+                Thank you for reaching out. A representative from the StrengthChecker team will review your submission and reply shortly.
+              </p>
+              <button
+                type="button"
+                id="reset-btn"
+                class="mt-6 inline-flex items-center justify-center rounded-xl border border-border bg-muted/40 px-4 py-2.5 text-xs font-bold hover:bg-muted text-foreground transition-all shadow-sm active:scale-[0.98] select-none"
+              >
+                Send Another Message
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>
+
+<script>
+  const form = document.getElementById('contact-form') as HTMLFormElement | null;
+  const successMsg = document.getElementById('success-message') as HTMLDivElement | null;
+  const resetBtn = document.getElementById('reset-btn') as HTMLButtonElement | null;
+  const submitBtn = document.getElementById('submit-btn') as HTMLButtonElement | null;
+
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = '<span>Sending...</span>';
+    }
+
+    // Simulate sending network request
+    setTimeout(() => {
+      form.reset();
+      if (submitBtn) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span>Send Message</span>';
+      }
+      successMsg?.classList.remove('hidden');
+    }, 800);
+  });
+
+  resetBtn?.addEventListener('click', () => {
+    successMsg?.classList.add('hidden');
+  });
+</script>

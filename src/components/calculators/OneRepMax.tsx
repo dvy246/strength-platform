@@ -8,8 +8,12 @@ import { GenderSelector } from '../shared/GenderSelector';
 import { LevelBadge } from '../standards/LevelBadge';
 import { ResultCard } from '../shared/ResultCard';
 
-export const OneRepMax: React.FC = () => {
-  const [exerciseId, setExerciseId] = useState<string>('bench-press');
+interface OneRepMaxProps {
+  initialExerciseId?: string;
+}
+
+export const OneRepMax: React.FC<OneRepMaxProps> = ({ initialExerciseId = 'bench-press' }) => {
+  const [exerciseId, setExerciseId] = useState<string>(initialExerciseId);
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [bodyweight, setBodyweight] = useState<string>('80');
   

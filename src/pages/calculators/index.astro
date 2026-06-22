@@ -9,7 +9,7 @@ const breadcrumbs = [{ name: 'Calculators', path: '/calculators' }];
 ---
 
 <PageLayout
-  title="Strength & Fitness Calculators | StrengthAtlas"
+  title="Strength & Fitness Calculators | StrengthChecker"
   description="Calculate your One-Rep Max, evaluate your total body strength profile, and find your relative strength score using our precision tools."
   canonicalPath="/calculators"
 >
@@ -107,6 +107,27 @@ const breadcrumbs = [{ name: 'Calculators', path: '/calculators' }];
               class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
             >
               Analyze Ratio
+            </a>
+          </div>
+        </div>
+
+        {/* Powerlifting Score Card */}
+        <div class="flex flex-col justify-between p-8 border border-border rounded-2xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-mono">Competition</span>
+            <h2 class="text-2xl font-bold text-foreground mt-3 group-hover:text-primary transition-colors">
+              Wilks & Powerlifting Score
+            </h2>
+            <p class="text-muted-foreground text-sm mt-3 leading-relaxed">
+              Calculate your Wilks score, DOTS score, and IPF GL points dynamically. Compare your relative powerlifting performance.
+            </p>
+          </div>
+          <div class="mt-8">
+            <a
+              href="/calculators/wilks-calculator"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
+            >
+              Calculate Wilks
             </a>
           </div>
         </div>

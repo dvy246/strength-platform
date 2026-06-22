@@ -4,7 +4,7 @@ import type { APIRoute } from 'astro';
 const robotsText = `User-agent: *
 Allow: /
 
-Sitemap: https://strengthatlas.com/sitemap.xml
+Sitemap: https://strengthchecker.com/sitemap.xml
 `;
 
 export const GET: APIRoute = () => {

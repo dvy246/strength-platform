@@ -52,7 +52,7 @@ const ogImageUrl = buildOgImageUrl(ogImagePath);
 <meta property="og:title" content={formattedTitle} />
 <meta property="og:description" content={description} />
 <meta property="og:image" content={ogImageUrl} />
-<meta property="og:site_name" content="StrengthAtlas" />
+<meta property="og:site_name" content="StrengthChecker" />
 
 {/* Twitter */}
 <meta property="twitter:card" content="summary_large_image" />
@@ -64,3 +64,13 @@ const ogImageUrl = buildOgImageUrl(ogImagePath);
 {/* Theme Color */}
 <meta name="theme-color" content="#111115" />
 <meta name="color-scheme" content="dark light" />
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6Z7VWMQ1RD"></script>
+<script is:inline>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-6Z7VWMQ1RD');
+</script>

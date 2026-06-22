@@ -1,0 +1,131 @@
+---
+// src/pages/calculators/deadlift-one-rep-max-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { OneRepMax } from '@/components/calculators/OneRepMax';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import { deadliftFAQs } from '@/data/faqs';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'Deadlift One Rep Max Calculator', item: '/calculators/deadlift-one-rep-max-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'Deadlift One Rep Max Calculator',
+  'Estimate your deadlift one rep max (1RM) using 6 scientific powerlifting formulas. Get your training zones and level classifications.',
+  'https://strengthchecker.com/calculators/deadlift-one-rep-max-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+---
+
+<CalculatorLayout
+  title="Deadlift One Rep Max Calculator | Calculate Deadlift 1RM | StrengthChecker"
+  description="Use the ultimate deadlift one rep max calculator to estimate your deadlift 1RM safely. Features the Epley formula, standard one rep max chart, and training zones."
+  calculatorName="Deadlift One Rep Max Calculator"
+  canonicalPath="/calculators/deadlift-one-rep-max-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* The Interactive Calculator Island */}
+  <OneRepMax slot="calculator" initialExerciseId="deadlift" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Deadlift 1RM Stats</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Your <strong class="text-foreground">one rep max deadlift</strong> measures total posterior chain pulling power. Knowing it helps track back and leg development.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Attempting a deadlift 1RM can place significant load on your central nervous system, making a <strong class="text-foreground">deadlift one rep max calculator</strong> the safest testing alternative.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/bench-press-one-rep-max-calculator" class="block text-primary hover:underline">
+        Bench Press One Rep Max Calculator →
+      </a>
+      <a href="/calculators/squat-one-rep-max-calculator" class="block text-primary hover:underline">
+        Squat One Rep Max Calculator →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What is a Deadlift One Rep Max?</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Your deadlift <strong class="text-foreground">one rep max</strong> represents the maximum weight you can pull from the floor to a full locked-out position for a single, strict repetition. This number is used to calculate working weights in powerlifting methodologies.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">How to Calculate One Rep Max for Deadlift</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Learning <strong class="text-foreground">how to calculate one rep max</strong> safely prevents training injuries. A specialized <strong class="text-foreground">one rep max calculator deadlift</strong> takes a sub-maximal set (such as a 3-rep or 5-rep set completed near failure) and calculates your estimated maximum pull.
+      </p>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Using a reliable <strong class="text-foreground">one rep max finder</strong>, you can track structural progression. Our <strong class="text-foreground">deadlift one rep max calculator</strong> handles the calculations, providing a safer alternative to heavy single attempts.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Understanding the Epley Formula One Rep Max</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        The primary math model behind our <strong class="text-foreground">one rep max deadlift calculator</strong> is the <strong class="text-foreground">epley formula one rep max</strong>. The formula calculates:
+        <br />
+        <code class="block bg-muted/40 p-3 rounded-lg text-xs font-mono border border-border mt-2">1RM = w × (1 + r/30)</code>
+        This calculation provides a reliable estimate when repetitions are kept under 10.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">The Deadlift One Rep Max Chart</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Our platform generates a dynamic <strong class="text-foreground">one rep max chart</strong> showing your training load breakdown from 50% to 95% of your estimated maximum:
+      </p>
+      
+      <div class="p-5 border border-border bg-card/40 rounded-xl space-y-4 text-xs font-mono">
+        <div class="flex justify-between border-b border-border/40 pb-2 font-bold text-muted-foreground">
+          <span>Percentage</span>
+          <span>Repetition Goal</span>
+          <span>Training Zone</span>
+        </div>
+        <div class="flex justify-between border-b border-border/20 py-1">
+          <span>95% 1RM</span>
+          <span>1-2 reps</span>
+          <span>Maximum Pull Power</span>
+        </div>
+        <div class="flex justify-between border-b border-border/20 py-1">
+          <span>85% 1RM</span>
+          <span>5-6 reps</span>
+          <span>Posterior Chain Strength</span>
+        </div>
+        <div class="flex justify-between border-b border-border/20 py-1">
+          <span>75% 1RM</span>
+          <span>8-10 reps</span>
+          <span>Back/Leg Hypertrophy</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span>65% 1RM</span>
+          <span>12+ reps</span>
+          <span>Pulling Endurance</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4 border-t border-border/80 pt-6">
+      <h3 class="text-lg font-bold text-foreground">Interlinking & Navigation</h3>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Compare your deadlift level to standard categories using our <a href="/strength-standards" class="text-primary hover:underline">Strength Standards</a> page, calculate your overall <a href="/calculators/strength-index" class="text-primary hover:underline">Strength Index</a>, or map weight-class efficiency using the <a href="/calculators/relative-strength" class="text-primary hover:underline">Relative Strength Calculator</a>.
+      </p>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={deadliftFAQs} title="Deadlift FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

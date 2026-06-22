@@ -6,16 +6,38 @@ import ToolGrid from '@/components/home/ToolGrid.astro';
 import FeaturedStandards from '@/components/home/FeaturedStandards.astro';
 import HowItWorks from '@/components/home/HowItWorks.astro';
 import StructuredData from '@/components/seo/StructuredData.astro';
-import { buildWebSiteSchema, buildOrganizationSchema } from '@/lib/seo/schema';
+import Section from '@/components/layout/Section.astro';
+import Container from '@/components/layout/Container.astro';
+import { buildWebSiteSchema, buildOrganizationSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import { strengthCalculatorFAQs } from '@/data/faqs';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
 
+// Core SEO schemas
 const websiteSchema = buildWebSiteSchema();
 const orgSchema = buildOrganizationSchema();
-const schemas = [websiteSchema, orgSchema];
+const webpageSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'WebPage',
+  '@id': 'https://strengthchecker.com/#webpage',
+  'url': 'https://strengthchecker.com/',
+  'name': 'Strength Calculator & Standards Finder | StrengthChecker',
+  'description': "Evaluate your lifter class with our advanced strength calculator and max strength calculator. Find personalized strength standards for men, women, and relative strength metrics.",
+  'publisher': {
+    '@id': 'https://strengthchecker.com/#organization'
+  }
+};
+const calculatorSchema = buildWebApplicationSchema(
+  'StrengthChecker Strength Calculator',
+  'Calculate your Strength Index composite rating. Browse strict strength standards for Bench Press, Squats, Deadlifts, Overhead Press, and Pull-Ups.',
+  'https://strengthchecker.com/'
+);
+
+const schemas = [websiteSchema, orgSchema, webpageSchema, calculatorSchema];
 ---
 
 <PageLayout
-  title="StrengthAtlas | Strength Standards & Relative Strength Platform"
-  description="Calculate your Strength Index composite rating. Browse strict strength standards for Bench Press, Squats, Deadlifts, Overhead Press, and Pull-Ups."
+  title="Strength Calculator & Standards Finder"
+  description="Evaluate your lifter class with our advanced strength calculator and max strength calculator. Find personalized strength standards for men, women, and relative strength metrics."
   canonicalPath="/"
 >
   <StructuredData slot="head" schema={schemas} />
@@ -31,4 +53,91 @@ const schemas = [websiteSchema, orgSchema];
 
   {/* Calculation methodology steps */}
   <HowItWorks />
+
+  {/* Comprehensive Homepage SEO Text Section */}
+  <Section class="bg-card/20 border-t border-border/80">
+    <Container class="max-w-4xl space-y-12">
+      
+      {/* Editorial Content Block */}
+      <div class="prose dark:prose-invert max-w-none space-y-6 text-sm text-muted-foreground leading-relaxed">
+        <h1 class="text-3xl font-extrabold text-foreground tracking-tight sm:text-4xl mb-4">
+          The Ultimate Strength Calculator and Athletic Strength Finder
+        </h1>
+        
+        <p>
+          Welcome to the definitive training analysis portal. When athletes ask how to measure physical progression, they typically look for a reliable <strong class="text-foreground">strength calculator</strong> or a comprehensive <strong class="text-foreground">strength finder</strong> to benchmark their progress. While business-oriented trainees might be familiar with the corporate Clifton <strong class="text-foreground">strength finder test</strong> or the professional <strong class="text-foreground">strength finder assessment</strong> used to discover workplace leadership talents, our focus is entirely kinetic. We offer a physical <strong class="text-foreground">strength finder</strong> engine to help you pinpoint muscular development, identify structural imbalances, and plan your path toward athletic peak potential.
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground tracking-tight pt-4">
+          Why Check Your Bench Press, Squat, and Deadlift Strength Standards?
+        </h2>
+        
+        <p>
+          To understand your standing, you must compare your performance to verified, bodyweight-adjusted <strong class="text-foreground">strength standards</strong>. Evaluating your lifting metrics across primary compound movements allows you to determine where your training stands. Whether you are searching for <strong class="text-foreground">strength standards men</strong> can target or <strong class="text-foreground">strength standards women</strong> use to benchmark their progress, having access to structured, age-aligned scales is essential. 
+        </p>
+        
+        <p>
+          Our database utilizes mathematical normal curves to deliver <strong class="text-foreground">strength standards by age and weight</strong>, moving past simple lookup charts to give you a true statistical rank. For example, when checking the <strong class="text-foreground">bench press</strong>, using a targeted <strong class="text-foreground">strength calculator bench</strong> widget will calculate your one-rep max and show you how your chest and shoulder power ranks compared to peers.
+        </p>
+        
+        <p>
+          Similarly, analyzing your lower-body power requires looking closely at <strong class="text-foreground">squat standards</strong> and <strong class="text-foreground">deadlift strength standards</strong>. Lower-body standards can vary significantly based on skeletal leverage and gender. When checking the <strong class="text-foreground">squat strength standards</strong>, male lifters and female lifters will observe distinct distribution curves. Our platform details both general patterns and <strong class="text-foreground">female squat standards</strong> to ensure that every lifter has access to highly accurate, demographic-specific benchmarks.
+        </p>
+        
+        <p>
+          Beyond the classical big three lifts, trainees looking to isolate the posterior chain often monitor <strong class="text-foreground">rdl strength standards</strong>. This helps track hip hinge mechanics and glute-hamstring development, which directly support your primary deadlift performance.
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground tracking-tight pt-4">
+          The Role of the Relative Strength Calculator and Relative Strength Index
+        </h2>
+        
+        <p>
+          Absolute strength measures the total raw weight you can lift. However, true athletic development is determined by how much you can lift relative to your own bodyweight. This is calculated using a <strong class="text-foreground">relative strength calculator</strong> to find your <strong class="text-foreground">relative strength index</strong> score. 
+        </p>
+        
+        <p>
+          A high absolute score does not always mean balanced development. A 100kg lifter moving 120kg on the bench press has a lower relative score (1.20x BW) than a lean 70kg lifter moving 100kg (1.43x BW). By checking your progress against our <strong class="text-foreground">max strength calculator</strong>, you can view your relative metrics across all movements, helping you identify if you are carrying excess body fat or if you have reached a high level of neuromuscular efficiency.
+        </p>
+        
+        <p class="italic text-xs text-muted-foreground/80 bg-muted/20 p-3 rounded-lg border border-border/40">
+          (Note: While some culinary and wellness enthusiasts search the web for an "edible strength calculator" to calculate recipe infusions and dosing weights, our calculator suites focus strictly on physical barbell, dumbbell, and calisthenics output.)
+        </p>
+
+        <h2 class="text-2xl font-bold text-foreground tracking-tight pt-4">
+          Using the Ideal Weight Calculator to Determine What Is My Ideal Weight
+        </h2>
+        
+        <p>
+          To maximize relative power, you must find your optimal body composition. Trainees frequently ask: <strong class="text-foreground">what is my ideal weight</strong>? To answer this, our built-in <strong class="text-foreground">ideal weight calculator</strong> aggregates multiple verified formulas to determine the ideal weight for your height and structure.
+        </p>
+        
+        <p>
+          Instead of using basic charts, we analyze the <strong class="text-foreground">ideal weight for women</strong> and the <strong class="text-foreground">ideal weight for men</strong> alongside strength potential. This shows you what your target lifts should be at your ideal weight. For instance, the <strong class="text-foreground">ideal weight for 5'2 female in kg</strong> usually sits between 48kg and 56kg depending on frame size, while the <strong class="text-foreground">ideal weight for 5'4 female</strong> ranges slightly higher.
+        </p>
+      </div>
+
+      {/* Internal Linking Quick Plan */}
+      <div class="p-6 border border-border/80 rounded-2xl bg-card/60 shadow-sm space-y-4">
+        <h3 class="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border pb-2">
+          Interactive Strength Directories
+        </h3>
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs font-semibold">
+          <a href="/calculators" class="text-primary hover:underline">Strength Standards Dashboard</a>
+          <a href="/calculators/relative-strength" class="text-primary hover:underline">Relative Strength Calculator</a>
+          <a href="/calculators/ideal-bodyweight" class="text-primary hover:underline">Ideal Weight Calculator</a>
+          <a href="/bench-press-standards" class="text-primary hover:underline">Bench Press Standards</a>
+          <a href="/squat-standards" class="text-primary hover:underline">Squat Standards</a>
+          <a href="/deadlift-standards" class="text-primary hover:underline">Deadlift Strength Standards</a>
+          <a href="/strength-standards/squat" class="text-primary hover:underline">Female Squat Standards</a>
+          <a href="/calculators" class="text-primary hover:underline">Strength Standards Men</a>
+          <a href="/calculators" class="text-primary hover:underline">Strength Standards Women</a>
+        </div>
+      </div>
+
+      {/* Accordion FAQ Area */}
+      <SEOFAQSection items={strengthCalculatorFAQs} title="Strength Standards & Strength Calculator FAQs" />
+
+    </Container>
+  </Section>
 </PageLayout>

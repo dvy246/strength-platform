@@ -42,7 +42,7 @@ interface Props {
 const { exercise, bodyweightKg } = Astro.props;
 const bodyweightLb = Math.round(convert.toLb(bodyweightKg));
 
-const title = `${exercise.name} Standards at ${bodyweightKg}kg (${bodyweightLb} lb) Bodyweight | StrengthAtlas`;
+const title = `${exercise.name} Standards at ${bodyweightKg}kg (${bodyweightLb} lb) Bodyweight | StrengthChecker`;
 const description = `Discover standard ${exercise.name} weights for male and female lifters at ${bodyweightKg} kg (${bodyweightLb} lbs) bodyweight. View raw percentiles and distribution curves.`;
 
 const canonicalPath = `/${exercise.slug}-standards-at-${bodyweightKg}kg`;

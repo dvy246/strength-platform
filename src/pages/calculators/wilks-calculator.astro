@@ -1,0 +1,94 @@
+---
+// src/pages/calculators/wilks-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { PowerliftingWilks } from '@/components/calculators/PowerliftingWilks';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'Powerlifting Wilks Calculator', item: '/calculators/wilks-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'Powerlifting Wilks Calculator',
+  'Calculate your powerlifting Wilks score, DOTS score, and IPF GL points using raw formulas. Compares coefficient systems for men and women.',
+  'https://strengthchecker.com/calculators/wilks-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+---
+
+<CalculatorLayout
+  title="Powerlifting Wilks Calculator | Calculate Wilks & DOTS Score | StrengthChecker"
+  description="Calculate your powerlifting Wilks score, DOTS score, and IPF GL points dynamically. Compare your relative powerlifting performance across weight classes."
+  calculatorName="Powerlifting Score Calculator"
+  canonicalPath="/calculators/wilks-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* The Powerlifting Wilks Calculator Island */}
+  <PowerliftingWilks slot="calculator" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Powerlifting Coefficients</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Powerlifting score systems (Wilks, DOTS, and IPF GL) are mathematical coefficients used to evaluate and compare lifters of different bodyweights.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Instead of evaluating absolute load (which naturally biases heavier athletes), these systems measure your efficiency relative to your body mass.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/relative-strength" class="block text-primary hover:underline">
+        Relative Strength Calculator →
+      </a>
+      <a href="/calculators/strength-index" class="block text-primary hover:underline">
+        Strength Index Calculator →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What is the Wilks Score?</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        The **Wilks Score** (or Wilks Coefficient) is the most famous metric in powerlifting history. Developed by Robert Wilks, it uses a fifth-order polynomial equation to estimate a lifter's capacity relative to their exact scale weight. This enables organizers to award "Best Lifter" titles across different weight classes at competitions.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Understanding the Formula Systems</h2>
+      <div class="space-y-4">
+        <div>
+          <h4 class="text-sm font-semibold text-foreground">1. Wilks Coefficient</h4>
+          <p class="text-muted-foreground text-xs leading-relaxed mt-1">
+            Calculated using standard 5th-order polynomials. Though widely loved, the Wilks formula has been criticized for slightly favoring extremely light and extremely heavy lifters, which led to the creation of alternative models.
+          </p>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-foreground">2. DOTS Formula</h4>
+          <p class="text-muted-foreground text-xs leading-relaxed mt-1">
+            The **DOTS Score** (Dynamic Overlord Trophy System) is a newer 4th-order polynomial model designed to fix the imbalances of Wilks. It is currently the primary coefficient used by USAPL and other national federations to select absolute champions.
+          </p>
+        </div>
+        <div>
+          <h4 class="text-sm font-semibold text-foreground">3. IPF GL Points</h4>
+          <p class="text-muted-foreground text-xs leading-relaxed mt-1">
+            The **IPF GL points** system is the official metric of the International Powerlifting Federation (IPF). It uses exponential functions rather than polynomials, avoiding extreme fluctuations at the ends of bodyweight scales.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">How to Improve Your Powerlifting Score</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        To increase your score, you must either increase your combined 3-lift total (Squat + Bench + Deadlift) or optimize your body weight class. Often, losing unnecessary body fat while maintaining strength yields a massive bump in your Wilks and DOTS ratings.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

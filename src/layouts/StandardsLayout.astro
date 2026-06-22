@@ -25,7 +25,7 @@ interface Props {
 
 const { exercise, title, description, canonicalPath, ogImagePath } = Astro.props;
 
-const fallbackTitle = `${exercise.name} Standards & Strength Percentiles | StrengthAtlas`;
+const fallbackTitle = `${exercise.name} Standards & Strength Percentiles | StrengthChecker`;
 const fallbackDesc = `Discover Bench Press strength standards for male and female lifters. Find your strength level, 1RM percentiles, and bodyweight ratios.`;
 
 const currentPath = canonicalPath || `/strength-standards/${exercise.slug}`;

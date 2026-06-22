@@ -39,6 +39,8 @@ export interface StrengthIndexResult {
   recommendations: string[];
   ageAdjusted: boolean;
   ageFactor: number;
+  archetype?: string;
+  archetypeDesc?: string;
 }
 
 // Convert input weight to kg
@@ -179,11 +181,21 @@ export function calculateStrengthIndex(input: StrengthIndexInput): StrengthIndex
   if (dipsBreakdown) pushScores.push(dipsBreakdown.exerciseScore);
 
   const pullScores: number[] = [];
+  const latPulldownBreakdown = breakdown.find(b => b.exerciseId === 'lat-pulldown');
+  const barbellCurlBreakdown = breakdown.find(b => b.exerciseId === 'barbell-curl');
   if (deadliftBreakdown) pullScores.push(deadliftBreakdown.exerciseScore);
   if (pullupBreakdown) pullScores.push(pullupBreakdown.exerciseScore);
+  if (latPulldownBreakdown) pullScores.push(latPulldownBreakdown.exerciseScore);
+  if (barbellCurlBreakdown) pullScores.push(barbellCurlBreakdown.exerciseScore);
+
+  const legScores: number[] = [];
+  const legPressBreakdown = breakdown.find(b => b.exerciseId === 'leg-press');
+  if (squatBreakdown) legScores.push(squatBreakdown.exerciseScore);
+  if (legPressBreakdown) legScores.push(legPressBreakdown.exerciseScore);
 
   const pushAvg = pushScores.length > 0 ? pushScores.reduce((a, b) => a + b, 0) / pushScores.length : null;
   const pullAvg = pullScores.length > 0 ? pullScores.reduce((a, b) => a + b, 0) / pullScores.length : null;
+  const legAvg = legScores.length > 0 ? legScores.reduce((a, b) => a + b, 0) / legScores.length : null;
 
   // Biomechanical balance analysis
   if (pushAvg !== null && pullAvg !== null) {
@@ -225,6 +237,30 @@ export function calculateStrengthIndex(input: StrengthIndexInput): StrengthIndex
     recommendations.push('Programming Tip: Work with a specialist coach. Utilize micro-loading (fractional plates) and accommodate resistance (chains, bands) to bypass neural adaptations plateaus.');
   }
   
+  // 7. Determine Athlete Archetype
+  let archetype = 'Hybrid Lifter';
+  let archetypeDesc = 'You display robust strength across multiple patterns, with slight variations. A solid foundation for general physical preparation (GPP) and athletic conditioning.';
+
+  if (pushAvg !== null && pullAvg !== null && legAvg !== null) {
+    const scores = [pushAvg, pullAvg, legAvg];
+    const maxVal = Math.max(...scores);
+    const minVal = Math.min(...scores);
+    
+    if (maxVal - minVal < 10) {
+      archetype = 'Symmetric Powerhouse';
+      archetypeDesc = 'Your pressing, pulling, and lower-body strength are exceptionally balanced. This symmetry reduces injury risks and indicates complete, well-rounded athletic development.';
+    } else if (maxVal === pushAvg && pushAvg - (pullAvg + legAvg) / 2 > 6) {
+      archetype = 'Upper Body Press Specialist';
+      archetypeDesc = 'You possess outstanding horizontal and vertical pressing power compared to your pulling and lower-body metrics. Consider prioritizing posterior chain and leg development to balance your structure.';
+    } else if (maxVal === pullAvg && pullAvg - (pushAvg + legAvg) / 2 > 6) {
+      archetype = 'Posterior Chain Pulling Machine';
+      archetypeDesc = 'Your deadlift and upper back pulling strength are highly dominant. Your back and hip extension capacities are superb. Bring up your pressing and squatting volumes to create structural balance.';
+    } else if (maxVal === legAvg && legAvg - (pushAvg + pullAvg) / 2 > 6) {
+      archetype = 'Quad-Dominant Sledgehammer';
+      archetypeDesc = 'Your lower-body squats and presses are exceptionally strong relative to your upper body. While your leg power is outstanding, focus on vertical pulls and upper body presses to match your lower-body leverages.';
+    }
+  }
+
   return {
     score: Math.round(finalScore * 10) / 10,
     percentile: finalPercentile,
@@ -234,6 +270,8 @@ export function calculateStrengthIndex(input: StrengthIndexInput): StrengthIndex
     coverageScore,
     recommendations,
     ageAdjusted,
-    ageFactor
+    ageFactor,
+    archetype,
+    archetypeDesc
   };
 }

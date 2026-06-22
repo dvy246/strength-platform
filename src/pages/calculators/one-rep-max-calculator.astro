@@ -2,10 +2,12 @@
 // src/pages/calculators/one-rep-max-calculator.astro
 import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
 import { OneRepMax } from '@/components/calculators/OneRepMax';
+import { oneRepMaxFAQs } from '@/data/faqs';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
 ---
 
 <CalculatorLayout
-  title="One-Rep Max Calculator | Estimate 1RM Lifts | StrengthAtlas"
+  title="One-Rep Max Calculator | Estimate 1RM Lifts | StrengthChecker"
   description="Estimate your strict one-repetition maximum (1RM) using 6 standard powerlifting formulas (Epley, Brzycki, Lombardi, etc.). Outputs percentage training zones."
   calculatorName="One Rep Max Calculator"
   canonicalPath="/calculators/one-rep-max-calculator"
@@ -53,22 +55,8 @@ import { OneRepMax } from '@/components/calculators/OneRepMax';
       </div>
     </section>
 
-    <section class="space-y-4">
-      <h2 class="text-xl font-bold text-foreground">FAQ</h2>
-      <div class="space-y-4">
-        <div>
-          <h4 class="text-sm font-semibold text-foreground">Is estimating 1RM safe?</h4>
-          <p class="text-muted-foreground text-xs leading-relaxed mt-1">
-            Yes. Direct 1RM testing carries an increased risk of injury, especially for beginners. Estimating it from 3–8 reps allows you to determine training loads safely.
-          </p>
-        </div>
-        <div>
-          <h4 class="text-sm font-semibold text-foreground">How many reps should I use to estimate?</h4>
-          <p class="text-muted-foreground text-xs leading-relaxed mt-1">
-            For maximum accuracy, use sets of 2 to 6 reps performed to near failure (RPE 9-10). As repetitions exceed 10, calculations become less accurate due to variations in individual muscular endurance.
-          </p>
-        </div>
-      </div>
-    </section>
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={oneRepMaxFAQs} title="One Rep Max FAQs" />
+    </div>
   </div>
 </CalculatorLayout>

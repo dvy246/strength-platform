@@ -1,0 +1,48 @@
+---
+// src/pages/500.astro
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+---
+
+<BaseLayout
+  title="Server Error (500) | StrengthChecker"
+  description="An internal server error occurred. Please try again later."
+  noindex={true}
+>
+  <Header />
+
+  <main class="flex-grow flex items-center justify-center py-24 relative overflow-hidden hero-gradient min-h-[70vh]">
+    <div class="absolute inset-0 hero-grid pointer-events-none" />
+    
+    <Container class="relative z-10 text-center space-y-6 max-w-xl">
+      <div class="space-y-2">
+        <span class="text-xs font-semibold uppercase tracking-widest text-primary font-mono select-none">Error 500</span>
+        <h1 class="text-7xl md:text-8xl font-black tracking-tighter text-gradient leading-none">500</h1>
+        <h2 class="text-2xl font-bold text-foreground mt-4">Internal Server Error</h2>
+        <p class="text-sm text-muted-foreground leading-relaxed mt-2 max-w-sm mx-auto">
+          Something went wrong on our servers. We have been notified and are looking into it. Please try again shortly.
+        </p>
+      </div>
+
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a
+          href="/"
+          class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground hover:bg-primary/95 shadow-sm active:scale-[0.99] transition-all select-none"
+        >
+          Return to Home
+        </a>
+        <button
+          type="button"
+          onclick="window.location.reload()"
+          class="w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-border bg-card px-6 py-3 text-sm font-bold hover:bg-muted text-foreground transition-all select-none"
+        >
+          Reload Page
+        </button>
+      </div>
+    </Container>
+  </main>
+
+  <Footer />
+</BaseLayout>

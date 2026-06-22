@@ -1,7 +1,7 @@
 // src/lib/seo/meta.ts
 
-export const SITE_NAME = 'StrengthAtlas';
-export const DEFAULT_DOMAIN = 'https://strengthatlas.com';
+export const SITE_NAME = 'StrengthChecker';
+export const DEFAULT_DOMAIN = 'https://strengthchecker.com';
 
 export function buildTitle(pageTitle?: string): string {
   if (!pageTitle) return `${SITE_NAME} | Strength Standards & Relative Strength Platform`;

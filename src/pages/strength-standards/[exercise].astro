@@ -3,6 +3,14 @@
 import StandardsLayout from '@/layouts/StandardsLayout.astro';
 import { ExerciseStandardsDashboard } from '@/components/standards/ExerciseStandardsDashboard';
 import { exercises, type Exercise } from '@/data/exercises';
+import { 
+  benchPressFAQs, 
+  squatFAQs, 
+  deadliftFAQs, 
+  pullUpCalisthenicsFAQs, 
+  strengthCalculatorFAQs 
+} from '@/data/faqs';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
 
 export async function getStaticPaths() {
   return exercises.map((ex) => ({
@@ -16,8 +24,18 @@ interface Props {
 }
 
 const { exercise } = Astro.props;
+let exerciseFAQs = strengthCalculatorFAQs;
+if (exercise.id === 'bench-press') {
+  exerciseFAQs = benchPressFAQs;
+} else if (exercise.id === 'squat') {
+  exerciseFAQs = squatFAQs;
+} else if (exercise.id === 'deadlift') {
+  exerciseFAQs = deadliftFAQs;
+} else if (['pull-up', 'weighted-pull-up', 'dips'].includes(exercise.id)) {
+  exerciseFAQs = pullUpCalisthenicsFAQs;
+}
 
-const title = `${exercise.name} Strength Standards & Gym Levels | StrengthAtlas`;
+const title = `${exercise.name} Strength Standards & Gym Levels | StrengthChecker`;
 const description = `Find standard strict 1RM ${exercise.name} weights for male and female lifters of all bodyweights. Calculate your gym level and percentile rank.`;
 ---
 
@@ -78,5 +96,7 @@ const description = `Find standard strict 1RM ${exercise.name} weights for male 
         </p>
       </div>
     </div>
+
+    <SEOFAQSection items={exerciseFAQs} title={`${exercise.name} FAQs`} class="mt-16" />
   </div>
 </StandardsLayout>

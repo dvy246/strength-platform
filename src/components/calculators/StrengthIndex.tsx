@@ -24,7 +24,8 @@ export const StrengthIndex: React.FC = () => {
     'deadlift': { weight: '180', reps: '1' },
     'overhead-press': { weight: '60', reps: '1' },
     'pull-up': { weight: '10', reps: '1' },
-    'dips': { weight: '', reps: '1' }
+    'dips': { weight: '15', reps: '1' },
+    'weighted-pull-up': { weight: '15', reps: '1' }
   });
 
   const [result, setResult] = useState<StrengthIndexResult | null>(null);

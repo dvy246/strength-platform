@@ -353,6 +353,68 @@ export const ExerciseImage: React.FC<ExerciseImageProps> = ({ exerciseId, classN
         </svg>
       );
 
+    case 'dumbbell-bench-press':
+      return (
+        <svg className={`w-full h-full text-foreground ${className}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">
+          {renderDefs('dumbbell-bench-press')}
+          <rect x="5" y="5" width="90" height="90" rx="10" fill="url(#grid-dumbbell-bench-press)" stroke="var(--border)" strokeWidth="1" />
+          <circle cx="50" cy="50" r="22" fill="var(--primary)" opacity="0.04" filter="url(#glow-dumbbell-bench-press)" />
+          {/* Bench Frame & Pad */}
+          <path d="M 24 85 L 24 74 M 76 85 L 76 74" stroke="#929ca6" strokeWidth="3" strokeLinecap="round" />
+          <rect x="18" y="70" width="64" height="4.5" rx="1.5" fill="#10b981" stroke="#232f3e" strokeWidth="2" /> {/* Pad */}
+          {/* Dumbbell 1 */}
+          <line x1="22" y1="46" x2="38" y2="46" stroke="#232f3e" strokeWidth="3" strokeLinecap="round" />
+          <rect x="18" y="38" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          <rect x="38" y="38" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          {/* Dumbbell 2 */}
+          <line x1="62" y1="46" x2="78" y2="46" stroke="#232f3e" strokeWidth="3" strokeLinecap="round" />
+          <rect x="58" y="38" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          <rect x="78" y="38" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          {/* Target Muscles Glowing Overlay */}
+          <path d="M 45 64 C 47 62, 53 62, 55 64" stroke="url(#grad-dumbbell-bench-press)" strokeWidth="6" strokeLinecap="round" fill="none" filter="url(#glow-dumbbell-bench-press)" />
+        </svg>
+      );
+
+    case 'incline-bench-press':
+      return (
+        <svg className={`w-full h-full text-foreground ${className}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">
+          {renderDefs('incline-bench-press')}
+          <rect x="5" y="5" width="90" height="90" rx="10" fill="url(#grid-incline-bench-press)" stroke="var(--border)" strokeWidth="1" />
+          <circle cx="50" cy="50" r="22" fill="var(--primary)" opacity="0.04" filter="url(#glow-incline-bench-press)" />
+          {/* Incline Bench Pad (30 degrees) */}
+          <path d="M 28 85 L 28 75 M 50 85 L 50 60" stroke="#788591" strokeWidth="3" />
+          <line x1="20" y1="78" x2="75" y2="46" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round" /> {/* Red Incline Pad */}
+          {/* Barbell & Plates */}
+          <line x1="25" y1="36" x2="75" y2="36" stroke="#232f3e" strokeWidth="3" strokeLinecap="round" />
+          <circle cx="31" cy="36" r="10" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          <circle cx="69" cy="36" r="10" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          {/* Target Muscles Glowing Overlay */}
+          <path d="M 40 50 C 44 46, 50 46, 54 50" stroke="url(#grad-incline-bench-press)" strokeWidth="6" strokeLinecap="round" fill="none" filter="url(#glow-incline-bench-press)" />
+        </svg>
+      );
+
+    case 'incline-dumbbell-press':
+      return (
+        <svg className={`w-full h-full text-foreground ${className}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">
+          {renderDefs('incline-dumbbell-press')}
+          <rect x="5" y="5" width="90" height="90" rx="10" fill="url(#grid-incline-dumbbell-press)" stroke="var(--border)" strokeWidth="1" />
+          <circle cx="50" cy="50" r="22" fill="var(--primary)" opacity="0.04" filter="url(#glow-incline-dumbbell-press)" />
+          {/* Incline Bench Pad (30 degrees) */}
+          <path d="M 28 85 L 28 75 M 50 85 L 50 60" stroke="#788591" strokeWidth="3" />
+          <line x1="20" y1="78" x2="75" y2="46" stroke="#10b981" strokeWidth="4.5" strokeLinecap="round" /> {/* Incline Pad */}
+          {/* Dumbbell 1 */}
+          <line x1="22" y1="38" x2="38" y2="38" stroke="#232f3e" strokeWidth="3" strokeLinecap="round" />
+          <rect x="18" y="30" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          <rect x="38" y="30" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          {/* Dumbbell 2 */}
+          <line x1="62" y1="38" x2="78" y2="38" stroke="#232f3e" strokeWidth="3" strokeLinecap="round" />
+          <rect x="58" y="30" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          <rect x="78" y="30" width="4" height="16" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+          {/* Target Muscles Glowing Overlay */}
+          <path d="M 40 50 C 44 46, 50 46, 54 50" stroke="url(#grad-incline-dumbbell-press)" strokeWidth="6" strokeLinecap="round" fill="none" filter="url(#glow-incline-dumbbell-press)" />
+        </svg>
+      );
+
     default:
       return null;
   }

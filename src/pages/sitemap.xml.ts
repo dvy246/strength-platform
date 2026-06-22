@@ -3,7 +3,7 @@ import type { APIRoute } from 'astro';
 import { exercises } from '@/data/exercises';
 
 export const GET: APIRoute = () => {
-  const domain = 'https://strengthatlas.com';
+  const domain = 'https://strengthchecker.com';
   
   // Static pages
   const staticUrls = [
@@ -16,6 +16,13 @@ export const GET: APIRoute = () => {
     '/calculators/one-rep-max-calculator',
     '/calculators/ideal-bodyweight',
     '/calculators/relative-strength',
+    '/calculators/bench-press-one-rep-max-calculator',
+    '/calculators/squat-one-rep-max-calculator',
+    '/calculators/deadlift-one-rep-max-calculator',
+    '/calculators/wilks-calculator',
+    '/privacy',
+    '/terms',
+    '/contact',
   ];
 
   // Dynamic exercise main pages (old structure)

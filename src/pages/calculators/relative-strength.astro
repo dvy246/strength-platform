@@ -2,10 +2,12 @@
 // src/pages/calculators/relative-strength.astro
 import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
 import { RelativeStrength } from '@/components/calculators/RelativeStrength';
+import { relativeStrengthFAQs } from '@/data/faqs';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
 ---
 
 <CalculatorLayout
-  title="Relative Strength Calculator | Lift to Bodyweight Ratio | StrengthAtlas"
+  title="Relative Strength Calculator | Lift to Bodyweight Ratio | StrengthChecker"
   description="Calculate your lift-to-bodyweight ratios and see how you rank compared to the competitive lifting community. Features interactive sliders."
   calculatorName="Relative Strength"
   canonicalPath="/calculators/relative-strength"
@@ -47,5 +49,9 @@ import { RelativeStrength } from '@/components/calculators/RelativeStrength';
         For bodyweight exercises like pull-ups and dips, the total force required is equal to your bodyweight plus the added weight on your belt. This calculator automatically incorporates your body weight to yield an accurate ratio, comparing your added load directly to standardized fitness metrics.
       </p>
     </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={relativeStrengthFAQs} title="Relative Strength FAQs" />
+    </div>
   </div>
 </CalculatorLayout>

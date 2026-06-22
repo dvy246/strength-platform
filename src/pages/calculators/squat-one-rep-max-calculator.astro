@@ -1,0 +1,131 @@
+---
+// src/pages/calculators/squat-one-rep-max-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { OneRepMax } from '@/components/calculators/OneRepMax';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import { squatFAQs } from '@/data/faqs';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'Squat One Rep Max Calculator', item: '/calculators/squat-one-rep-max-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'Squat One Rep Max Calculator',
+  'Estimate your back squat one rep max (1RM) using 6 scientific powerlifting formulas. Get your training zones and level classifications.',
+  'https://strengthchecker.com/calculators/squat-one-rep-max-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+---
+
+<CalculatorLayout
+  title="Squat One Rep Max Calculator | Calculate Squat 1RM | StrengthChecker"
+  description="Use the ultimate squat one rep max calculator to estimate your back squat 1RM safely. Features the Epley formula, standard one rep max chart, and training zones."
+  calculatorName="Squat One Rep Max Calculator"
+  canonicalPath="/calculators/squat-one-rep-max-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* The Interactive Calculator Island */}
+  <OneRepMax slot="calculator" initialExerciseId="squat" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Squat 1RM Stats</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Your <strong class="text-foreground">one rep max squat</strong> is the ultimate indicator of lower-body and core power. Knowing it helps structure your leg days.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Attempting a true squat 1RM to failure carries a higher risk of injury, making a <strong class="text-foreground">squat one rep max calculator</strong> an essential training companion.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/bench-press-one-rep-max-calculator" class="block text-primary hover:underline">
+        Bench Press One Rep Max Calculator →
+      </a>
+      <a href="/calculators/deadlift-one-rep-max-calculator" class="block text-primary hover:underline">
+        Deadlift One Rep Max Calculator →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What is a Squat One Rep Max?</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Your back squat <strong class="text-foreground">one rep max</strong> represents the maximum weight you can squat for a single, full-depth repetition. In strength programs like Wendler 5/3/1 or Smolov, your weekly training targets are set based on percentages of your estimated 1RM.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">How to Calculate One Rep Max for Squat</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Understanding <strong class="text-foreground">how to calculate one rep max</strong> safely is crucial for lower-body longevity. Using a specialized <strong class="text-foreground">one rep max calculator squat</strong> allows you to estimate your peak squat capacity from working sets of 3 to 8 repetitions. This method is much safer than overloading the spine with a maximum single lift.
+      </p>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Using a reliable <strong class="text-foreground">one rep max finder</strong>, you can calculate your limits without CNS fatigue. A dedicated <strong class="text-foreground">one rep max squat calculator</strong> handles the math automatically, applying formulas that weight lower-body leverage.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Understanding the Epley Formula One Rep Max</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        The math behind our <strong class="text-foreground">squat one rep max calculator</strong> relies heavily on the <strong class="text-foreground">epley formula one rep max</strong>. This formula calculates:
+        <br />
+        <code class="block bg-muted/40 p-3 rounded-lg text-xs font-mono border border-border mt-2">1RM = w × (1 + r/30)</code>
+        It provides a highly accurate estimate of squat strength when the repetitions are kept below 10.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">The Squat One Rep Max Chart</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Trainees can use the dynamic <strong class="text-foreground">one rep max chart</strong> below to plan their leg workouts and choose the correct working weights:
+      </p>
+      
+      <div class="p-5 border border-border bg-card/40 rounded-xl space-y-4 text-xs font-mono">
+        <div class="flex justify-between border-b border-border/40 pb-2 font-bold text-muted-foreground">
+          <span>Percentage</span>
+          <span>Repetition Goal</span>
+          <span>Training Zone</span>
+        </div>
+        <div class="flex justify-between border-b border-border/20 py-1">
+          <span>95% 1RM</span>
+          <span>1-2 reps</span>
+          <span>Maximum Squat Power</span>
+        </div>
+        <div class="flex justify-between border-b border-border/20 py-1">
+          <span>85% 1RM</span>
+          <span>5-6 reps</span>
+          <span>Lower Body Strength</span>
+        </div>
+        <div class="flex justify-between border-b border-border/20 py-1">
+          <span>75% 1RM</span>
+          <span>8-10 reps</span>
+          <span>Quad/Glute Hypertrophy</span>
+        </div>
+        <div class="flex justify-between py-1">
+          <span>65% 1RM</span>
+          <span>12+ reps</span>
+          <span>Squat Endurance</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="space-y-4 border-t border-border/80 pt-6">
+      <h3 class="text-lg font-bold text-foreground">Interlinking & Navigation</h3>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Compare your back squat level to standard categories using our <a href="/strength-standards" class="text-primary hover:underline">Strength Standards</a> page, calculate your overall <a href="/calculators/strength-index" class="text-primary hover:underline">Strength Index</a>, or map weight-class efficiency using the <a href="/calculators/relative-strength" class="text-primary hover:underline">Relative Strength Calculator</a>.
+      </p>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={squatFAQs} title="Squat FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

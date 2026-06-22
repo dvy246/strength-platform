@@ -154,6 +154,26 @@ export const StrengthReport: React.FC<StrengthReportProps> = ({
         )}
       </div>
 
+      {/* Athlete Archetype Section */}
+      {result.archetype && (
+        <div className="p-5 border border-primary/20 rounded-2xl bg-primary/[0.02] space-y-3 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+          
+          <div className="flex items-center space-x-3">
+            <div className="w-9 h-9 rounded-xl bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-black text-sm">
+              👑
+            </div>
+            <div>
+              <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Athlete Archetype</span>
+              <h4 className="text-lg font-extrabold text-foreground">{result.archetype}</h4>
+            </div>
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed max-w-3xl">
+            {result.archetypeDesc}
+          </p>
+        </div>
+      )}
+
       {/* Muscle & Biomechanical Balance Analysis */}
       <div className="space-y-4">
         <h4 className="text-xs font-bold text-foreground uppercase tracking-widest border-b border-border/60 pb-2">

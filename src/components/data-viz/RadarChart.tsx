@@ -24,12 +24,13 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
     );
   }
 
-  const cx = 130;
-  const cy = 130;
-  const r = 65; // max radius for score 100
+  // Dimension settings optimized for spacing and framing
+  const cx = 150;
+  const cy = 150;
+  const r = 60; // Max radius for score 100
   const numAxes = data.length;
 
-  // Compute angles for each axis
+  // Compute angles and coordinates for each axis
   const getCoordinatesForValue = (index: number, scoreValue: number) => {
     const angle = (index * 2 * Math.PI) / numAxes - Math.PI / 2;
     const currentRadius = (scoreValue / 100) * r;
@@ -93,7 +94,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
   return (
     <div className={`relative w-full max-w-[340px] mx-auto p-2 flex flex-col items-center justify-center ${className}`}>
       <div className="relative w-full aspect-square">
-        <svg className="w-full h-full overflow-visible" viewBox="0 0 260 260">
+        <svg className="w-full h-full overflow-visible" viewBox="0 0 300 300">
           {/* Grid Rings */}
           {gridPolygons.map((points, idx) => (
             <polygon
@@ -103,7 +104,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
               stroke="var(--border)"
               strokeWidth="0.75"
               strokeDasharray={idx < 4 ? '2 2' : undefined}
-              className="opacity-50"
+              className="opacity-55"
             />
           ))}
 
@@ -113,10 +114,10 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
             return (
               <text
                 key={idx}
-                x={x - 4}
+                x={x - 5}
                 y={y + 3}
                 fill="var(--muted-foreground)"
-                fontSize="8"
+                fontSize="9"
                 fontFamily="var(--font-mono)"
                 textAnchor="end"
                 className="opacity-60 select-none pointer-events-none"
@@ -185,6 +186,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
                 className="cursor-pointer select-none"
                 onMouseEnter={() => setHoveredIndex(i)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => setHoveredIndex(hoveredIndex === i ? null : i)}
               >
                 <text
                   x={lbl.lx}
@@ -196,7 +198,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
                   <tspan
                     x={lbl.lx}
                     fill={isActive ? 'var(--primary)' : 'var(--foreground)'}
-                    fontSize="9.5"
+                    fontSize="10.5"
                     fontWeight="700"
                     className="transition-colors duration-200"
                   >
@@ -204,9 +206,9 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
                   </tspan>
                   <tspan
                     x={lbl.lx}
-                    dy="11"
+                    dy="12"
                     fill="var(--primary)"
-                    fontSize="9"
+                    fontSize="10"
                     fontWeight="800"
                     className="font-mono"
                   >
@@ -230,6 +232,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
                 className="cursor-pointer"
                 onMouseEnter={() => setHoveredIndex(i)}
                 onMouseLeave={() => setHoveredIndex(null)}
+                onClick={() => setHoveredIndex(hoveredIndex === i ? null : i)}
               />
             );
           })}
@@ -239,14 +242,14 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
         {hoveredIndex !== null && (() => {
           const activeData = data[hoveredIndex];
           const { x, y } = getCoordinatesForValue(hoveredIndex, activeData.value);
-          const leftPercent = (x / 260) * 100;
-          const topPercent = (y / 260) * 100;
+          const leftPercent = (x / 300) * 100;
+          const topPercent = (y / 300) * 100;
           const level = scoreToLevel(activeData.value);
           const levelLabel = getLevelLabel(level);
 
           return (
             <div
-              className="absolute z-30 pointer-events-none bg-popover/95 backdrop-blur-md border border-border/80 px-3 py-2 rounded-xl shadow-xl text-xs space-y-1 transition-all duration-200 ease-out min-w-[130px] text-center"
+              className="absolute z-30 pointer-events-none bg-popover/95 backdrop-blur-md border border-border/80 px-3 py-2 rounded-xl shadow-xl text-xs space-y-1 transition-all duration-200 ease-out min-w-[130px] text-center animate-in fade-in zoom-in-95 duration-150"
               style={{
                 left: `${leftPercent}%`,
                 top: `${topPercent}%`,
@@ -275,7 +278,7 @@ export const RadarChart: React.FC<RadarChartProps> = ({ data, className = '' }) 
         })()}
       </div>
       <p className="text-[10px] text-center text-muted-foreground mt-4 italic max-w-xs select-none">
-        Hover over exercises or markers to see pattern score details and gym classification.
+        Hover or tap on exercises and markers to inspect specific scores and gym classifications.
       </p>
     </div>
   );

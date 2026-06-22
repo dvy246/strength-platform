@@ -9,9 +9,9 @@ import Container from './Container.astro';
       {/* Brand Column */}
       <div class="flex flex-col space-y-4">
         <div class="flex items-center space-x-2">
-          <img src="/favicon.svg" alt="StrengthAtlas Logo" class="h-5 w-5" />
+          <img src="/favicon.svg" alt="StrengthChecker Logo" class="h-5 w-5" />
           <span class="text-lg font-bold tracking-tight text-foreground">
-            Strength<span class="text-primary">Atlas</span>
+            Strength<span class="text-primary">Checker</span>
           </span>
         </div>
         <p class="text-sm text-muted-foreground max-w-xs">
@@ -40,6 +40,7 @@ import Container from './Container.astro';
           <li><a href="/calculators/one-rep-max-calculator" class="hover:text-foreground hover:underline">One Rep Max</a></li>
           <li><a href="/calculators/ideal-bodyweight" class="hover:text-foreground hover:underline">Ideal Bodyweight</a></li>
           <li><a href="/calculators/relative-strength" class="hover:text-foreground hover:underline">Relative Strength</a></li>
+          <li><a href="/calculators/wilks-calculator" class="hover:text-foreground hover:underline">Wilks Calculator</a></li>
           <li><a href="/strength-standards" class="hover:text-foreground hover:underline">All Lifts</a></li>
         </ul>
       </div>
@@ -50,17 +51,21 @@ import Container from './Container.astro';
         <ul class="space-y-2 text-sm text-muted-foreground">
           <li><a href="/methodology" class="hover:text-foreground hover:underline">Calculations & Science</a></li>
           <li><a href="/about" class="hover:text-foreground hover:underline">About Us</a></li>
+          <li><a href="/contact" class="hover:text-foreground hover:underline">Contact Us</a></li>
         </ul>
       </div>
     </div>
 
     <div class="border-t border-border mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-muted-foreground">
       <span>
-        &copy; {new Date().getFullYear()} StrengthAtlas. Built with data, not hype. All rights reserved.
+        &copy; {new Date().getFullYear()} StrengthChecker. Built with data, not hype. All rights reserved.
       </span>
       <div class="flex space-x-6">
         <a href="/methodology" class="hover:text-foreground">Methodology</a>
         <a href="/about" class="hover:text-foreground">About</a>
+        <a href="/contact" class="hover:text-foreground">Contact</a>
+        <a href="/privacy" class="hover:text-foreground">Privacy Policy</a>
+        <a href="/terms" class="hover:text-foreground">Terms & Conditions</a>
       </div>
     </div>
   </Container>
