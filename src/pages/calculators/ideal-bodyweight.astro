@@ -1,0 +1,56 @@
+---
+// src/pages/calculators/ideal-bodyweight.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { IdealBodyweight } from '@/components/calculators/IdealBodyweight';
+---
+
+<CalculatorLayout
+  title="Ideal Bodyweight & Target Lifts Calculator | StrengthAtlas"
+  description="Determine your recommended, athletic, and strength-focused weight classes based on height and experience, and view corresponding target standards."
+  calculatorName="Ideal Bodyweight"
+  canonicalPath="/calculators/ideal-bodyweight"
+>
+  {/* The Ideal Bodyweight Island */}
+  <IdealBodyweight slot="calculator" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Ideal Bodyweight</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Your recommended bodyweight range is modeled to provide the optimal ratio of muscle mass to skeleton size.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Instead of using generic BMI indicators, we combine body structure research, training experience, and competitive fitness percentiles to project target strength levels.
+    </p>
+    <div class="border-t border-border pt-4">
+      <a href="/methodology" class="text-xs font-semibold text-primary hover:underline">
+        Read calculations methodology →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">Understanding Bodyweight and Strength</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Many lifters struggle to identify their target weight class. A common mistake is attempting to stay excessively shredded (under 8% body fat) or bulking too far (over 25% body fat), which impacts overall metabolic health and joint leverages. 
+      </p>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Our **Ideal Bodyweight Calculator** solves this. It computes three targeted weight classes based on your height and experience:
+      </p>
+      <ul class="list-disc list-inside text-sm text-muted-foreground space-y-1.5 pl-2">
+        <li><strong>Recommended Target:</strong> The sweet spot for general athletic wellness and strength progress (BMI 21.5 - 26 depending on experience).</li>
+        <li><strong>Athletic Cut:</strong> Optimized for agility, conditioning, and bodyweight movements like pull-ups and dips.</li>
+        <li><strong>Strength / Power:</strong> Optimized for raw barbell leverage and absolute compound loading (Squats, Deadlifts, Bench Press).</li>
+      </ul>
+    </section>
+
+    <section class="space-y-4">
+      <h3 class="text-xl font-bold text-foreground">What Should You Weigh and Lift?</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        By matching your height structure to standard log-normal curves, the platform identifies the exact weight targets required to rank up your lifting tier (Beginner, Intermediate, Advanced). This bridges the gap between bodyweight structure and gym performance.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

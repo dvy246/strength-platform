@@ -1,0 +1,83 @@
+---
+// src/layouts/StandardsLayout.astro
+import PageLayout from './PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildWebApplicationSchema } from '@/lib/seo/schema';
+import { buildCanonical } from '@/lib/seo/meta';
+
+import { ExerciseImage } from '@/components/standards/ExerciseImage';
+
+interface Props {
+  exercise: {
+    id: string;
+    slug: string;
+    name: string;
+    description: string;
+  };
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  ogImagePath?: string;
+}
+
+const { exercise, title, description, canonicalPath, ogImagePath } = Astro.props;
+
+const fallbackTitle = `${exercise.name} Standards & Strength Percentiles | StrengthAtlas`;
+const fallbackDesc = `Discover Bench Press strength standards for male and female lifters. Find your strength level, 1RM percentiles, and bodyweight ratios.`;
+
+const currentPath = canonicalPath || `/strength-standards/${exercise.slug}`;
+const absoluteUrl = buildCanonical(currentPath);
+const webAppSchema = buildWebApplicationSchema(
+  `${exercise.name} Standards Calculator`,
+  description || fallbackDesc,
+  absoluteUrl
+);
+
+const breadcrumbItems = [
+  { name: 'Strength Standards', path: '/strength-standards' },
+  { name: `${exercise.name} Standards`, path: currentPath }
+];
+---
+
+<PageLayout
+  title={title || fallbackTitle}
+  description={description || fallbackDesc}
+  canonicalPath={currentPath}
+  ogImagePath={ogImagePath}
+>
+  <StructuredData slot="head" schema={webAppSchema} />
+
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbItems} />
+      
+      {/* Page Title & Visual Illustration */}
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-border/80 pb-8">
+        <div class="max-w-3xl">
+          <h1 class="text-3xl font-extrabold tracking-tight text-foreground md:text-4xl lg:text-5xl">
+            {exercise.name} <span class="text-primary">Standards</span>
+          </h1>
+          <p class="mt-3 text-base sm:text-lg text-muted-foreground leading-relaxed">
+            {exercise.description}
+          </p>
+        </div>
+        <div class="flex-shrink-0 flex items-center justify-center bg-card border border-border/60 p-3 rounded-2xl w-28 h-28 md:w-32 md:h-32 shadow-sm">
+          <ExerciseImage exerciseId={exercise.id} />
+        </div>
+      </div>
+
+      {/* Primary slot: Interactive calculator/table area */}
+      <div class="mt-8">
+        <slot />
+      </div>
+      
+      {/* Bottom informational details */}
+      <div class="prose prose-invert max-w-none mt-16 pt-12 border-t border-border">
+        <slot name="methodology" />
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

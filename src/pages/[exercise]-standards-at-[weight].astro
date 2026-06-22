@@ -1,0 +1,230 @@
+---
+// src/pages/[exercise]-standards-at-[weight].astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { DistributionCurve } from '@/components/data-viz/DistributionCurve';
+import { exercises, type Exercise } from '@/data/exercises';
+import { calculateWeightForScore } from '@/lib/calculations/percentiles';
+import { buildWebApplicationSchema } from '@/lib/seo/schema';
+import { buildCanonical } from '@/lib/seo/meta';
+import { convert } from '@/lib/formatting/units';
+
+export async function getStaticPaths() {
+  const paths = [];
+  // Generate steps from 50kg to 140kg in 5kg intervals (19 steps per exercise)
+  const bodyweights = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140];
+  
+  for (const exercise of exercises) {
+    for (const bw of bodyweights) {
+      paths.push({
+        params: { 
+          exercise: exercise.slug, 
+          weight: `${bw}kg` 
+        },
+        props: { 
+          exercise, 
+          bodyweightKg: bw 
+        },
+      });
+    }
+  }
+  return paths;
+}
+
+interface Props {
+  exercise: Exercise;
+  bodyweightKg: number;
+}
+
+const { exercise, bodyweightKg } = Astro.props;
+const bodyweightLb = Math.round(convert.toLb(bodyweightKg));
+
+const title = `${exercise.name} Standards at ${bodyweightKg}kg (${bodyweightLb} lb) Bodyweight | StrengthAtlas`;
+const description = `Discover standard ${exercise.name} weights for male and female lifters at ${bodyweightKg} kg (${bodyweightLb} lbs) bodyweight. View raw percentiles and distribution curves.`;
+
+const canonicalPath = `/${exercise.slug}-standards-at-${bodyweightKg}kg`;
+const absoluteUrl = buildCanonical(canonicalPath);
+const webAppSchema = buildWebApplicationSchema(
+  `${exercise.name} Standards at ${bodyweightKg}kg`,
+  description,
+  absoluteUrl
+);
+
+const breadcrumbs = [
+  { name: 'Strength Standards', path: '/strength-standards' },
+  { name: `${exercise.name} Standards`, path: `/strength-standards/${exercise.slug}` },
+  { name: `At ${bodyweightKg}kg`, path: canonicalPath }
+];
+
+const levels = [
+  { name: 'Beginner', score: 10, color: 'text-[var(--level-beginner)]' },
+  { name: 'Novice', score: 30, color: 'text-[var(--level-novice)]' },
+  { name: 'Intermediate', score: 50, color: 'text-[var(--level-intermediate)]' },
+  { name: 'Advanced', score: 70, color: 'text-[var(--level-advanced)]' },
+  { name: 'Elite', score: 90, color: 'text-[var(--level-elite)]' }
+];
+
+// Helper to calculate standards for a gender
+const getStandardsForGender = (gender: 'male' | 'female') => {
+  return levels.map(lvl => {
+    let wt = calculateWeightForScore(exercise.id, gender, bodyweightKg, lvl.score);
+    if (exercise.id === 'pull-up' || exercise.id === 'dips') {
+      wt = Math.max(0, wt - bodyweightKg);
+    }
+    return {
+      levelName: lvl.name,
+      weightKg: Math.round(wt),
+      weightLb: Math.round(convert.toLb(wt))
+    };
+  });
+};
+
+const maleStandards = getStandardsForGender('male');
+const femaleStandards = getStandardsForGender('female');
+
+// Nearby bodyweight links for SEO linking structure
+const prevBwKg = bodyweightKg > 50 ? bodyweightKg - 5 : null;
+const nextBwKg = bodyweightKg < 140 ? bodyweightKg + 5 : null;
+
+// Related exercise links for SEO linking structure
+const otherExercises = exercises.filter(ex => ex.id !== exercise.id);
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+>
+  <StructuredData slot="head" schema={webAppSchema} />
+
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      {/* Hero Header */}
+      <div class="mb-10 text-left">
+        <h1 class="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+          {exercise.name} Standards at <span class="text-gradient">{bodyweightKg} kg</span> Bodyweight
+        </h1>
+        <p class="mt-3 text-lg text-muted-foreground max-w-3xl leading-relaxed">
+          The following thresholds define lifting levels for male and female athletes weighing <strong>{bodyweightKg} kg ({bodyweightLb} lb)</strong>. Ratios represent strict 1-Repetition Max (1RM) targets.
+        </p>
+      </div>
+
+      {/* Side-by-side comparison tables */}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+        {/* Male Standards Table */}
+        <div class="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-border bg-muted/20">
+            <h3 class="text-sm font-bold text-foreground">Male Standards ({bodyweightKg} kg)</h3>
+          </div>
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border bg-muted/40 text-[10px] uppercase font-mono text-muted-foreground">
+                <th scope="col" class="px-5 py-3">Level</th>
+                <th scope="col" class="px-5 py-3">Weight (KG)</th>
+                <th scope="col" class="px-5 py-3">Weight (LB)</th>
+                <th scope="col" class="px-5 py-3">BW Ratio</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/60">
+              {maleStandards.map((item) => {
+                // Adjust for bodyweight movements (pull up / dips)
+                const isBwExercise = exercise.id === 'pull-up' || exercise.id === 'dips';
+                const rawWeightKg = isBwExercise ? item.weightKg + bodyweightKg : item.weightKg;
+                const ratio = rawWeightKg / bodyweightKg;
+                return (
+                  <tr class="hover:bg-muted/10">
+                    <td class="px-5 py-3 font-semibold text-foreground">{item.levelName}</td>
+                    <td class="px-5 py-3 font-mono">{item.weightKg} kg</td>
+                    <td class="px-5 py-3 font-mono text-muted-foreground">({item.weightLb} lb)</td>
+                    <td class="px-5 py-3 font-mono text-primary font-bold">{ratio.toFixed(2)}x</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Female Standards Table */}
+        <div class="rounded-xl border border-border bg-card shadow-sm overflow-hidden">
+          <div class="p-4 border-b border-border bg-muted/20">
+            <h3 class="text-sm font-bold text-foreground">Female Standards ({bodyweightKg} kg)</h3>
+          </div>
+          <table class="w-full text-xs sm:text-sm text-left border-collapse">
+            <thead>
+              <tr class="border-b border-border bg-muted/40 text-[10px] uppercase font-mono text-muted-foreground">
+                <th scope="col" class="px-5 py-3">Level</th>
+                <th scope="col" class="px-5 py-3">Weight (KG)</th>
+                <th scope="col" class="px-5 py-3">Weight (LB)</th>
+                <th scope="col" class="px-5 py-3">BW Ratio</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/60">
+              {femaleStandards.map((item) => {
+                const isBwExercise = exercise.id === 'pull-up' || exercise.id === 'dips';
+                const rawWeightKg = isBwExercise ? item.weightKg + bodyweightKg : item.weightKg;
+                const ratio = rawWeightKg / bodyweightKg;
+                return (
+                  <tr class="hover:bg-muted/10">
+                    <td class="px-5 py-3 font-semibold text-foreground">{item.levelName}</td>
+                    <td class="px-5 py-3 font-mono">{item.weightKg} kg</td>
+                    <td class="px-5 py-3 font-mono text-muted-foreground">({item.weightLb} lb)</td>
+                    <td class="px-5 py-3 font-mono text-primary font-bold">{ratio.toFixed(2)}x</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Visual Distribution Curve (Intermediate anchor) */}
+      <div class="max-w-2xl mx-auto mb-16">
+        <DistributionCurve percentile={50} label={`Normal Strength Distribution for ${bodyweightKg} kg Lifters`} client:load />
+      </div>
+
+      {/* Programmatic Comparative Content */}
+      <div class="prose prose-invert max-w-3xl leading-relaxed text-muted-foreground text-sm space-y-4 mb-16">
+        <h2 class="text-xl font-bold text-foreground">Understanding the Standards</h2>
+        <p>
+          At a bodyweight of <strong>{bodyweightKg} kg ({bodyweightLb} lb)</strong>, an intermediate male bench press/lift is defined as <strong>{maleStandards[2].weightKg} kg ({maleStandards[2].weightLb} lb)</strong>. A female lifter at the same bodyweight reaches intermediate level with a lift of <strong>{femaleStandards[2].weightKg} kg ({femaleStandards[2].weightLb} lb)</strong>.
+        </p>
+        <p>
+          These benchmarks are built using cumulative normal distributions. The "Intermediate" level represents the 25th-35th percentile range of registered powerlifting competitors. Since competitors represent a self-selected group of strong athletes, achieving an Intermediate rating represents a very solid, above-average standard for standard gym-goers.
+        </p>
+      </div>
+
+      {/* SEO Programmatic Interlinking */}
+      <div class="border-t border-border pt-10">
+        <h3 class="text-sm font-bold text-foreground uppercase tracking-wider mb-6">Explore Other Bodyweights</h3>
+        <div class="flex flex-wrap gap-4 text-xs font-semibold">
+          {prevBwKg && (
+            <a href={`/${exercise.slug}-standards-at-${prevBwKg}kg`} class="px-3.5 py-2 border border-border rounded-lg bg-card text-muted-foreground hover:text-primary transition-colors">
+              &larr; standards at {prevBwKg} kg ({Math.round(convert.toLb(prevBwKg))} lb)
+            </a>
+          )}
+          {nextBwKg && (
+            <a href={`/${exercise.slug}-standards-at-${nextBwKg}kg`} class="px-3.5 py-2 border border-border rounded-lg bg-card text-muted-foreground hover:text-primary transition-colors">
+              standards at {nextBwKg} kg ({Math.round(convert.toLb(nextBwKg))} lb) &rarr;
+            </a>
+          )}
+        </div>
+      </div>
+
+      <div class="border-t border-border mt-10 pt-10">
+        <h3 class="text-sm font-bold text-foreground uppercase tracking-wider mb-6">Related Exercises at {bodyweightKg} kg</h3>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-xs font-semibold">
+          {otherExercises.map(ex => (
+            <a href={`/${ex.slug}-standards-at-${bodyweightKg}kg`} class="p-3 border border-border rounded-lg bg-card text-muted-foreground hover:text-primary transition-colors block text-center">
+              {ex.name} Standards at {bodyweightKg} kg
+            </a>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

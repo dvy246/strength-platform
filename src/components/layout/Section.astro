@@ -1,0 +1,14 @@
+---
+// src/components/layout/Section.astro
+export interface Props {
+  class?: string;
+  id?: string;
+  as?: 'section' | 'div' | 'footer' | 'header';
+}
+
+const { class: className = '', id, as: Component = 'section' } = Astro.props;
+---
+
+<Component id={id} class={`py-12 md:py-16 lg:py-24 ${className}`}>
+  <slot />
+</Component>

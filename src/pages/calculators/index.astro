@@ -1,0 +1,116 @@
+---
+// src/pages/calculators/index.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+
+const breadcrumbs = [{ name: 'Calculators', path: '/calculators' }];
+---
+
+<PageLayout
+  title="Strength & Fitness Calculators | StrengthAtlas"
+  description="Calculate your One-Rep Max, evaluate your total body strength profile, and find your relative strength score using our precision tools."
+  canonicalPath="/calculators"
+>
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="mb-12">
+        <h1 class="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+          Strength <span class="text-gradient">Calculators</span>
+        </h1>
+        <p class="mt-3 text-lg text-muted-foreground max-w-2xl">
+          Scientific, data-driven calculators designed to assess your performance, optimize your training zones, and track your development.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
+        {/* Strength Index Card */}
+        <div class="flex flex-col justify-between p-8 border border-border rounded-2xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-primary font-mono">Flagship</span>
+            <h2 class="text-2xl font-bold text-foreground mt-3 group-hover:text-primary transition-colors">
+              Strength Index Calculator
+            </h2>
+            <p class="text-muted-foreground text-sm mt-3 leading-relaxed">
+              Synthesize your performance across multiple movements into a single score from 0 to 100. Get customized profile analysis, percentile ratings, and muscle balance charts.
+            </p>
+          </div>
+          <div class="mt-8">
+            <a
+              href="/calculators/strength-index"
+              class="inline-flex items-center justify-center rounded-lg bg-primary px-4 py-2.5 text-xs font-bold text-primary-foreground hover:bg-primary/95 shadow-sm transition-all"
+            >
+              Calculate Strength Index
+            </a>
+          </div>
+        </div>
+
+        {/* One Rep Max Card */}
+        <div class="flex flex-col justify-between p-8 border border-border rounded-2xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-mono">Training Math</span>
+            <h2 class="text-2xl font-bold text-foreground mt-3 group-hover:text-primary transition-colors">
+              One Rep Max Calculator
+            </h2>
+            <p class="text-muted-foreground text-sm mt-3 leading-relaxed">
+              Estimate your absolute single-rep capability for any movement based on your rep performance. Compares 6 major equations and outputs percent-based load charts.
+            </p>
+          </div>
+          <div class="mt-8">
+            <a
+              href="/calculators/one-rep-max-calculator"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
+            >
+              Estimate One-Rep Max
+            </a>
+          </div>
+        </div>
+
+        {/* Ideal Bodyweight Card */}
+        <div class="flex flex-col justify-between p-8 border border-border rounded-2xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-mono">Physique targets</span>
+            <h2 class="text-2xl font-bold text-foreground mt-3 group-hover:text-primary transition-colors">
+              Ideal Bodyweight Calculator
+            </h2>
+            <p class="text-muted-foreground text-sm mt-3 leading-relaxed">
+              Find your recommended, athletic, and strength-focused weight classes based on height structure and experience, with target standards.
+            </p>
+          </div>
+          <div class="mt-8">
+            <a
+              href="/calculators/ideal-bodyweight"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
+            >
+              Find Ideal Weight
+            </a>
+          </div>
+        </div>
+
+        {/* Relative Strength Card */}
+        <div class="flex flex-col justify-between p-8 border border-border rounded-2xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-mono">Neuromuscular</span>
+            <h2 class="text-2xl font-bold text-foreground mt-3 group-hover:text-primary transition-colors">
+              Relative Strength Calculator
+            </h2>
+            <p class="text-muted-foreground text-sm mt-3 leading-relaxed">
+              Analyze your absolute lift relative to your bodyweight, mapping ratios to Beginner through Elite tiers with percentile curves.
+            </p>
+          </div>
+          <div class="mt-8">
+            <a
+              href="/calculators/relative-strength"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
+            >
+              Analyze Ratio
+            </a>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

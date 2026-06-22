@@ -1,0 +1,52 @@
+---
+// src/components/home/HowItWorks.astro
+import Container from '../layout/Container.astro';
+import Section from '../layout/Section.astro';
+
+const steps = [
+  {
+    num: '01',
+    title: 'Input Profile Details',
+    desc: 'Enter your gender, bodyweight, and age. Our mathematical calculations require these reference baselines to compute accurate ratios.'
+  },
+  {
+    num: '02',
+    title: 'Enter Strict 1RMs',
+    desc: 'Record your weights. If you do not know your 1-Rep Max, input your working weight and repetitions, and Epley’s formula will estimate it.'
+  },
+  {
+    num: '03',
+    title: 'Obtain Strength Index',
+    desc: 'Get your composite rating from 0 to 100 mapped to 5 gym levels. Review your muscle balance radar chart and custom recommendations.'
+  }
+];
+---
+
+<Section class="bg-muted/10 border-b border-border">
+  <Container>
+    <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+      <h2 class="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        How It Works
+      </h2>
+      <p class="text-muted-foreground text-sm">
+        We map your maximum lifts against the normal distribution curves of competitive lifters.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-8 relative">
+      {steps.map((step) => (
+        <div class="flex flex-col relative space-y-4">
+          <span class="font-score text-5xl font-black text-primary/20 select-none">
+            {step.num}
+          </span>
+          <h3 class="text-lg font-bold text-foreground">
+            {step.title}
+          </h3>
+          <p class="text-sm text-muted-foreground leading-relaxed">
+            {step.desc}
+          </p>
+        </div>
+      ))}
+    </div>
+  </Container>
+</Section>

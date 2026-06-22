@@ -1,0 +1,53 @@
+---
+// src/pages/about.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+
+const breadcrumbs = [{ name: 'About', path: '/about' }];
+---
+
+<PageLayout
+  title="About StrengthAtlas | The Strength Intelligence Platform"
+  description="Learn about the mission, data science, and team behind StrengthAtlas — the premium, definitive strength standards platform."
+  canonicalPath="/about"
+>
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="mb-12">
+        <h1 class="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+          About <span class="text-gradient">StrengthAtlas</span>
+        </h1>
+        <p class="mt-3 text-lg text-muted-foreground max-w-2xl">
+          We build scientific strength intelligence tools for lifters, coaches, and researchers.
+        </p>
+      </div>
+
+      <div class="prose prose-invert max-w-3xl leading-relaxed text-muted-foreground text-sm space-y-6">
+        <h2 class="text-xl font-bold text-foreground">Our Mission</h2>
+        <p>
+          In the fitness industry, generic guidelines and anecdotal evidence abound. Trainees are often left with questions: "Is my squat actually strong?", "What should a person of my weight be bench pressing?", "Is my body development balanced?"
+        </p>
+        <p>
+          StrengthAtlas was founded to provide clear, quantitative, and scientifically-grounded answers. We believe that strength metrics should be derived from empirical data, not myths.
+        </p>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">Data-Driven Integrity</h2>
+        <p>
+          Unlike competitive websites that rely on user-submitted inputs (which are subject to reporting bias and inflation), our baseline curves are mathematically modeled using raw competition results from powerlifting meets (specifically open-raw divisions in the IPF) combined with peer-reviewed population fitness studies.
+        </p>
+        <p>
+          This ensures that our standards represent real-world athletic capabilities. Our log-normal statistical curves are built to reflect how bodyweight affects relative strength, honoring the physiological differences in lifters.
+        </p>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">The Team</h2>
+        <p>
+          We are a team of data scientists, software engineers, and strength coaches. By merging modern web design principles (Vercel-inspired dark aesthetics, high-performance static rendering, interactive React components) with rigorous math, we deliver a premium, tool-first UX that sets a new standard for fitness platforms.
+        </p>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

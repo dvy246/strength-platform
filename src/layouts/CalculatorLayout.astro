@@ -1,0 +1,61 @@
+---
+// src/layouts/CalculatorLayout.astro
+import PageLayout from './PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildWebApplicationSchema } from '@/lib/seo/schema';
+import { buildCanonical } from '@/lib/seo/meta';
+
+interface Props {
+  title: string;
+  description: string;
+  calculatorName: string;
+  canonicalPath?: string;
+  ogImagePath?: string;
+}
+
+const { title, description, calculatorName, canonicalPath, ogImagePath } = Astro.props;
+
+const currentPath = canonicalPath || Astro.url.pathname;
+const absoluteUrl = buildCanonical(currentPath);
+const webAppSchema = buildWebApplicationSchema(calculatorName, description, absoluteUrl);
+
+const breadcrumbItems = [
+  { name: 'Calculators', path: '/calculators' },
+  { name: calculatorName, path: currentPath }
+];
+---
+
+<PageLayout
+  title={title}
+  description={description}
+  canonicalPath={currentPath}
+  ogImagePath={ogImagePath}
+>
+  <StructuredData slot="head" schema={webAppSchema} />
+
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbItems} />
+      
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mt-6">
+        {/* Calculator interactive section */}
+        <div class="lg:col-span-8">
+          <slot name="calculator" />
+        </div>
+        
+        {/* Informational sidebar content */}
+        <aside class="lg:col-span-4 space-y-8">
+          <slot name="sidebar" />
+        </aside>
+      </div>
+      
+      {/* Bottom detailed methodology/content section */}
+      <div class="prose prose-invert max-w-none mt-12 pt-12 border-t border-border">
+        <slot />
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

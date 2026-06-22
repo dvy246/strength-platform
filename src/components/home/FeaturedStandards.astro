@@ -1,0 +1,70 @@
+---
+// src/components/home/FeaturedStandards.astro
+import Container from '../layout/Container.astro';
+import Section from '../layout/Section.astro';
+
+// Pre-computed Intermediate benchmarks for 80kg male in KG & LB
+const benchmarks = [
+  { slug: 'bench-press', name: 'Bench Press', ratio: '1.15x BW', kg: '92 kg', lb: '203 lb', labelColor: 'text-[var(--level-intermediate)]' },
+  { slug: 'squat', name: 'Squat', ratio: '1.75x BW', kg: '140 kg', lb: '308 lb', labelColor: 'text-[var(--level-intermediate)]' },
+  { slug: 'deadlift', name: 'Deadlift', ratio: '2.00x BW', kg: '160 kg', lb: '352 lb', labelColor: 'text-[var(--level-intermediate)]' },
+  { slug: 'overhead-press', name: 'Overhead Press', ratio: '0.75x BW', kg: '60 kg', lb: '132 lb', labelColor: 'text-[var(--level-intermediate)]' },
+  { slug: 'pull-up', name: 'Pull-Up', ratio: 'Bodyweight', kg: '0 kg added', lb: '0 lb added', labelColor: 'text-[var(--level-intermediate)]' },
+  { slug: 'dips', name: 'Dips', ratio: 'Bodyweight', kg: '0 kg added', lb: '0 lb added', labelColor: 'text-[var(--level-intermediate)]' },
+];
+---
+
+<Section class="border-b border-border bg-background">
+  <Container>
+    <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+      <h2 class="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        Benchmark Gym Levels
+      </h2>
+      <p class="text-muted-foreground text-sm">
+        See how you compare to standard Intermediate lifting benchmarks for an <strong>80 kg (176 lb) Male</strong>.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+      {benchmarks.map((item) => (
+        <a
+          href={`/strength-standards/${item.slug}`}
+          class="group p-6 border border-border rounded-xl bg-card shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+        >
+          <div>
+            <span class="text-[10px] font-mono font-bold tracking-widest text-muted-foreground uppercase">
+              Intermediate
+            </span>
+            <h3 class="text-base font-bold text-foreground mt-1 group-hover:text-primary transition-colors">
+              {item.name}
+            </h3>
+            <span class="inline-block mt-3 text-xs px-2 py-0.5 rounded bg-muted text-muted-foreground font-semibold">
+              {item.ratio}
+            </span>
+          </div>
+
+          <div class="mt-6 border-t border-border/60 pt-4">
+            <span class="block text-2xl font-score font-black text-foreground">
+              {item.kg}
+            </span>
+            <span class="block text-xs text-muted-foreground mt-0.5">
+              ({item.lb})
+            </span>
+          </div>
+        </a>
+      ))}
+    </div>
+
+    <div class="mt-12 text-center">
+      <a
+        href="/strength-standards"
+        class="inline-flex items-center text-sm font-bold text-primary hover:text-primary/80 group"
+      >
+        <span>View all exercise standards</span>
+        <svg class="ml-1 h-4 w-4 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+      </a>
+    </div>
+  </Container>
+</Section>

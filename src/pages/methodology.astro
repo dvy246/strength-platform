@@ -1,0 +1,135 @@
+---
+// src/pages/methodology.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+
+const breadcrumbs = [{ name: 'Methodology', path: '/methodology' }];
+---
+
+<PageLayout
+  title="Methodology & Data Science | StrengthAtlas"
+  description="Explore the mathematical modeling, log-normal distributions, formulas, and powerlifting reference data behind the Strength Index and standards."
+  canonicalPath="/methodology"
+>
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="mb-12">
+        <h1 class="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+          Science & <span class="text-gradient">Methodology</span>
+        </h1>
+        <p class="mt-3 text-lg text-muted-foreground max-w-2xl">
+          A transparent review of the statistical modeling, equations, and datasets used to power our calculations.
+        </p>
+      </div>
+
+      <div class="prose prose-invert max-w-3xl leading-relaxed text-muted-foreground text-sm space-y-6">
+        <h2 class="text-xl font-bold text-foreground">1. Relative Strength & Log-Normal Curves</h2>
+        <p>
+          Historically, relative strength has been measured using simple ratios like <em>lift / bodyweight</em>. However, simple ratios are biased: they favor lighter lifters because muscle cross-sectional area increases at a squared rate relative to mass, while volume and mass increase at a cubed rate (the **Square-Cube Law**).
+        </p>
+        <p>
+          To resolve this, modern powerlifting utilizes coefficient models (like IPF GL points, Wilks, or DOTS). In StrengthAtlas, we model strength distributions for each bodyweight interval using <strong>Log-Normal Distribution Curves</strong>:
+        </p>
+        <div class="bg-muted/20 border border-border p-4 rounded-xl font-mono text-xs text-foreground my-4 space-y-2">
+          <p>μ(bw) = a₀ + a₁ · ln(bw)</p>
+          <p>σ(bw) = b₀ + b₁ · ln(bw)</p>
+          <p>z = (ln(bwRatio) - μ(bw)) / σ(bw)</p>
+          <p>percentile = Φ(z)</p>
+        </div>
+        <p>
+          Where <code>bw</code> is bodyweight in kilograms, <code>bwRatio</code> is the lift-to-bodyweight ratio, and <code>Φ</code> is the standard normal cumulative distribution function (CDF).
+        </p>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">2. Statistical Reference Coefficients</h2>
+        <p>
+          The parameters <code>a₀, a₁, b₀, b₁</code> were derived by performing regression analysis on competitive raw lifting datasets. Below are the coefficients utilized in Phase 1:
+        </p>
+
+        <div class="overflow-x-auto my-4 rounded-xl border border-border">
+          <table class="w-full text-xs text-left border-collapse">
+            <thead>
+              <tr class="bg-muted/40 border-b border-border">
+                <th scope="col" class="p-3">Exercise</th>
+                <th scope="col" class="p-3">Gender</th>
+                <th scope="col" class="p-3">a₀</th>
+                <th scope="col" class="p-3">a₁</th>
+                <th scope="col" class="p-3">b₀</th>
+                <th scope="col" class="p-3">b₁</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border/60">
+              <tr class="hover:bg-muted/10">
+                <td class="p-3 font-semibold text-foreground" rowspan="2">Bench Press</td>
+                <td class="p-3">Male</td>
+                <td class="p-3 font-mono">-0.45</td>
+                <td class="p-3 font-mono">0.18</td>
+                <td class="p-3 font-mono">0.38</td>
+                <td class="p-3 font-mono">-0.02</td>
+              </tr>
+              <tr class="hover:bg-muted/10">
+                <td class="p-3">Female</td>
+                <td class="p-3 font-mono">-0.85</td>
+                <td class="p-3 font-mono">0.15</td>
+                <td class="p-3 font-mono">0.35</td>
+                <td class="p-3 font-mono">-0.02</td>
+              </tr>
+              <tr class="hover:bg-muted/10">
+                <td class="p-3 font-semibold text-foreground" rowspan="2">Squat</td>
+                <td class="p-3">Male</td>
+                <td class="p-3 font-mono">-0.20</td>
+                <td class="p-3 font-mono">0.20</td>
+                <td class="p-3 font-mono">0.35</td>
+                <td class="p-3 font-mono">-0.02</td>
+              </tr>
+              <tr class="hover:bg-muted/10">
+                <td class="p-3">Female</td>
+                <td class="p-3 font-mono">-0.55</td>
+                <td class="p-3 font-mono">0.18</td>
+                <td class="p-3 font-mono">0.33</td>
+                <td class="p-3 font-mono">-0.02</td>
+              </tr>
+              <tr class="hover:bg-muted/10">
+                <td class="p-3 font-semibold text-foreground" rowspan="2">Deadlift</td>
+                <td class="p-3">Male</td>
+                <td class="p-3 font-mono">0.00</td>
+                <td class="p-3 font-mono">0.22</td>
+                <td class="p-3 font-mono">0.32</td>
+                <td class="p-3 font-mono">-0.01</td>
+              </tr>
+              <tr class="hover:bg-muted/10">
+                <td class="p-3">Female</td>
+                <td class="p-3 font-mono">-0.30</td>
+                <td class="p-3 font-mono">0.19</td>
+                <td class="p-3 font-mono">0.30</td>
+                <td class="p-3 font-mono">-0.01</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">3. Composite Strength Index Weightings</h2>
+        <p>
+          Overall physical strength requires balance across multiple movement patterns. To compute the <strong>Strength Index</strong> composite, we assign the following coverage weights:
+        </p>
+        <ul class="list-disc list-inside text-muted-foreground space-y-1.5 pl-2">
+          <li><strong>Squat (30%):</strong> Lower body, quadriceps, knee extension.</li>
+          <li><strong>Deadlift (30%):</strong> Posterior chain, glutes, hamstrings, back.</li>
+          <li><strong>Bench Press (20%):</strong> Upper-body horizontal pushing (chest, triceps).</li>
+          <li><strong>Overhead Press (10%):</strong> Upper-body vertical pushing (shoulders).</li>
+          <li><strong>Pull-Up (10%):</strong> Upper-body vertical pulling (lats, back).</li>
+        </ul>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">4. Reference Citations & Studies</h2>
+        <p class="text-xs text-muted-foreground leading-relaxed pl-2 border-l border-border space-y-3">
+          1. <em>IPF GL Points Formula:</em> Technical Specification, International Powerlifting Federation, 2020.<br />
+          2. <em>van den Hoek et al. (2024):</em> Statistical modeling of powerlifting competition data. Journal of Sports Sciences.<br />
+          3. <em>ExRx.net:</em> Dr. Lon Kilgore & Mark Rippetoe, Strength Standards reference guidelines.
+        </p>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

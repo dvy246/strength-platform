@@ -1,0 +1,34 @@
+---
+// src/layouts/PageLayout.astro
+import BaseLayout from './BaseLayout.astro';
+import Header from '@/components/layout/Header.astro';
+import Footer from '@/components/layout/Footer.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  ogImagePath?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonicalPath, ogImagePath, noindex } = Astro.props;
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={canonicalPath}
+  ogImagePath={ogImagePath}
+  noindex={noindex}
+>
+  <slot name="head" slot="head" />
+  
+  <Header />
+  
+  <main id="main-content" class="flex-grow focus:outline-none">
+    <slot />
+  </main>
+  
+  <Footer />
+</BaseLayout>

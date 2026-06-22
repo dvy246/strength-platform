@@ -1,0 +1,13 @@
+---
+// src/components/layout/Container.astro
+interface Props {
+  class?: string;
+  id?: string;
+}
+
+const { class: className = '', id } = Astro.props;
+---
+
+<div id={id} class={`max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 w-full ${className}`}>
+  <slot />
+</div>

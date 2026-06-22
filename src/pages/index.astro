@@ -1,17 +1,34 @@
 ---
-import Layout from "@/layouts/main.astro"
-import { Button } from "@/components/ui/button"
+// src/pages/index.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import HeroSection from '@/components/home/HeroSection.astro';
+import ToolGrid from '@/components/home/ToolGrid.astro';
+import FeaturedStandards from '@/components/home/FeaturedStandards.astro';
+import HowItWorks from '@/components/home/HowItWorks.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildWebSiteSchema, buildOrganizationSchema } from '@/lib/seo/schema';
+
+const websiteSchema = buildWebSiteSchema();
+const orgSchema = buildOrganizationSchema();
+const schemas = [websiteSchema, orgSchema];
 ---
 
-<Layout>
-  <div class="flex min-h-svh p-6">
-    <div class="flex max-w-md min-w-0 flex-col gap-4 text-sm leading-loose">
-      <div>
-        <h1 class="font-medium">Project ready!</h1>
-        <p>You may now add components and start building.</p>
-        <p>We've already added the button component for you.</p>
-        <Button client:load className="mt-2">Button</Button>
-      </div>
-    </div>
-  </div>
-</Layout>
+<PageLayout
+  title="StrengthAtlas | Strength Standards & Relative Strength Platform"
+  description="Calculate your Strength Index composite rating. Browse strict strength standards for Bench Press, Squats, Deadlifts, Overhead Press, and Pull-Ups."
+  canonicalPath="/"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* Flagship Hero section with integrated calculator */}
+  <HeroSection />
+
+  {/* Tool Navigation Grid */}
+  <ToolGrid />
+
+  {/* Featured 80kg Male intermediate standards */}
+  <FeaturedStandards />
+
+  {/* Calculation methodology steps */}
+  <HowItWorks />
+</PageLayout>

@@ -1,0 +1,51 @@
+---
+// src/pages/calculators/relative-strength.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { RelativeStrength } from '@/components/calculators/RelativeStrength';
+---
+
+<CalculatorLayout
+  title="Relative Strength Calculator | Lift to Bodyweight Ratio | StrengthAtlas"
+  description="Calculate your lift-to-bodyweight ratios and see how you rank compared to the competitive lifting community. Features interactive sliders."
+  calculatorName="Relative Strength"
+  canonicalPath="/calculators/relative-strength"
+>
+  {/* The Relative Strength Island */}
+  <RelativeStrength slot="calculator" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Relative Strength</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Relative strength measures your force output per unit of bodyweight. It is the definitive metric for weight-class athletes and calisthenics trainees.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      A 100kg lifter benching 100kg is solid, but a 60kg lifter benching 100kg is an exceptional athlete. Ratios normalize raw weights to show true athletic capacity.
+    </p>
+    <div class="border-t border-border pt-4">
+      <a href="/methodology" class="text-xs font-semibold text-primary hover:underline">
+        Read calculations methodology →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">Why Relative Strength Matters</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        While absolute strength is useful for heavy machinery, relative strength is the primary driver of human physical performance. It determines how fast you can run, how high you can jump, and how easily you can manipulate your own body structure in space.
+      </p>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        This **Relative Strength Calculator** analyzes your force-to-mass ratio. It uses log-normal distribution probability curves to rank your ratio against standard competitive tiers (Beginner to Elite) so you can compare progress objectively, regardless of your bodyweight.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h3 class="text-xl font-bold text-foreground">Evaluating Bodyweight Exercises</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        For bodyweight exercises like pull-ups and dips, the total force required is equal to your bodyweight plus the added weight on your belt. This calculator automatically incorporates your body weight to yield an accurate ratio, comparing your added load directly to standardized fitness metrics.
+      </p>
+    </section>
+  </div>
+</CalculatorLayout>

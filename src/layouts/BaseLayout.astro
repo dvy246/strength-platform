@@ -1,0 +1,53 @@
+---
+// src/layouts/BaseLayout.astro
+import '@/styles/global.css';
+import Head from '@/components/seo/Head.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  canonicalPath?: string;
+  ogImagePath?: string;
+  noindex?: boolean;
+}
+
+const { title, description, canonicalPath, ogImagePath, noindex } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <Head
+      title={title}
+      description={description}
+      canonicalPath={canonicalPath}
+      ogImagePath={ogImagePath}
+      noindex={noindex}
+    />
+    <script is:inline>
+      // Sync dark/light theme before rendering content to prevent flashing
+      const getTheme = () => {
+        if (typeof localStorage !== 'undefined' && localStorage.getItem('sa-theme')) {
+          return localStorage.getItem('sa-theme');
+        }
+        return 'dark'; // Dark default as per design specification
+      };
+      
+      const theme = getTheme();
+      if (theme === 'light') {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.classList.add('light');
+      } else {
+        document.documentElement.classList.add('dark');
+        document.documentElement.classList.remove('light');
+      }
+    </script>
+    <slot name="head" />
+  </head>
+  <body class="bg-background text-foreground antialiased selection:bg-primary/20 selection:text-primary">
+    <a href="#main-content" class="skip-to-content">
+      Skip to main content
+    </a>
+    <slot />
+  </body>
+</html>

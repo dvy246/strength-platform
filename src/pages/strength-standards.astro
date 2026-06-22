@@ -1,0 +1,100 @@
+---
+// src/pages/strength-standards.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import { exercises } from '@/data/exercises';
+
+const breadcrumbs = [{ name: 'Strength Standards', path: '/strength-standards' }];
+
+const barbellLifts = exercises.filter(e => e.category === 'barbell');
+const bodyweightLifts = exercises.filter(e => e.category === 'bodyweight' || e.category === 'weighted-bodyweight');
+---
+
+<PageLayout
+  title="Strict Strength Standards & Gym Levels | StrengthAtlas"
+  description="Discover scientific strength standards for compound barbell and bodyweight movements. Find where you rank from Beginner to Elite."
+  canonicalPath="/strength-standards"
+>
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbs} />
+
+      <div class="mb-12">
+        <h1 class="text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
+          Strength <span class="text-gradient">Standards</span>
+        </h1>
+        <p class="mt-3 text-lg text-muted-foreground max-w-2xl">
+          Accurate strength levels derived from raw powerlifting meets and survey data, categorized by pattern and muscle group.
+        </p>
+      </div>
+
+      {/* Barbell Lifts Section */}
+      <div class="space-y-6">
+        <h2 class="text-2xl font-bold text-foreground border-b border-border pb-2">
+          Barbell Exercises
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {barbellLifts.map((ex) => (
+            <a
+              href={`/strength-standards/${ex.slug}`}
+              class="group p-6 border border-border rounded-xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <span class="text-[10px] font-mono font-bold tracking-widest text-primary uppercase">
+                  {ex.muscleGroup}
+                </span>
+                <h3 class="text-lg font-bold text-foreground mt-2 group-hover:text-primary transition-colors">
+                  {ex.name}
+                </h3>
+                <p class="text-xs text-muted-foreground mt-2 line-clamp-2">
+                  {ex.description}
+                </p>
+              </div>
+              <span class="mt-6 flex items-center text-xs font-semibold text-primary">
+                <span>View standards</span>
+                <svg class="ml-1 h-3 w-3 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+
+      {/* Bodyweight Lifts Section */}
+      <div class="space-y-6 mt-16">
+        <h2 class="text-2xl font-bold text-foreground border-b border-border pb-2">
+          Bodyweight & Weighted Exercises
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {bodyweightLifts.map((ex) => (
+            <a
+              href={`/strength-standards/${ex.slug}`}
+              class="group p-6 border border-border rounded-xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 flex flex-col justify-between"
+            >
+              <div>
+                <span class="text-[10px] font-mono font-bold tracking-widest text-primary uppercase">
+                  {ex.muscleGroup}
+                </span>
+                <h3 class="text-lg font-bold text-foreground mt-2 group-hover:text-primary transition-colors">
+                  {ex.name}
+                </h3>
+                <p class="text-xs text-muted-foreground mt-2 line-clamp-2">
+                  {ex.description}
+                </p>
+              </div>
+              <span class="mt-6 flex items-center text-xs font-semibold text-primary">
+                <span>View standards</span>
+                <svg class="ml-1 h-3 w-3 transform group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

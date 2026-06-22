@@ -1,0 +1,82 @@
+---
+// src/pages/[exercise]-standards.astro
+import StandardsLayout from '@/layouts/StandardsLayout.astro';
+import { ExerciseStandardsDashboard } from '@/components/standards/ExerciseStandardsDashboard';
+import { exercises, type Exercise } from '@/data/exercises';
+
+export async function getStaticPaths() {
+  return exercises.map((ex) => ({
+    params: { exercise: ex.slug },
+    props: { exercise: ex },
+  }));
+}
+
+interface Props {
+  exercise: Exercise;
+}
+
+const { exercise } = Astro.props;
+
+const title = `${exercise.name} Strength Standards & Gym Levels | StrengthAtlas`;
+const description = `Find standard strict 1RM ${exercise.name} weights for male and female lifters of all bodyweights. Calculate your gym level and percentile rank.`;
+---
+
+<StandardsLayout
+  exercise={exercise}
+  title={title}
+  description={description}
+  canonicalPath={`/${exercise.slug}-standards`}
+>
+  {/* Unified Calculator, Progression recommendations, and Matrix Dashboard */}
+  <ExerciseStandardsDashboard
+    exerciseId={exercise.id}
+    exerciseName={exercise.name}
+    exerciseSlug={exercise.slug}
+    client:load
+  />
+
+  {/* Methodology slot */}
+  <div slot="methodology" class="space-y-6">
+    <h2 class="text-2xl font-bold text-foreground">Calculation Methodology</h2>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Standards on this page represent strict, full-range-of-motion repetitions. For barbell movements, this means touching the chest on the bench press, squatting to or below parallel, and lifting the bar to full lockout on deadlifts.
+    </p>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Lifting values are derived using log-normal probability curves modeled against competitive powerlifting databases (specifically raw divisions from the International Powerlifting Federation) combined with surveys from recreational gym trainees. This ensures the thresholds reflect realistic milestones for general lifters while remaining statistically anchored to empirical athletic results.
+    </p>
+    
+    <h3 class="text-lg font-bold text-foreground mt-8">Level Descriptions</h3>
+    <div class="grid grid-cols-1 md:grid-cols-5 gap-6 mt-4">
+      <div class="p-4 border border-border bg-card rounded-lg space-y-2">
+        <span class="text-xs font-bold text-[var(--level-beginner)]">Beginner</span>
+        <p class="text-[11px] text-muted-foreground leading-relaxed">
+          Traveled past empty-bar workouts. Can perform movements with basic technique. Stronger than 5% of the database.
+        </p>
+      </div>
+      <div class="p-4 border border-border bg-card rounded-lg space-y-2">
+        <span class="text-xs font-bold text-[var(--level-novice)]">Novice</span>
+        <p class="text-[11px] text-muted-foreground leading-relaxed">
+          Has trained consistently for a few months. Possesses decent form and base coordination. Stronger than 15% of lifters.
+        </p>
+      </div>
+      <div class="p-4 border border-border bg-card rounded-lg space-y-2">
+        <span class="text-xs font-bold text-[var(--level-intermediate)]">Intermediate</span>
+        <p class="text-[11px] text-muted-foreground leading-relaxed">
+          Trained seriously for 1–2 years. Standard, strong gym goer who can handle significant loads. Stronger than 35% of lifters.
+        </p>
+      </div>
+      <div class="p-4 border border-border bg-card rounded-lg space-y-2">
+        <span class="text-xs font-bold text-[var(--level-advanced)]">Advanced</span>
+        <p class="text-[11px] text-muted-foreground leading-relaxed">
+          Multiple years of dedicated progress. High strength development and solid technique. Stronger than 70% of lifters.
+        </p>
+      </div>
+      <div class="p-4 border border-border bg-card rounded-lg space-y-2">
+        <span class="text-xs font-bold text-[var(--level-elite)]">Elite</span>
+        <p class="text-[11px] text-muted-foreground leading-relaxed">
+          Outstanding, highly competitive levels of relative strength. Approaching absolute human potential. Stronger than 95% of lifters.
+        </p>
+      </div>
+    </div>
+  </div>
+</StandardsLayout>

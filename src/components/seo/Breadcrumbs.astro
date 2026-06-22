@@ -1,0 +1,53 @@
+---
+// src/components/seo/Breadcrumbs.astro
+import StructuredData from './StructuredData.astro';
+import { buildBreadcrumbSchema } from '@/lib/seo/schema';
+
+interface BreadcrumbItem {
+  name: string;
+  path: string;
+}
+
+interface Props {
+  items: BreadcrumbItem[];
+}
+
+const { items } = Astro.props;
+
+// Ensure Home is always present at the start if not already there
+const allItems = items[0]?.path === '/' 
+  ? items 
+  : [{ name: 'Home', path: '/' }, ...items];
+
+const schemaItems = allItems.map(item => ({
+  name: item.name,
+  item: item.path,
+}));
+
+const breadcrumbSchema = buildBreadcrumbSchema(schemaItems);
+---
+
+<nav aria-label="Breadcrumb" class="mb-6 flex items-center space-x-2 text-sm text-muted-foreground font-mono">
+  {allItems.map((item, index) => {
+    const isLast = index === allItems.length - 1;
+    return (
+      <>
+        {index > 0 && <span class="text-border">/</span>}
+        {isLast ? (
+          <span class="text-foreground font-medium select-none" aria-current="page">
+            {item.name}
+          </span>
+        ) : (
+          <a
+            href={item.path}
+            class="hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:rounded"
+          >
+            {item.name}
+          </a>
+        )}
+      </>
+    );
+  })}
+</nav>
+
+<StructuredData schema={breadcrumbSchema} />

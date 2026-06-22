@@ -1,0 +1,135 @@
+---
+// src/components/home/ToolGrid.astro
+import Container from '../layout/Container.astro';
+import Section from '../layout/Section.astro';
+---
+
+<Section class="border-b border-border bg-muted/20">
+  <Container>
+    <div class="text-center max-w-2xl mx-auto mb-16 space-y-3">
+      <h2 class="text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+        Precision Strength Tools
+      </h2>
+      <p class="text-muted-foreground text-sm">
+        Explore our specialized suite of calculators designed for powerlifters, athletes, and fitness enthusiasts.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      {/* Strength Index Card */}
+      <a
+        href="/calculators/strength-index"
+        class="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md flex flex-col justify-between overflow-hidden"
+      >
+        <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div>
+          <span class="text-primary font-mono text-xs font-semibold uppercase tracking-widest">Flagship Tool</span>
+          <h3 class="text-xl font-bold text-foreground mt-2 group-hover:text-primary transition-colors">
+            Strength Index
+          </h3>
+          <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+            Get a single, composite score from 0 to 100 representing your relative strength, normalized for age and gender.
+          </p>
+        </div>
+        <div class="mt-8 flex items-center text-xs font-semibold text-primary">
+          <span>Calculate score</span>
+          <svg class="ml-1.5 h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
+      {/* 1RM Calculator Card */}
+      <a
+        href="/calculators/one-rep-max-calculator"
+        class="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md flex flex-col justify-between overflow-hidden"
+      >
+        <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div>
+          <span class="text-muted-foreground font-mono text-xs font-semibold uppercase tracking-widest">Training Math</span>
+          <h3 class="text-xl font-bold text-foreground mt-2 group-hover:text-primary transition-colors">
+            One Rep Max
+          </h3>
+          <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+            Estimate your absolute maximum strength for any lift using 6 standard powerlifting formulas with zone breakdowns.
+          </p>
+        </div>
+        <div class="mt-8 flex items-center text-xs font-semibold text-primary">
+          <span>Estimate 1RM</span>
+          <svg class="ml-1.5 h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
+      {/* Standards Database Card */}
+      <a
+        href="/strength-standards"
+        class="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md flex flex-col justify-between overflow-hidden"
+      >
+        <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div>
+          <span class="text-muted-foreground font-mono text-xs font-semibold uppercase tracking-widest">Database</span>
+          <h3 class="text-xl font-bold text-foreground mt-2 group-hover:text-primary transition-colors">
+            Strength Standards
+          </h3>
+          <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+            Browse strict strength levels and percentile rankings for Bench Press, Squats, Deadlifts, Overhead Press, and Pull-Ups.
+          </p>
+        </div>
+        <div class="mt-8 flex items-center text-xs font-semibold text-primary">
+          <span>Browse database</span>
+          <svg class="ml-1.5 h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
+      {/* Ideal Bodyweight Card */}
+      <a
+        href="/calculators/ideal-bodyweight"
+        class="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md flex flex-col justify-between overflow-hidden"
+      >
+        <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div>
+          <span class="text-muted-foreground font-mono text-xs font-semibold uppercase tracking-widest">Sizing Diagnostic</span>
+          <h3 class="text-xl font-bold text-foreground mt-2 group-hover:text-primary transition-colors">
+            Ideal Bodyweight
+          </h3>
+          <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+            Determine your recommended weight ranges for athletic wellness or strength training, and see your target lifts.
+          </p>
+        </div>
+        <div class="mt-8 flex items-center text-xs font-semibold text-primary">
+          <span>Find ideal weight</span>
+          <svg class="ml-1.5 h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+
+      {/* Relative Strength Card */}
+      <a
+        href="/calculators/relative-strength"
+        class="group relative rounded-2xl border border-border bg-card p-8 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-primary/40 hover:shadow-md flex flex-col justify-between overflow-hidden"
+      >
+        <div class="absolute inset-x-0 top-0 h-[2px] bg-gradient-to-r from-primary to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        <div>
+          <span class="text-muted-foreground font-mono text-xs font-semibold uppercase tracking-widest">Ratio Analysis</span>
+          <h3 class="text-xl font-bold text-foreground mt-2 group-hover:text-primary transition-colors">
+            Relative Strength
+          </h3>
+          <p class="text-sm text-muted-foreground mt-3 leading-relaxed">
+            Calculate your lift-to-bodyweight ratios and evaluate your neuromuscular performance against standardized tiers.
+          </p>
+        </div>
+        <div class="mt-8 flex items-center text-xs font-semibold text-primary">
+          <span>Analyze ratio</span>
+          <svg class="ml-1.5 h-3.5 w-3.5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
+      </a>
+    </div>
+  </Container>
+</Section>
