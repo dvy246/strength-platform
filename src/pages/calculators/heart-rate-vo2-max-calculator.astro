@@ -1,0 +1,149 @@
+---
+// src/pages/calculators/heart-rate-vo2-max-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { VO2MaxCalculator } from '@/components/calculators/VO2MaxCalculator';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'Heart Rate VO2 Max Calculator', item: '/calculators/heart-rate-vo2-max-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'Heart Rate VO2 Max Calculator',
+  'Estimate your VO2 Max using resting and maximum heart rates (Uth-Sorensen ratio formula). View your conditioning rating and learn heart rate physiology.',
+  'https://strengthchecker.com/calculators/heart-rate-vo2-max-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+
+const hrFAQs = [
+  {
+    question: "How does heart rate relate to VO₂ Max?",
+    answer: "There is a direct linear relationship between cardiac output and oxygen consumption. Since cardiac output is the product of heart rate and stroke volume, the ratio of your maximum heart rate to your resting heart rate can be used to estimate your relative aerobic capacity (VO₂ Max)."
+  },
+  {
+    question: "What is the Uth-Sørensen formula?",
+    answer: "The Uth-Sørensen formula is a simple mathematical model: VO₂ Max = 15.3 * (HR_max / HR_rest). It was validated in 2004 by Danish researchers studying active, healthy adult populations."
+  },
+  {
+    question: "How do I measure my resting heart rate accurately?",
+    answer: "Measure your resting heart rate first thing in the morning before getting out of bed. Sit quietly for 5 minutes, locate your pulse on your wrist, and count the beats for a full 60 seconds. Take the average over 3 consecutive mornings."
+  },
+  {
+    question: "How should I determine my maximum heart rate?",
+    answer: "The most accurate way is a laboratory graded exercise test. Otherwise, it can be estimated using formulas like the Tanaka equation: HR_max = 208 - (0.7 * Age). Our calculator can perform this Tanaka estimation automatically."
+  },
+  {
+    question: "What factors can artificially alter my resting heart rate?",
+    answer: "Resting heart rate can be increased by sleep deprivation, dehydration, psychological stress, caffeine, nicotine, alcohol consumption, high temperatures, or starting a new high-volume training block."
+  },
+  {
+    question: "How accurate is the Heart Rate Ratio method?",
+    answer: "The Heart Rate Ratio method has a lower correlation (r ≈ 0.75) compared to physical running tests, because stroke volume is assumed to scale standardly. It serves as a quick estimate, but should be cross-referenced with field tests for verification."
+  },
+  {
+    question: "Does a lower resting heart rate mean I have a higher VO₂ Max?",
+    answer: "Generally, yes. Consistent aerobic exercise increases cardiac stroke volume, meaning your heart pumps more blood per beat. This adaptation allows the heart to beat fewer times per minute at rest while delivering the same amount of oxygen, correlating with a higher VO₂ Max."
+  }
+];
+---
+
+<CalculatorLayout
+  title="Heart Rate VO2 Max Calculator | HR Ratio Method | StrengthChecker"
+  description="Estimate your VO2 Max using resting and maximum heart rate ratios (Uth-Sørensen formula). Find out how stroke volume and heart rate predict cardiovascular health."
+  calculatorName="Heart Rate VO₂ Max Calculator"
+  canonicalPath="/calculators/heart-rate-vo2-max-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* Interactive Calculator Island */}
+  <VO2MaxCalculator slot="calculator" initialMethod="heartrate" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Heart Rate Ratio Stats</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      The <strong class="text-foreground">Heart Rate Ratio method</strong> estimates aerobic power without requiring a grueling running test.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      By evaluating the gap between resting cardiac output and maximal cardiac capability, it provides a fast, metabolic index of cardiorespiratory conditioning.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/vo2-max-calculator" class="block text-primary hover:underline font-bold">
+        ← All VO₂ Max Methods
+      </a>
+      <a href="/calculators/cooper-test-vo2-max-calculator" class="block text-primary hover:underline">
+        Cooper 12-Min Test →
+      </a>
+      <a href="/calculators/rockport-vo2-max-calculator" class="block text-primary hover:underline">
+        Rockport 1-Mile Walk Test →
+      </a>
+      <a href="/calculators/1-5-mile-run-vo2-max-calculator" class="block text-primary hover:underline">
+        1.5 Mile Run Test →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl leading-relaxed text-muted-foreground text-sm">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What Is the Heart Rate Ratio Method?</h2>
+      <p>
+        The <strong>Heart Rate Ratio Method</strong> (frequently referred to as the <strong>Uth-Sørensen Formula</strong>) was developed in 2004 by researchers Niels Uth, Henrik Sørensen, Kristian Overgaard, and Peter K. Pedersen at the University of Aarhus, Denmark. 
+      </p>
+      <p>
+        They set out to find a reliable mathematical method to estimate relative VO₂ Max using basic cardiovascular metrics, eliminating the need for physical tests that require specialized facilities or high physical strain. By observing that maximal oxygen uptake is relative to the ratio between your highest possible heart rate and your resting pulse, they established a simple, robust regression equation.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">The Uth-Sørensen Formula</h2>
+      <p>
+        The physiology behind the formula relies on the Fick Equation, which states that oxygen consumption equals cardiac output multiplied by arterial-venous oxygen difference. The researchers verified that the ratio of maximum to resting heart rate is a strong proxy for cardiac stroke volume and metabolic efficiency:
+      </p>
+      <div class="p-4 border border-border bg-card/40 rounded-xl font-mono text-xs">
+        <code class="block bg-muted/40 p-2.5 rounded border border-border text-foreground leading-relaxed whitespace-normal text-center">
+          VO2 Max = 15.3 × ( HR_max / HR_rest )
+        </code>
+      </div>
+      <p class="text-xs">
+        Where:
+      </p>
+      <ul class="list-disc pl-5 text-xs space-y-1">
+        <li><strong>HR_max:</strong> Maximum heart rate in beats per minute (BPM). If unknown, it is calculated using the Tanaka formula: <code class="font-mono text-[10px]">208 - 0.7 * Age</code>.</li>
+        <li><strong>HR_rest:</strong> Resting heart rate in beats per minute (BPM) measured under complete rest.</li>
+        <li><strong>15.3:</strong> The constant multiplier derived by Uth et al., representing the average metabolic equivalent and oxygen extraction constants in healthy populations.</li>
+      </ul>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Determining Resting & Max Heart Rates</h2>
+      <p>
+        Because this formula relies heavily on the accuracy of heart rate inputs, obtaining precise measurements is crucial:
+      </p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li><strong>Resting Heart Rate (HR_rest):</strong> Take this measurement immediately upon waking, before consuming any caffeine or starting physical activity. Lie flat, breathe normally, and count your pulse for 60 seconds. Repeat over 3 mornings and use the lowest stable value.</li>
+        <li><strong>Maximum Heart Rate (HR_max):</strong> The Tanaka equation (<code class="font-mono text-xs">208 - 0.7 * Age</code>) is highly accurate for general populations. For trained athletes, field tests (like a hill-sprint protocol while wearing a chest strap monitor) or graded laboratory testing are preferred to find true physiological maximums.</li>
+      </ul>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Limitations and Physiology</h2>
+      <p>
+        While simple and convenient, the Heart Rate Ratio method has specific limitations. The formula assumes a standard relationship between heart rate and cardiac stroke volume. If an individual has an enlarged heart (athletic bradycardia) or is on medications that affect heart rate (such as beta-blockers), the formula will not provide an accurate estimation.
+      </p>
+      <p>
+        Furthermore, daily stressors such as dehydration, caffeine consumption, high humidity, and lack of sleep can temporarily elevate your resting heart rate, which will artificially lower your estimated VO₂ Max score on the calculator.
+      </p>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={hrFAQs} title="Heart Rate VO₂ Max FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

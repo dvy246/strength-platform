@@ -1,0 +1,154 @@
+---
+// src/pages/calculators/rockport-vo2-max-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { VO2MaxCalculator } from '@/components/calculators/VO2MaxCalculator';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'Rockport Walk VO2 Max Calculator', item: '/calculators/rockport-vo2-max-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'Rockport Walk VO2 Max Calculator',
+  'Estimate your VO2 Max using the Rockport 1-Mile Walk Test. Enter your walking time, heart rate, age, weight, and gender to calculate cardiorespiratory fitness.',
+  'https://strengthchecker.com/calculators/rockport-vo2-max-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+
+const rockportFAQs = [
+  {
+    question: "What is the Rockport 1-mile walk test?",
+    answer: "The Rockport walk test is a sub-maximal fitness assessment designed to estimate cardiovascular fitness (VO₂ Max) in individuals of varying fitness levels, particularly beginners, older adults, or those returning to exercise."
+  },
+  {
+    question: "How do you perform the Rockport walk test?",
+    answer: "You must walk exactly 1 mile (1,609 meters) as fast as possible on a flat track. Immediately upon completion, record the time taken in minutes and seconds, and measure your heart rate for 10-60 seconds to find your beats per minute (BPM)."
+  },
+  {
+    question: "What is the Rockport walk test formula?",
+    answer: "The Rockport walk formula is: VO₂ Max = 132.853 - (0.0769 * Weight in lbs) - (0.3877 * Age) + (6.315 * Gender) - (3.2649 * Time in minutes) - (0.1565 * Heart Rate). Gender is 1 for males and 0 for females."
+  },
+  {
+    question: "Can I run during the Rockport walk test?",
+    answer: "No, running is strictly prohibited. The test is validated only for walking. Running will lower your finish time artificially but will result in an incorrect estimation of your VO₂ Max since the physiological regression equations expect a walking stride."
+  },
+  {
+    question: "How accurate is the Rockport walk test?",
+    answer: "The Rockport test is highly accurate for a sub-maximal test, with a correlation coefficient of r = 0.88 against metabolic cart results. It is especially reliable for individuals whose fitness levels make running-based tests unsafe."
+  },
+  {
+    question: "Why does the Rockport test require my body weight?",
+    answer: "Body weight is required because relative VO₂ Max represents oxygen consumption relative to muscle mass and body fat. A heavier person walking a mile at a given speed and heart rate requires more energy and cardiorespiratory output than a lighter person."
+  },
+  {
+    question: "How do I measure my heart rate at the end of the Rockport test?",
+    answer: "You should measure your pulse immediately after crossing the 1-mile mark. You can use a heart rate monitor, smartwatch, or measure your radial or carotid pulse manually by counting beats for 15 seconds and multiplying by 4."
+  }
+];
+---
+
+<CalculatorLayout
+  title="Rockport Walk VO2 Max Calculator | 1-Mile Walk | StrengthChecker"
+  description="Calculate your VO2 Max with the Rockport Walk Test. Learn the 1-mile walking protocol, how completion heart rate impacts your conditioning score, and view age brackets."
+  calculatorName="Rockport Walk VO₂ Max Calculator"
+  canonicalPath="/calculators/rockport-vo2-max-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* Interactive Calculator Island */}
+  <VO2MaxCalculator slot="calculator" initialMethod="rockport" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Rockport Walk Overview</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      The <strong class="text-foreground">Rockport Walk Test</strong> is a sub-maximal physical assessment. It is ideal for individuals who want a safe estimate of cardiorespiratory capacity without the physical toll of a maximal run.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      By tracking walking duration alongside your heart rate response, it maps the efficiency of your heart and blood vessels under low-impact conditions.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/vo2-max-calculator" class="block text-primary hover:underline font-bold">
+        ← All VO₂ Max Methods
+      </a>
+      <a href="/calculators/cooper-test-vo2-max-calculator" class="block text-primary hover:underline">
+        Cooper 12-Min Test →
+      </a>
+      <a href="/calculators/1-5-mile-run-vo2-max-calculator" class="block text-primary hover:underline">
+        1.5 Mile Run Test →
+      </a>
+      <a href="/calculators/heart-rate-vo2-max-calculator" class="block text-primary hover:underline">
+        Heart Rate Estimate →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl leading-relaxed text-muted-foreground text-sm">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What Is the Rockport 1-Mile Walk Test?</h2>
+      <p>
+        The <strong>Rockport Walk Test</strong> was developed in 1987 by researchers at the University of Massachusetts Medical School and the Rockport Walking Institute. The goal was to establish a scientifically sound cardiorespiratory fitness test that could be performed safely by the general public, including sedentary individuals, seniors, and those with physical limitations.
+      </p>
+      <p>
+        Unlike the Cooper test, which requires a maximal running effort, the Rockport test measures the physiological response to a brisk walk. By checking how fast your heart beats after covering 1 mile, the test evaluates cardiovascular efficiency.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">The Rockport Regression Equation Explained</h2>
+      <p>
+        The mathematical model underlying the Rockport test uses multiple linear regression. It evaluates the relationship between bodyweight, demographic data, time taken, and physical stress (measured via heart rate). The formula is:
+      </p>
+      <div class="p-4 border border-border bg-card/40 rounded-xl font-mono text-xs">
+        <code class="block bg-muted/40 p-2.5 rounded border border-border text-foreground leading-relaxed whitespace-normal">
+          VO2 Max = 132.853 - (0.0769 × Weight) - (0.3877 × Age) + (6.315 × Gender) - (3.2649 × Time) - (0.1565 × Heart Rate)
+        </code>
+      </div>
+      <p class="text-xs">
+        Where:
+      </p>
+      <ul class="list-disc pl-5 text-xs space-y-1">
+        <li><strong>Weight:</strong> Total body weight in pounds (lbs).</li>
+        <li><strong>Age:</strong> Age in years.</li>
+        <li><strong>Gender:</strong> 1 for Male, 0 for Female.</li>
+        <li><strong>Time:</strong> Duration of the walk in minutes (e.g., 14 minutes and 30 seconds = 14.5).</li>
+        <li><strong>Heart Rate:</strong> Heart rate immediately upon completing the walk in beats per minute (BPM).</li>
+      </ul>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Step-by-Step Rockport Walk Test Protocol</h2>
+      <p>
+        For consistent and accurate estimations, carefully execute the following test protocol:
+      </p>
+      <ol class="list-decimal pl-5 space-y-2">
+        <li><strong>Pre-test:</strong> Measure your bodyweight accurately in light clothing. Avoid stimulants like coffee or pre-workout before the test.</li>
+        <li><strong>Warm-up:</strong> Perform a 5-minute easy walk to warm up the joints and muscles.</li>
+        <li><strong>Execution:</strong> Walk exactly 1 mile (1,609 meters) as fast as you can. You must walk—do not jog or run. Keep a fast, steady stride.</li>
+        <li><strong>Immediate Reading:</strong> The instant you cross the 1-mile mark, stop your timer and check your heart rate. You can use a heart rate monitor or count your pulse manually for 15 seconds (multiply by 4 to get BPM).</li>
+        <li><strong>Input:</strong> Enter your exact time, heart rate, age, weight, and gender into our Rockport calculator widget to view your estimated VO₂ Max.</li>
+      </ol>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Why Sub-Maximal Testing Is Important</h2>
+      <p>
+        Maximal fitness testing (like a treadmill stress test to exhaustion or a fast run) can pose cardiovascular risks for sedentary adults or individuals with undiagnosed health issues. 
+      </p>
+      <p>
+        The Rockport Walk Test provides a safe, low-impact alternative. Because heart rate and walking velocity have a linear relationship with oxygen consumption, sports scientists can estimate your maximum capacity based on sub-maximal stress, offering a reliable starting point for cardiorespiratory conditioning.
+      </p>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={rockportFAQs} title="Rockport Walk FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

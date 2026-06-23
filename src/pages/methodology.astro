@@ -123,11 +123,62 @@ const breadcrumbs = [{ name: 'Methodology', path: '/methodology' }];
           <li><strong>Pull-Up (10%):</strong> Upper-body vertical pulling (lats, back).</li>
         </ul>
 
-        <h2 class="text-xl font-bold text-foreground mt-8">4. Reference Citations & Studies</h2>
+        <h2 class="text-xl font-bold text-foreground mt-8">4. Body Fat Percentage Estimation Formulas</h2>
+        <p>
+          To calculate body composition with the highest degree of tape-based accuracy, we implement the <strong>US Navy Circumference Method</strong>. The math works by using logarithmic equations comparing height and neck-to-waist/hip circumferences:
+        </p>
+        <div class="bg-muted/20 border border-border p-4 rounded-xl font-mono text-xs text-foreground my-4 space-y-2">
+          <p class="font-bold text-primary">// For Men (metric dimensions in cm):</p>
+          <p>BFP (%) = 495 / (1.0324 - 0.19077 · log₁₀(waist - neck) + 0.15456 · log₁₀(height)) - 450</p>
+          <p class="font-bold text-primary mt-2">// For Women (metric dimensions in cm):</p>
+          <p>BFP (%) = 495 / (1.29579 - 0.35004 · log₁₀(waist + hip - neck) + 0.22100 · log₁₀(height)) - 450</p>
+        </div>
+        <p>
+          As a secondary estimation, the calculator calculates the standard **BMI-to-Fat Regression Formula** developed by adult clinical research:
+        </p>
+        <div class="bg-muted/20 border border-border p-4 rounded-xl font-mono text-xs text-foreground my-4 space-y-2">
+          <p>BMI = weight (kg) / (height (m))²</p>
+          <p>BFP (%) for Men = 1.20 · BMI + 0.23 · Age - 16.2</p>
+          <p>BFP (%) for Women = 1.20 · BMI + 0.23 · Age - 5.4</p>
+        </div>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">5. VO₂ Max Estimation Formulas</h2>
+        <p>
+          To evaluate cardiorespiratory conditioning, we implement four scientifically validated field estimation methods, mapping results to the <strong>American College of Sports Medicine (ACSM)</strong> standards:
+        </p>
+        <div class="bg-muted/20 border border-border p-4 rounded-xl font-mono text-xs text-foreground my-4 space-y-4">
+          <div>
+            <p class="font-bold text-primary">// 1. Cooper 12-Minute Run Test</p>
+            <p>VO₂ Max (Meters) = (distance - 504.9) / 44.73</p>
+            <p>VO₂ Max (Miles) = 35.97 · distance - 11.29</p>
+          </div>
+          <div>
+            <p class="font-bold text-primary">// 2. Rockport Walk Test (Kline et al.)</p>
+            <p>VO₂ Max = 132.853 - 0.0769 · W_lbs - 0.3877 · Age + 6.315 · Gender - 3.2649 · Time_min - 0.1565 · HR_bpm</p>
+            <p class="text-[10px] text-muted-foreground">// Gender: Male = 1, Female = 0; W_lbs is bodyweight in pounds.</p>
+          </div>
+          <div>
+            <p class="font-bold text-primary">// 3. 1.5-Mile Run Test (George-Fisher Formula)</p>
+            <p>VO₂ Max = 88.02 - 0.1656 · W_kg - 0.85 · Time_min + 3.716 · Gender</p>
+            <p class="text-[10px] text-muted-foreground">// W_kg is bodyweight in kilograms.</p>
+          </div>
+          <div>
+            <p class="font-bold text-primary">// 4. Heart Rate Ratio Method (Uth-Sørensen Formula)</p>
+            <p>VO₂ Max = 15.3 · (HR_max / HR_rest)</p>
+            <p class="text-[10px] text-muted-foreground">// Tanaka HR_max = 208 - 0.7 · Age; HR_rest is resting heart rate.</p>
+          </div>
+        </div>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">6. Reference Citations & Studies</h2>
         <p class="text-xs text-muted-foreground leading-relaxed pl-2 border-l border-border space-y-3">
           1. <em>IPF GL Points Formula:</em> Technical Specification, International Powerlifting Federation, 2020.<br />
           2. <em>van den Hoek et al. (2024):</em> Statistical modeling of powerlifting competition data. Journal of Sports Sciences.<br />
-          3. <em>ExRx.net:</em> Dr. Lon Kilgore & Mark Rippetoe, Strength Standards reference guidelines.
+          3. <em>ExRx.net:</em> Dr. Lon Kilgore & Mark Rippetoe, Strength Standards reference guidelines.<br />
+          4. <em>US Navy Circumference Formula:</em> Hodgdon, J.A. and Beckett, M.B., 1984. Prediction of body fat for military personnel. Naval Health Research Center.<br />
+          5. <em>Cooper, K. H. (1968):</em> A means of assessing maximal oxygen intake. JAMA.<br />
+          6. <em>Kline et al. (1987):</em> Estimation of VO2max from a one-mile track walk. MSSE.<br />
+          7. <em>George & Fisher (1993):</em> VO2max estimation from a 1.5-mile run test. RQES.<br />
+          8. <em>Uth et al. (2004):</em> Estimation of VO2max from the ratio between HRmax and HRrest. EJAP.
         </p>
       </div>
     </Container>

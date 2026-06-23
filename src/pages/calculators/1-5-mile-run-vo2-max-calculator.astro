@@ -1,0 +1,154 @@
+---
+// src/pages/calculators/1-5-mile-run-vo2-max-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { VO2MaxCalculator } from '@/components/calculators/VO2MaxCalculator';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: '1.5-Mile Run VO2 Max Calculator', item: '/calculators/1-5-mile-run-vo2-max-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  '1.5-Mile Run VO2 Max Calculator',
+  'Calculate your VO2 Max using the 1.5-Mile Run Test (George-Fisher equation). Enter your run completion time, weight, age, and gender for a detailed conditioning report.',
+  'https://strengthchecker.com/calculators/1-5-mile-run-vo2-max-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+
+const run15FAQs = [
+  {
+    question: "What is the 1.5-mile run test?",
+    answer: "The 1.5-mile run test is a standard cardiorespiratory fitness test used by military organizations, law enforcement, and sports coaches to evaluate aerobic endurance and estimate VO₂ Max based on running speed."
+  },
+  {
+    question: "What formula does this calculator use for the 1.5-mile run?",
+    answer: "This calculator uses the highly accurate George-Fisher formula: VO₂ Max = 88.02 - (0.1656 * Weight in kg) - (0.85 * Time in minutes) + (3.716 * Gender). Gender is 1 for males and 0 for females."
+  },
+  {
+    question: "What is the difference between the 1.5-mile run and the Cooper test?",
+    answer: "While the Cooper test requires running as far as possible in a fixed time (12 minutes), the 1.5-mile run test requires running a fixed distance as fast as possible. Both assess the same energy pathway, but the 1.5-mile run is often easier to administer because the distance is preset."
+  },
+  {
+    question: "What is a good 1.5-mile run time?",
+    answer: "For active adults aged 20-29, a good time is generally under 11:30 for males and under 13:00 for females. Elite endurance athletes can run this distance in under 8 to 9 minutes."
+  },
+  {
+    question: "How accurate is the 1.5-mile run test for VO₂ Max?",
+    answer: "The 1.5-mile run test has a standard error of estimate (SEE) of approximately 3.0 ml/kg/min. Because it uses weight and gender, the George-Fisher formula provides a more personalized and accurate VO₂ Max estimation than simple time-only calculations."
+  },
+  {
+    question: "How should I train to improve my 1.5-mile run time?",
+    answer: "Improve your time by building your aerobic base with Zone 2 running (30-60 minutes at a conversational pace) to increase capillary and mitochondrial density, combined with interval sessions (like 800m repeats at your target 1.5-mile pace) to increase VO₂ Max."
+  },
+  {
+    question: "Who should take the 1.5-mile run test?",
+    answer: "This test is suitable for healthy individuals with a baseline level of running fitness. Because it involves near-maximal cardiorespiratory effort, individuals with joint injuries or cardiac risk factors should consult a physician before attempting it."
+  }
+];
+---
+
+<CalculatorLayout
+  title="1.5-Mile Run VO2 Max Calculator | Run Test | StrengthChecker"
+  description="Calculate your VO2 Max using the 1.5-Mile Run Test. Learn the George-Fisher running equation, military fitness requirements, and view age and gender charts."
+  calculatorName="1.5-Mile Run VO₂ Max Calculator"
+  canonicalPath="/calculators/1-5-mile-run-vo2-max-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* Interactive Calculator Island */}
+  <VO2MaxCalculator slot="calculator" initialMethod="run15" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">1.5-Mile Run Stats</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      The <strong class="text-foreground">1.5-Mile Run Test</strong> is the standard conditioning assessment for organizations like the US Navy, Air Force, and various police academies.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Performing a timed run over a set distance allows you to benchmark your cardiorespiratory endurance and evaluate training adaptations over time.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/vo2-max-calculator" class="block text-primary hover:underline font-bold">
+        ← All VO₂ Max Methods
+      </a>
+      <a href="/calculators/cooper-test-vo2-max-calculator" class="block text-primary hover:underline">
+        Cooper 12-Min Test →
+      </a>
+      <a href="/calculators/rockport-vo2-max-calculator" class="block text-primary hover:underline">
+        Rockport 1-Mile Walk Test →
+      </a>
+      <a href="/calculators/heart-rate-vo2-max-calculator" class="block text-primary hover:underline">
+        Heart Rate Estimate →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl leading-relaxed text-muted-foreground text-sm">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What Is the 1.5-Mile Run Test?</h2>
+      <p>
+        The <strong>1.5-Mile Run Test</strong> is a cardiorespiratory fitness test designed to evaluate cardiovascular endurance. Used extensively by the military, law enforcement, and collegiate athletic programs, this test requires you to run exactly 1.5 miles (2,414 meters) on a flat running surface as fast as possible.
+      </p>
+      <p>
+        Since it is a fixed-distance test, it is highly practical. It removes the pacing difficulty associated with distance-estimation tests like the Cooper test, and allows athletes to focus solely on complete completion speed.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">The George-Fisher Regression Equation</h2>
+      <p>
+        While simple calculators estimate VO₂ Max using only your final time, physical research shows that body weight and biological sex significantly impact metabolic efficiency. Our calculator implements the <strong>George-Fisher formula</strong> (1993), which includes these variables to reduce calculation error:
+      </p>
+      <div class="p-4 border border-border bg-card/40 rounded-xl font-mono text-xs">
+        <code class="block bg-muted/40 p-2.5 rounded border border-border text-foreground leading-relaxed whitespace-normal">
+          VO2 Max = 88.02 - (0.1656 × Weight in kg) - (0.85 × Time in minutes) + (3.716 × Gender)
+        </code>
+      </div>
+      <p class="text-xs">
+        Where:
+      </p>
+      <ul class="list-disc pl-5 text-xs space-y-1">
+        <li><strong>Weight in kg:</strong> Your body mass in kilograms (lbs are converted automatically).</li>
+        <li><strong>Time in minutes:</strong> Your total run duration in minutes (e.g. 11 minutes 30 seconds = 11.5).</li>
+        <li><strong>Gender:</strong> 1 for Male, 0 for Female.</li>
+      </ul>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">1.5-Mile Run Test Protocol</h2>
+      <p>
+        To get a valid estimation, perform the test under standard conditions:
+      </p>
+      <ol class="list-decimal pl-5 space-y-2">
+        <li><strong>Course:</strong> Run on a flat, measured course. A standard 400m outdoor track requires exactly 6 laps to reach 1.5 miles. Indoor tracks or flat roads can be used, but GPS errors may affect accuracy.</li>
+        <li><strong>Warm-up:</strong> Perform 5-10 minutes of active jogging followed by dynamic movements. Avoid running at high speed before the clock starts.</li>
+        <li><strong>Pacing:</strong> Start at a fast, sustainable tempo. Do not sprint at the start—try to maintain uniform lap times.</li>
+        <li><strong>Cool-down:</strong> Jog slowly or walk for 5 minutes after finishing, and stretch the lower body.</li>
+        <li><strong>Input:</strong> Input your weight, age, gender, and exact run time in minutes and seconds to view your score.</li>
+      </ol>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Military & Tactical Fitness Standards</h2>
+      <p>
+        The 1.5-mile run is the centerpiece of tactical conditioning assessments. For example:
+      </p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li><strong>US Navy:</strong> A satisfactory score for males aged 20-24 requires a run time of 12:00 or less, while an outstanding score requires completing the run in under 9:30.</li>
+        <li><strong>US Air Force:</strong> Completing the run under 9:12 scores maximum points for males under 30.</li>
+        <li><strong>Law Enforcement:</strong> Many academies require recruits to run the distance in under 12:30 to guarantee academy entry.</li>
+      </ul>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={run15FAQs} title="1.5-Mile Run FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

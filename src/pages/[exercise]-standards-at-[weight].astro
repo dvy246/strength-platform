@@ -41,6 +41,7 @@ interface Props {
 
 const { exercise, bodyweightKg } = Astro.props;
 const bodyweightLb = Math.round(convert.toLb(bodyweightKg));
+const isBwExercise = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exercise.id);
 
 const title = `${exercise.name} Standards at ${bodyweightKg}kg (${bodyweightLb} lb) Bodyweight | StrengthChecker`;
 const description = `Discover standard ${exercise.name} weights for male and female lifters at ${bodyweightKg} kg (${bodyweightLb} lbs) bodyweight. View raw percentiles and distribution curves.`;
@@ -71,7 +72,7 @@ const levels = [
 const getStandardsForGender = (gender: 'male' | 'female') => {
   return levels.map(lvl => {
     let wt = calculateWeightForScore(exercise.id, gender, bodyweightKg, lvl.score);
-    if (['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exercise.id)) {
+    if (isBwExercise) {
       wt = Math.max(0, wt - bodyweightKg);
     }
     return {
@@ -188,13 +189,45 @@ const otherExercises = exercises.filter(ex => ex.id !== exercise.id);
       </div>
 
       {/* Programmatic Comparative Content */}
-      <div class="prose prose-invert max-w-3xl leading-relaxed text-muted-foreground text-sm space-y-4 mb-16">
-        <h2 class="text-xl font-bold text-foreground">Understanding the Standards</h2>
+      <div class="prose prose-invert max-w-3xl leading-relaxed text-muted-foreground text-sm space-y-6 mb-16">
+        <h2 class="text-2xl font-bold text-foreground">Understanding {exercise.name} Benchmarks at {bodyweightKg}kg</h2>
+        
         <p>
-          At a bodyweight of <strong>{bodyweightKg} kg ({bodyweightLb} lb)</strong>, an intermediate male bench press/lift is defined as <strong>{maleStandards[2].weightKg} kg ({maleStandards[2].weightLb} lb)</strong>. A female lifter at the same bodyweight reaches intermediate level with a lift of <strong>{femaleStandards[2].weightKg} kg ({femaleStandards[2].weightLb} lb)</strong>.
+          The <strong>{exercise.name}</strong> is a key <strong>{exercise.isCompound ? 'compound' : 'isolation'}</strong> movement targeting the <strong>{exercise.muscleGroup}</strong>. Classified as a <strong>{exercise.category === 'barbell' ? 'barbell lift' : exercise.category === 'bodyweight' ? 'bodyweight exercise' : 'weighted bodyweight movement'}</strong>, it serves as a cornerstone for building athletic power, raw strength, and muscular development. {exercise.description}
+        </p>
+
+        <p>
+          At a bodyweight of <strong>{bodyweightKg} kg ({bodyweightLb} lb)</strong>, lifting capacities scale according to neuromuscular efficiency and muscle cross-sectional area. 
+          For male lifters at this bodyweight, the <strong>Beginner</strong> benchmark starts at <strong>{maleStandards[0].weightKg} kg ({maleStandards[0].weightLb} lb)</strong>, requiring a relative bodyweight ratio of <strong>{((isBwExercise ? maleStandards[0].weightKg + bodyweightKg : maleStandards[0].weightKg) / bodyweightKg).toFixed(2)}x</strong>. 
+          To be classified as <strong>Intermediate</strong>, a male lifter must achieve a 1RM of <strong>{maleStandards[2].weightKg} kg ({maleStandards[2].weightLb} lb)</strong> (ratio: <strong>{((isBwExercise ? maleStandards[2].weightKg + bodyweightKg : maleStandards[2].weightKg) / bodyweightKg).toFixed(2)}x</strong>), while reaching the <strong>Elite</strong> standard requires a lift of <strong>{maleStandards[4].weightKg} kg ({maleStandards[4].weightLb} lb)</strong> (ratio: <strong>{((isBwExercise ? maleStandards[4].weightKg + bodyweightKg : maleStandards[4].weightKg) / bodyweightKg).toFixed(2)}x</strong>).
+        </p>
+
+        <p>
+          For female lifters weighing <strong>{bodyweightKg} kg ({bodyweightLb} lb)</strong>, the <strong>Beginner</strong> threshold is set at <strong>{femaleStandards[0].weightKg} kg ({femaleStandards[0].weightLb} lb)</strong> (ratio: <strong>{((isBwExercise ? femaleStandards[0].weightKg + bodyweightKg : femaleStandards[0].weightKg) / bodyweightKg).toFixed(2)}x</strong>). 
+          The <strong>Intermediate</strong> milestone is reached at a 1-Rep Max of <strong>{femaleStandards[2].weightKg} kg ({femaleStandards[2].weightLb} lb)</strong> (ratio: <strong>{((isBwExercise ? femaleStandards[2].weightKg + bodyweightKg : femaleStandards[2].weightKg) / bodyweightKg).toFixed(2)}x</strong>). 
+          For those pursuing high-level competitive targets, the <strong>Elite</strong> threshold stands at <strong>{femaleStandards[4].weightKg} kg ({femaleStandards[4].weightLb} lb)</strong> (ratio: <strong>{((isBwExercise ? femaleStandards[4].weightKg + bodyweightKg : femaleStandards[4].weightKg) / bodyweightKg).toFixed(2)}x</strong>).
+        </p>
+
+        <p>
+          These benchmarks illustrate the principle of <em>allometric scaling</em> in strength sports. Due to dimensional scaling laws, relative strength (strength-to-weight ratio) is generally higher in lighter weight classes, whereas absolute strength (total load lifted) is higher in heavier weight classes. Lifters weighing <strong>{bodyweightKg} kg</strong> occupy a crucial middle ground where optimal body composition and leverage adjustments play an essential role in maximizing weight progression.
+        </p>
+
+        <h3 class="text-lg font-bold text-foreground mt-8 mb-4">Training Tips to Improve Your {exercise.name}</h3>
+        <p>
+          To progress your {exercise.name} standard safely and transition from Beginner to Intermediate or Advanced, execute each repetition with strict mechanics and focus on the following guidelines:
+        </p>
+        <ul class="list-disc pl-5 space-y-2 mt-2">
+          {exercise.tips.map((tip) => (
+            <li>{tip}</li>
+          ))}
+        </ul>
+
+        <h3 class="text-lg font-bold text-foreground mt-8 mb-4">Scientific Data & Calculation Methodology</h3>
+        <p>
+          Unlike crowd-sourced strength standards which rely on self-reported entries and are prone to selection and confirmation bias (such as ego lifting or partial ranges of motion), the benchmarks on this site are computed using rigorous statistical analysis. We utilize regression models fitted to official athletic performance datasets and validated exercise science studies.
         </p>
         <p>
-          These benchmarks are built using cumulative normal distributions. The "Intermediate" level represents the 25th-35th percentile range of registered powerlifting competitors. Since competitors represent a self-selected group of strong athletes, achieving an Intermediate rating represents a very solid, above-average standard for standard gym-goers.
+          Each standard corresponds to specific percentiles within a standardized log-normal distribution. The <strong>Intermediate</strong> tier represents the median (50th percentile) of trained lifters. Because these numbers are derived from a population of individuals who train regularly, achieving the Intermediate standard indicates a high level of physical fitness and dedication that is well above that of the general public.
         </p>
       </div>
 

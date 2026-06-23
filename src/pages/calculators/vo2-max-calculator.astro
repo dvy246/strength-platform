@@ -1,0 +1,359 @@
+---
+// src/pages/calculators/vo2-max-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { VO2MaxCalculator } from '@/components/calculators/VO2MaxCalculator';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'VO2 Max Calculator', item: '/calculators/vo2-max-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'VO2 Max Calculator',
+  'Calculate your VO2 Max using 4 validated fitness tests: Cooper 12-Min, Rockport Walk, 1.5-Mile Run, and Heart Rate. View age and gender classification charts.',
+  'https://strengthchecker.com/calculators/vo2-max-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+
+const vo2MaxFAQs = [
+  {
+    question: "What is VO₂ Max?",
+    answer: "VO₂ Max, or maximal oxygen consumption, represents the maximum volume of oxygen (in milliliters) your body can transport and utilize per kilogram of body weight per minute (ml/kg/min) during intense, exhaustive exercise. It is the gold standard metric for cardiovascular fitness."
+  },
+  {
+    question: "What is a good VO₂ Max?",
+    answer: "A good VO₂ Max is highly dependent on age and gender. For instance, for active males in their 20s, a score of 42.5–46.4 ml/kg/min is considered good, while for females in the same bracket, a score of 33.0–36.9 ml/kg/min is good. Refer to the ACSM tables below for a full breakdown."
+  },
+  {
+    question: "How is VO₂ Max calculated?",
+    answer: "VO₂ Max is measured directly in laboratory settings by analyzing inspired and expired air during a maximal treadmill test. It can be estimated using fitness tests such as the Cooper 12-minute run, the Rockport 1-mile walk, the 1.5-mile run, or resting and maximum heart rate ratios."
+  },
+  {
+    question: "Is VO₂ Max accurate?",
+    answer: "Field tests (like the Cooper or Rockport walk) provide estimates of VO₂ Max that correlate strongly (r = 0.85 to 0.90) with laboratory gold-standard tests. While they have a standard error of 2–3 ml/kg/min, they are highly useful, safe, and cost-effective alternatives to direct metabolic testing."
+  },
+  {
+    question: "How can I improve my VO₂ Max?",
+    answer: "You can improve your VO₂ Max by combining high-volume low-intensity base training (Zone 2 cardio) to increase capillary density and mitochondrial volume, with dedicated high-intensity interval training (HIIT or VO₂ Max intervals, such as 4x4 minutes at 90-95% max HR) to increase cardiac stroke volume."
+  },
+  {
+    question: "What is an elite VO₂ Max?",
+    answer: "An elite VO₂ Max generally exceeds 56 ml/kg/min for males under 30, and 45.4 ml/kg/min for females under 30. In professional endurance athletes (such as cross-country skiers and cyclists), VO₂ Max scores frequently exceed 80–90 ml/kg/min for men and 70–80 ml/kg/min for women."
+  },
+  {
+    question: "What VO₂ Max should I have for my age?",
+    answer: "Aerobic capacity naturally declines by about 10% per decade after age 30 due to decreases in maximum heart rate and stroke volume. A healthy, average target for a male in his 30s is 35.5–40.9, while for a male in his 50s, it is 30.2–35.7. See our detailed charts for exact bounds."
+  },
+  {
+    question: "How does bodyweight affect my VO₂ Max?",
+    answer: "VO₂ Max is expressed as a relative metric (ml of oxygen per kg of bodyweight per minute). Consequently, losing body fat while maintaining or improving aerobic output will automatically increase your relative VO₂ Max score, similarly to improving your relative strength index."
+  },
+  {
+    question: "Can I measure my VO₂ Max with a smartwatch?",
+    answer: "Smartwatches estimate VO₂ Max by tracking the relationship between your running speed (or walking pace) and your heart rate. While convenient for tracking trends, they are not direct metabolic measurements and have a standard margin of error of 5–10%."
+  },
+  {
+    question: "What is the difference between aerobic and anaerobic fitness?",
+    answer: "Aerobic fitness represents energy production utilizing oxygen (sustaining activities like jogging or cycling over long periods). Anaerobic fitness represents energy production without oxygen (supporting short, explosive efforts like weightlifting, sprinting, or jumping)."
+  }
+];
+---
+
+<CalculatorLayout
+  title="VO2 Max Calculator | Aerobic Fitness & Age Chart | StrengthChecker"
+  description="Calculate your VO2 Max using 4 scientific tests. Compare your aerobic fitness with the ACSM VO2 max charts by age/gender, and learn how to improve it."
+  calculatorName="VO₂ Max Calculator"
+  canonicalPath="/calculators/vo2-max-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* Interactive Calculator Island */}
+  <VO2MaxCalculator slot="calculator" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">The Conditioning Pillar</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      A comprehensive cardiorespiratory assessment. <strong class="text-foreground">VO₂ Max</strong> measures the limits of your aerobic engine.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      While strength standards measure skeletal output, your aerobic index governs cardiorespiratory recovery, energy synthesis, and general vascular health.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/cooper-test-vo2-max-calculator" class="block text-primary hover:underline">
+        Cooper 12-Min Test Calculator →
+      </a>
+      <a href="/calculators/rockport-vo2-max-calculator" class="block text-primary hover:underline">
+        Rockport 1-Mile Walk Calculator →
+      </a>
+      <a href="/calculators/1-5-mile-run-vo2-max-calculator" class="block text-primary hover:underline">
+        1.5 Mile Run Calculator →
+      </a>
+      <a href="/calculators/heart-rate-vo2-max-calculator" class="block text-primary hover:underline">
+        Heart Rate Estimate Calculator →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-12 max-w-3xl leading-relaxed text-muted-foreground text-sm">
+    
+    {/* Section 1 */}
+    <section id="what-is-vo2-max" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">1. What Is VO₂ Max?</h2>
+      <p>
+        Your <strong class="text-foreground">VO₂ Max</strong>, or maximal oxygen uptake, is the maximum rate at which your body can consume, transport, and utilize oxygen during high-intensity exercise. It is expressed in absolute terms as liters of oxygen per minute (L/min) or, more commonly, as a relative rate in milliliters of oxygen consumed per kilogram of bodyweight per minute (<strong class="text-foreground">ml/kg/min</strong>).
+      </p>
+      <p>
+        Physiologically, your VO₂ Max represents the ceiling of your aerobic energy system. It is governed by three primary systems: the pulmonary system (how much oxygen your lungs can intake), the cardiovascular system (cardiac output and the ability of your heart to pump oxygenated blood), and the muscular system (the efficiency of skeletal muscles in extracting and utilizing that oxygen inside mitochondria).
+      </p>
+    </section>
+
+    {/* Section 2 */}
+    <section id="why-vo2-max-matters" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">2. Why VO₂ Max Matters</h2>
+      <p>
+        In modern sports science, VO₂ Max is categorized as one of the most critical health and athletic metrics. Outside of performance, clinical data illustrates that cardiorespiratory fitness (CRF) is a strong independent predictor of all-cause mortality. High VO₂ Max levels correlate directly with reduced risks of cardiovascular disease, type-2 diabetes, and age-related cognitive decline.
+      </p>
+      <p>
+        For athletes, it defines the size of their energy reservoir. A higher aerobic ceiling means you can sustain higher power outputs before crossing your lactate threshold, and it substantially speeds up recovery between explosive, anaerobic efforts (like heavy sets of squats or deadlifts).
+      </p>
+    </section>
+
+    {/* Section 3 */}
+    <section id="vo2-max-by-age" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">3. VO₂ Max By Age</h2>
+      <p>
+        VO₂ Max peaks in late adolescence and the early 20s. Starting around age 30, it naturally declines by approximately 1% per year (or 10% per decade) due to age-related reductions in maximum heart rate and cardiac stroke volume. 
+      </p>
+      <p>
+        However, research shows that consistent, structured cardiorespiratory training can cut this decline rate in half, preserving functional mobility and youthfulness. Below are the official normative tables derived from the <strong>American College of Sports Medicine (ACSM)</strong> standards:
+      </p>
+
+      <h3 class="text-base font-bold text-foreground mt-6 mb-3">Male VO₂ Max Classifications (ml/kg/min)</h3>
+      <div class="overflow-x-auto rounded-xl border border-border">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-muted/40 border-b border-border text-[10px] uppercase font-mono text-muted-foreground">
+              <th scope="col" class="p-3">Age</th>
+              <th scope="col" class="p-3">Poor</th>
+              <th scope="col" class="p-3">Fair</th>
+              <th scope="col" class="p-3">Average</th>
+              <th scope="col" class="p-3">Good</th>
+              <th scope="col" class="p-3">Excellent</th>
+              <th scope="col" class="p-3">Elite</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60">
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">20–29</td>
+              <td class="p-3 font-mono">&lt;33.0</td>
+              <td class="p-3 font-mono">33.0–36.4</td>
+              <td class="p-3 font-mono">36.5–42.4</td>
+              <td class="p-3 font-mono">42.5–46.4</td>
+              <td class="p-3 font-mono">46.5–56.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;56.0</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">30–39</td>
+              <td class="p-3 font-mono">&lt;31.5</td>
+              <td class="p-3 font-mono">31.5–35.4</td>
+              <td class="p-3 font-mono">35.5–40.9</td>
+              <td class="p-3 font-mono">41.0–44.9</td>
+              <td class="p-3 font-mono">45.0–54.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;54.0</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">40–49</td>
+              <td class="p-3 font-mono">&lt;30.2</td>
+              <td class="p-3 font-mono">30.2–33.5</td>
+              <td class="p-3 font-mono">33.6–38.9</td>
+              <td class="p-3 font-mono">39.0–43.7</td>
+              <td class="p-3 font-mono">43.8–52.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;52.0</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">50–59</td>
+              <td class="p-3 font-mono">&lt;26.1</td>
+              <td class="p-3 font-mono">26.1–30.1</td>
+              <td class="p-3 font-mono">30.2–35.7</td>
+              <td class="p-3 font-mono">35.8–40.9</td>
+              <td class="p-3 font-mono">41.0–49.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;49.0</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">60–69</td>
+              <td class="p-3 font-mono">&lt;20.5</td>
+              <td class="p-3 font-mono">20.5–26.0</td>
+              <td class="p-3 font-mono">26.1–32.2</td>
+              <td class="p-3 font-mono">32.3–36.4</td>
+              <td class="p-3 font-mono">36.5–45.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;45.0</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">70+</td>
+              <td class="p-3 font-mono">&lt;17.5</td>
+              <td class="p-3 font-mono">17.5–23.0</td>
+              <td class="p-3 font-mono">23.1–29.0</td>
+              <td class="p-3 font-mono">29.1–33.0</td>
+              <td class="p-3 font-mono">33.1–41.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;41.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {/* Section 4 */}
+    <section id="vo2-max-by-gender" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">4. VO₂ Max By Gender</h2>
+      <p>
+        On average, biological females possess relative VO₂ Max values that are 10–15% lower than biological males. This variation is driven by specific physiological properties:
+      </p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li><strong>Body Composition:</strong> Females naturally carry a higher essential body fat percentage (for reproduction/health), resulting in lower active lean muscle tissue per unit of mass.</li>
+        <li><strong>Hemoglobin Concentration:</strong> Males possess higher concentrations of red blood cell hemoglobin (due to testosterone levels), which increases oxygen-carrying capacity.</li>
+        <li><strong>Cardiac Volume:</strong> Females generally have slightly smaller heart chambers and lungs, resulting in lower maximal stroke volumes.</li>
+      </ul>
+
+      <h3 class="text-base font-bold text-foreground mt-6 mb-3">Female VO₂ Max Classifications (ml/kg/min)</h3>
+      <div class="overflow-x-auto rounded-xl border border-border">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-muted/40 border-b border-border text-[10px] uppercase font-mono text-muted-foreground">
+              <th scope="col" class="p-3">Age</th>
+              <th scope="col" class="p-3">Poor</th>
+              <th scope="col" class="p-3">Fair</th>
+              <th scope="col" class="p-3">Average</th>
+              <th scope="col" class="p-3">Good</th>
+              <th scope="col" class="p-3">Excellent</th>
+              <th scope="col" class="p-3">Elite</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60">
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">20–29</td>
+              <td class="p-3 font-mono">&lt;23.6</td>
+              <td class="p-3 font-mono">23.6–28.9</td>
+              <td class="p-3 font-mono">29.0–32.9</td>
+              <td class="p-3 font-mono">33.0–36.9</td>
+              <td class="p-3 font-mono">37.0–45.4</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;45.4</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">30–39</td>
+              <td class="p-3 font-mono">&lt;22.8</td>
+              <td class="p-3 font-mono">22.8–26.9</td>
+              <td class="p-3 font-mono">27.0–31.4</td>
+              <td class="p-3 font-mono">31.5–35.6</td>
+              <td class="p-3 font-mono">35.7–44.2</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;44.2</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">40–49</td>
+              <td class="p-3 font-mono">&lt;21.0</td>
+              <td class="p-3 font-mono">21.0–24.4</td>
+              <td class="p-3 font-mono">24.5–28.9</td>
+              <td class="p-3 font-mono">29.0–32.8</td>
+              <td class="p-3 font-mono">32.9–41.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;41.0</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">50–59</td>
+              <td class="p-3 font-mono">&lt;20.2</td>
+              <td class="p-3 font-mono">20.2–22.7</td>
+              <td class="p-3 font-mono">22.8–26.9</td>
+              <td class="p-3 font-mono">27.0–31.4</td>
+              <td class="p-3 font-mono">31.5–39.9</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;39.9</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">60–69</td>
+              <td class="p-3 font-mono">&lt;17.5</td>
+              <td class="p-3 font-mono">17.5–20.1</td>
+              <td class="p-3 font-mono">20.2–24.4</td>
+              <td class="p-3 font-mono">24.5–30.2</td>
+              <td class="p-3 font-mono">30.3–36.4</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;36.4</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">70+</td>
+              <td class="p-3 font-mono">&lt;15.0</td>
+              <td class="p-3 font-mono">15.0–17.9</td>
+              <td class="p-3 font-mono">18.0–22.0</td>
+              <td class="p-3 font-mono">22.1–25.1</td>
+              <td class="p-3 font-mono">25.2–32.0</td>
+              <td class="p-3 font-mono font-bold text-primary">&gt;32.0</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    {/* Section 5 */}
+    <section id="vo2-max-for-runners" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">5. VO₂ Max For Runners</h2>
+      <p>
+        In running, VO₂ Max serves as a strong indicator of middle and long-distance potential. However, it is not the sole factor. Performance is governed by the combination of your VO₂ Max, your **Lactate Threshold** (the percentage of VO₂ Max you can sustain without lactic accumulation), and your **Running Economy** (the oxygen cost of running at a given speed).
+      </p>
+      <p>
+        To optimize VO₂ Max specifically for running, athletes focus on raising cardiac output through aerobic base building, which allows them to run faster at lower heart rates, alongside high-intensity intervals that stress maximum oxygen extraction.
+      </p>
+    </section>
+
+    {/* Section 6 */}
+    <section id="vo2-max-for-cyclists" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">6. VO₂ Max For Cyclists</h2>
+      <p>
+        In cycling, VO₂ Max is heavily utilized to evaluate power output on flats versus climbs. Since flat cycling speed is mostly restricted by aerodynamic drag (which does not scale with body weight), absolute VO₂ Max (L/min) is the primary predictor of performance on flat roads. 
+      </p>
+      <p>
+        However, on climbs (where gravity is the main resistance), relative VO₂ Max (ml/kg/min) becomes the critical metric. This is why professional climbing specialists optimize their bodyweight to be as lean as possible, maximizing their relative VO₂ Max and power-to-weight ratios (Watts/kg).
+      </p>
+    </section>
+
+    {/* Section 7 */}
+    <section id="how-to-improve-vo2-max" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">7. How To Improve VO₂ Max</h2>
+      <p>
+        Improving your cardiorespiratory fitness requires a dual approach targeting both peripheral (muscle extraction) and central (cardiac output) delivery systems:
+      </p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li><strong>Aerobic Base (Zone 2 Cardio):</strong> Long, steady-state sessions (60-90 mins) at a conversational pace (60-70% max HR). This increases muscular capillary density, mitochondrial count, and cardiac stroke volume over time.</li>
+        <li><strong>Aerobic Power (VO₂ Max Intervals):</strong> High-intensity intervals of 3 to 5 minutes at 90-95% max HR. Research shows that 4x4 minute intervals (with 3-minute active recoveries) are highly effective at expanding cardiac stroke volume and raising your VO₂ Max ceiling.</li>
+      </ul>
+    </section>
+
+    {/* Section 8 */}
+    <section id="vo2-max-limitations" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">8. VO₂ Max Limitations</h2>
+      <p>
+        While VO₂ Max is a crucial index, it does have specific limitations. It is highly genetically determined—genetics dictate roughly 50% of your baseline VO₂ Max and your trainability ceiling.
+      </p>
+      <p>
+        Additionally, having a high VO₂ Max does not guarantee athletic success. If an athlete has poor running mechanics (poor economy) or a low lactate threshold, they can be outperformed by a lifter or runner with a lower VO₂ Max but superior movement efficiency.
+      </p>
+    </section>
+
+    {/* Section 9 */}
+    <section id="understanding-test-accuracy" class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">9. Understanding Test Accuracy</h2>
+      <p>
+        Direct laboratory testing using a metabolic cart is the only way to get a true, definitive measurement. Our calculator uses established field tests (Cooper, Rockport, 1.5-Mile) which are indirect estimations. 
+      </p>
+      <p>
+        These field tests rely on regression models that match performance outputs (such as time taken or distance covered) to statistical averages. They are highly accurate when executed with maximum effort, but they can be skewed by bad pacing, wind resistance, running surface quality, or sub-maximal heart rate tracking.
+      </p>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={vo2MaxFAQs} title="VO₂ Max General FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

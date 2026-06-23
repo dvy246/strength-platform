@@ -1,0 +1,176 @@
+---
+// src/pages/calculators/body-fat-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { BodyFatCalculator } from '@/components/calculators/BodyFatCalculator';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data for SEO
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'Body Fat Calculator', item: '/calculators/body-fat-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'Body Fat Percentage Calculator',
+  'Calculate body fat percentage using the US Navy Tape Measure method and BMI regression formulas. View ideal charts and recommendations for men and women.',
+  'https://strengthchecker.com/calculators/body-fat-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+
+const bodyFatFAQs = [
+  {
+    question: "What is the most accurate way to measure body fat at home?",
+    answer: "The US Navy tape measure method is widely considered the most accurate and consistent at-home method. Unlike bioelectrical impedance scales (which fluctuate heavily based on hydration levels), tape measurements directly estimate subcutaneous fat deposits using body circumferences."
+  },
+  {
+    question: "Why is the essential body fat percentage higher for women than for men?",
+    answer: "Women require higher essential body fat (10-13% vs. 2-5% for men) to support vital endocrine functions, reproductive cycle regulation, and biological storage demands. Dropping below these thresholds leads to metabolic issues, hormonal disruption, and bone density loss."
+  },
+  {
+    question: "How does my body fat percentage affect my relative strength index?",
+    answer: "Relative strength index represents how much force you can generate relative to your bodyweight. Excess storage fat acts as inactive weight; it does not contribute to force generation. Reducing storage fat while preserving active lean muscle tissue is the fastest way to improve your relative strength index."
+  },
+  {
+    question: "How often should I recalculate my body fat percentage?",
+    answer: "Since body composition shifts slowly, measuring every 2 to 4 weeks is ideal. This timeframe allows you to track progress accurately without being distracted by minor day-to-day water weight fluctuations."
+  }
+];
+---
+
+<CalculatorLayout
+  title="Body Fat Percentage Calculator | Ideal Body Fat Chart | StrengthChecker"
+  description="Calculate your body fat percentage with our precision tape measure tool. Learn how to measure body fat, compare with the ideal body fat chart, and check recommendations."
+  calculatorName="Body Fat Percentage Calculator"
+  canonicalPath="/calculators/body-fat-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* Interactive Calculator Island */}
+  <BodyFatCalculator slot="calculator" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Body Fat & Performance</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      Shedding excess <strong class="text-foreground">storage body fat</strong> directly improves your power-to-weight ratio, allowing you to lift higher loads relative to your weight class.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      For strength sports, maintaining a body fat percentage of <strong class="text-foreground">8-15% (men)</strong> or <strong class="text-foreground">16-24% (women)</strong> is ideal to support energy levels, recovery, and lifting capability.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/relative-strength" class="block text-primary hover:underline">
+        Check Relative Strength →
+      </a>
+      <a href="/calculators/ideal-bodyweight" class="block text-primary hover:underline">
+        Find Ideal Bodyweight →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What is Body Fat Percentage?</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Your <strong class="text-foreground">body fat percentage</strong> is the total mass of fat divided by your total body weight, expressed as a percentage. It consists of both essential body fat (required for life and reproductive functions) and storage body fat (energy accumulation).
+      </p>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Using an accurate <strong class="text-foreground">body fat calculator</strong> is the best way to estimate your body composition and set realistic aesthetic or training goals. Unlike a simple weight scale, our <strong class="text-foreground">body fat percentage calculator</strong> accounts for actual body dimensions, offering a clear view of your physical state.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">How to Measure Body Fat Accurately</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        To get reliable results from the <strong class="text-foreground">fat percentage calculator</strong>, follow standard tape measurement practices. Wrap a flexible, non-elastic measuring tape snugly but without compressing your skin:
+      </p>
+      <ul class="list-disc pl-5 text-muted-foreground text-sm space-y-2">
+        <li><strong>Height:</strong> Measure without shoes, standing straight against a wall.</li>
+        <li><strong>Neck:</strong> Wrap the tape horizontally just below the larynx (Adam's apple), sloping slightly down toward the base.</li>
+        <li><strong>Waist:</strong> Measure horizontally. For men, measure at the navel level. For women, measure at the narrowest waist point (typically halfway between the lowest rib and hip bone).</li>
+        <li><strong>Hips (Women only):</strong> Wrap the tape horizontally around the widest part of the gluteal muscles.</li>
+      </ul>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Consistency is key: always measure first thing in the morning under fasting conditions to avoid gut bloating or hydration variables.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Ideal Body Fat Percentage Charts</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        We use the classification chart established by the **American Council on Exercise (ACE)**. It acts as the standard reference chart for medical and athletic assessments:
+      </p>
+      
+      <div class="overflow-x-auto my-4 rounded-xl border border-border">
+        <table class="w-full text-xs text-left border-collapse">
+          <thead>
+            <tr class="bg-muted/40 border-b border-border text-[10px] uppercase font-mono text-muted-foreground">
+              <th scope="col" class="p-3">Classification</th>
+              <th scope="col" class="p-3">Body Fat Percentage Men</th>
+              <th scope="col" class="p-3">Body Fat Percentage Women</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-border/60">
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">Essential Fat</td>
+              <td class="p-3 font-mono text-destructive">2 - 5%</td>
+              <td class="p-3 font-mono text-destructive">10 - 13%</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">Athletes</td>
+              <td class="p-3 font-mono text-primary font-bold">6 - 13%</td>
+              <td class="p-3 font-mono text-primary font-bold">14 - 20%</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">Fitness</td>
+              <td class="p-3 font-mono text-primary font-bold">14 - 17%</td>
+              <td class="p-3 font-mono text-primary font-bold">21 - 24%</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">Average / Acceptable</td>
+              <td class="p-3 font-mono text-warning">18 - 24%</td>
+              <td class="p-3 font-mono text-warning">25 - 31%</td>
+            </tr>
+            <tr class="hover:bg-muted/10">
+              <td class="p-3 font-semibold text-foreground">Excess Fat / Obese</td>
+              <td class="p-3 font-mono text-destructive">25%+</td>
+              <td class="p-3 font-mono text-destructive">32%+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Using an <strong class="text-foreground">ideal body fat percentage calculator</strong> assists in determining if your fat ratio is optimized for your target classification.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Essential Body Fat vs. Storage Body Fat</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        To properly manage your fitness targets, it is important to <strong class="text-foreground">explain the difference between essential body fat and storage body fat</strong>:
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-2">
+        <div class="p-4 rounded-xl border border-border bg-card/40 space-y-2">
+          <h4 class="text-xs font-bold text-foreground uppercase tracking-wide">Essential Body Fat</h4>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Essential fat is located in the brain, bone marrow, nerves, and cell membranes. It is absolutely necessary for basic survival, cellular replication, structural insulation, and hormonal control. Dropping below essential fat limits impairs health.
+          </p>
+        </div>
+        <div class="p-4 rounded-xl border border-border bg-card/40 space-y-2">
+          <h4 class="text-xs font-bold text-foreground uppercase tracking-wide">Storage Body Fat</h4>
+          <p class="text-xs text-muted-foreground leading-relaxed">
+            Storage fat represents accumulated energy reserves stored in adipose tissue. It is divided into subcutaneous fat (stored directly beneath the skin) and visceral fat (protecting internal abdominal organs). Reducing storage fat is safe and increases relative strength.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={bodyFatFAQs} title="Body Fat Calculator FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

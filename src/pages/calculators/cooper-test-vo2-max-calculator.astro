@@ -1,0 +1,155 @@
+---
+// src/pages/calculators/cooper-test-vo2-max-calculator.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { VO2MaxCalculator } from '@/components/calculators/VO2MaxCalculator';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildBreadcrumbSchema, buildWebApplicationSchema } from '@/lib/seo/schema';
+import SEOFAQSection from '@/components/seo/SEOFAQSection.astro';
+
+// Structured Data
+const breadcrumbSchema = buildBreadcrumbSchema([
+  { name: 'Home', item: '/' },
+  { name: 'Calculators', item: '/calculators' },
+  { name: 'Cooper Test VO2 Max Calculator', item: '/calculators/cooper-test-vo2-max-calculator' }
+]);
+
+const calculatorSchema = buildWebApplicationSchema(
+  'Cooper Test VO2 Max Calculator',
+  'Estimate your VO2 Max using the Cooper 12-Minute Run Test. Enter your distance in meters or miles to calculate your aerobic capacity and view fitness ratings.',
+  'https://strengthchecker.com/calculators/cooper-test-vo2-max-calculator'
+);
+
+const schemas = [breadcrumbSchema, calculatorSchema];
+
+const cooperFAQs = [
+  {
+    question: "What is the Cooper 12-minute run test?",
+    answer: "The Cooper 12-minute run test is a classic cardiorespiratory fitness test designed by Dr. Kenneth Cooper in 1968 for the US military. The objective is to run or jog as far as possible within a 12-minute window, and the distance covered is used to estimate VO₂ Max."
+  },
+  {
+    question: "How do you calculate VO₂ Max from the Cooper test?",
+    answer: "VO₂ Max is calculated using one of two formulas based on distance: for meters, VO₂ Max = (distance in meters - 504.9) / 44.73. For miles, VO₂ Max = 35.97 * (distance in miles) - 11.29. Our calculator handles both metric and imperial units automatically."
+  },
+  {
+    question: "How accurate is the Cooper 12-minute run test?",
+    answer: "Research shows a strong correlation (r = 0.85 to 0.90) between Cooper test performance and laboratory-measured VO₂ Max. The standard error is around 3 ml/kg/min, making it a highly reliable and practical field test."
+  },
+  {
+    question: "Can I walk during the Cooper test?",
+    answer: "Yes, you are permitted to walk or slow down if necessary during the 12-minute period. However, since the goal is to cover the maximum possible distance, keeping a consistent, fast running pace yields the most accurate reflection of your maximum aerobic capacity."
+  },
+  {
+    question: "How should I pace myself for the Cooper test?",
+    answer: "Pacing is critical. Avoid sprinting at the start. Try to maintain a constant, challenging speed that you can sustain for the entire 12 minutes, and then perform a final push in the last 1–2 minutes if you have remaining energy."
+  },
+  {
+    question: "What is a good Cooper test distance?",
+    answer: "For active adults aged 20-29, a good distance is generally above 2,400 meters (1.5 miles) for males and above 2,200 meters (1.37 miles) for females. Elite athletes frequently cover 3,000 meters (1.86 miles) or more."
+  },
+  {
+    question: "Who should not take the Cooper 12-minute run test?",
+    answer: "Because it requires near-maximal cardiorespiratory effort, the Cooper test is not recommended for sedentary individuals, those with pre-existing cardiovascular conditions, joint injuries, or anyone who has not cleared physical training with a physician."
+  }
+];
+---
+
+<CalculatorLayout
+  title="Cooper Test VO2 Max Calculator | 12-Min Run | StrengthChecker"
+  description="Estimate your VO2 Max using the Cooper 12-Minute Run Test. Features distance conversion formulas in meters or miles and ACSM cardiovascular benchmarks."
+  calculatorName="Cooper Test VO₂ Max Calculator"
+  canonicalPath="/calculators/cooper-test-vo2-max-calculator"
+>
+  <StructuredData slot="head" schema={schemas} />
+
+  {/* Interactive Calculator Island */}
+  <VO2MaxCalculator slot="calculator" initialMethod="cooper" client:load />
+
+  {/* Sidebar Content */}
+  <div slot="sidebar" class="p-6 border border-border bg-card rounded-xl shadow-sm space-y-6">
+    <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Cooper Test Overview</h3>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      The <strong class="text-foreground">Cooper 12-Min Run</strong> is a widely recognized standard in military, athletic, and educational physical fitness testing.
+    </p>
+    <p class="text-xs text-muted-foreground leading-relaxed">
+      It tests aerobic power by assessing how much distance you can cover under sustained oxygen demand, representing a key metric for your conditioning foundation.
+    </p>
+    <div class="border-t border-border pt-4 text-xs font-semibold space-y-2">
+      <a href="/calculators/vo2-max-calculator" class="block text-primary hover:underline font-bold">
+        ← All VO₂ Max Methods
+      </a>
+      <a href="/calculators/rockport-vo2-max-calculator" class="block text-primary hover:underline">
+        Rockport 1-Mile Walk Test →
+      </a>
+      <a href="/calculators/1-5-mile-run-vo2-max-calculator" class="block text-primary hover:underline">
+        1.5 Mile Run Test →
+      </a>
+      <a href="/calculators/heart-rate-vo2-max-calculator" class="block text-primary hover:underline">
+        Heart Rate Estimate →
+      </a>
+    </div>
+  </div>
+
+  {/* Bottom Editorial Content */}
+  <div class="space-y-8 max-w-3xl leading-relaxed text-muted-foreground text-sm">
+    <section class="space-y-4">
+      <h2 class="text-2xl font-bold text-foreground">What Is the Cooper 12-Minute Run Test?</h2>
+      <p>
+        Developed in 1968 by Dr. Kenneth Cooper, a physician in the United States Air Force, the <strong>Cooper Test</strong> is one of the oldest and most popular field tests designed to estimate aerobic fitness and maximal oxygen uptake (VO₂ Max). 
+      </p>
+      <p>
+        The protocol is simple: cover as much ground as possible in exactly 12 minutes. The test is typically performed on a standard 400-meter track, allowing administrators to count laps and measure exact fractional distances.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Scientific Underpinnings of the Cooper Formulas</h2>
+      <p>
+        The Cooper test operates on the principle that the distance an individual can cover while running continuously for 12 minutes correlates linearly with their maximal aerobic power. The linear regression equations derived by Dr. Cooper are:
+      </p>
+      <div class="p-4 border border-border bg-card/40 rounded-xl space-y-3 font-mono text-xs">
+        <div>
+          <span class="text-foreground font-bold">Metric Formula:</span>
+          <code class="block bg-muted/40 p-2 rounded border border-border mt-1">VO2 Max = (Distance in meters - 504.9) / 44.73</code>
+        </div>
+        <div>
+          <span class="text-foreground font-bold">Imperial Formula:</span>
+          <code class="block bg-muted/40 p-2 rounded border border-border mt-1">VO2 Max = 35.97 * (Distance in miles) - 11.29</code>
+        </div>
+      </div>
+      <p>
+        Both equations provide highly similar results. The metric formula is generally preferred because measuring to the nearest meter on a track offers greater precision than tracking miles on a watch.
+      </p>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Step-by-Step Cooper Test Protocol</h2>
+      <p>
+        To ensure your results are valid and safe to compare with standard fitness charts, follow these guidelines:
+      </p>
+      <ol class="list-decimal pl-5 space-y-2">
+        <li><strong>Equipment:</strong> A flat running track (preferably a 400m athletics track), a stopwatch, and running shoes. A GPS sports watch can be used but track markings are more reliable.</li>
+        <li><strong>Warm-up:</strong> Complete a 5-10 minute light jog followed by dynamic stretching (high knees, leg swings, butt kicks). Do not static stretch before running.</li>
+        <li><strong>Execution:</strong> Start the timer and run, jog, or walk at the fastest sustainable pace for exactly 12 minutes. Track your laps carefully.</li>
+        <li><strong>Cool-down:</strong> Walk slowly for 3-5 minutes to prevent blood pooling, and perform light static stretching.</li>
+        <li><strong>Distance Recording:</strong> Record the final distance covered to the nearest 10 meters (or 0.01 mile).</li>
+      </ol>
+    </section>
+
+    <section class="space-y-4">
+      <h2 class="text-xl font-bold text-foreground">Factors Affecting Cooper Test Accuracy</h2>
+      <p>
+        While the Cooper test is excellent for benchmarking, several environmental and physical factors can skew the estimation:
+      </p>
+      <ul class="list-disc pl-5 space-y-2">
+        <li><strong>Pacing Strategy:</strong> If you start too fast, you will accumulate lactic acid early and slow down significantly, reducing total distance and underestimating VO₂ Max.</li>
+        <li><strong>Weather & Friction:</strong> Strong winds, rain, extreme heat, or a soft, muddy running surface will increase physical resistance and lower your performance.</li>
+        <li><strong>Altitude:</strong> Testing at high elevations reduces oxygen availability, which will lower your cardiorespiratory performance compared to sea level.</li>
+        <li><strong>Motivation:</strong> As a field test, it requires maximal mental drive to push through fatigue. Sub-maximal efforts will not provide a true VO₂ Max reading.</li>
+      </ul>
+    </section>
+
+    <div class="border-t border-border/80 pt-6">
+      <SEOFAQSection items={cooperFAQs} title="Cooper Test FAQs" />
+    </div>
+  </div>
+</CalculatorLayout>

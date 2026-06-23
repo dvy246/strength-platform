@@ -2,6 +2,7 @@
 // src/layouts/BaseLayout.astro
 import '@/styles/global.css';
 import Head from '@/components/seo/Head.astro';
+import CookieConsent from '@/components/layout/CookieConsent.astro';
 
 interface Props {
   title?: string;
@@ -49,5 +50,6 @@ const { title, description, canonicalPath, ogImagePath, noindex } = Astro.props;
       Skip to main content
     </a>
     <slot />
+    <CookieConsent />
   </body>
 </html>
