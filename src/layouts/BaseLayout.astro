@@ -18,6 +18,15 @@ const { title, description, canonicalPath, ogImagePath, noindex } = Astro.props;
 <!doctype html>
 <html lang="en" class="dark">
   <head>
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-872F2MYES9" is:inline></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-872F2MYES9');
+    </script>
     <Head
       title={title}
       description={description}
