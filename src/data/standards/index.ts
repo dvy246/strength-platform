@@ -12,6 +12,10 @@ import { legPressStandards } from './leg-press';
 import { latPulldownStandards } from './lat-pulldown';
 import { barbellCurlStandards } from './barbell-curl';
 import { weightedSitUpStandards } from './weighted-sit-up';
+import { dumbbellCurlStandards } from './dumbbell-curl';
+import { tricepsPushdownStandards } from './triceps-pushdown';
+import { legExtensionStandards } from './leg-extension';
+import { cableHorizontalRowsStandards } from './cable-horizontal-rows';
 import type { ExerciseStandardsData } from './types';
 
 export const allStandards: Record<string, ExerciseStandardsData> = {
@@ -22,13 +26,18 @@ export const allStandards: Record<string, ExerciseStandardsData> = {
   'pull-up': pullUpStandards,
   'dips': dipsStandards,
   'weighted-pull-up': pullUpStandards,
+  'weighted-dips': dipsStandards,
   'dumbbell-bench-press': dumbbellBenchPressStandards,
   'incline-bench-press': inclineBenchPressStandards,
   'incline-dumbbell-press': inclineDumbbellPressStandards,
   'leg-press': legPressStandards,
   'lat-pulldown': latPulldownStandards,
   'barbell-curl': barbellCurlStandards,
-  'weighted-sit-up': weightedSitUpStandards
+  'weighted-sit-up': weightedSitUpStandards,
+  'dumbbell-curl': dumbbellCurlStandards,
+  'triceps-pushdown': tricepsPushdownStandards,
+  'leg-extension': legExtensionStandards,
+  'cable-horizontal-rows': cableHorizontalRowsStandards
 };
 
 

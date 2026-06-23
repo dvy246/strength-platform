@@ -31,12 +31,13 @@ if (exercise.id === 'bench-press') {
   exerciseFAQs = squatFAQs;
 } else if (exercise.id === 'deadlift') {
   exerciseFAQs = deadliftFAQs;
-} else if (['pull-up', 'weighted-pull-up', 'dips'].includes(exercise.id)) {
+} else if (['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exercise.id)) {
   exerciseFAQs = pullUpCalisthenicsFAQs;
 }
 
 const title = `${exercise.name} Strength Standards & Gym Levels | StrengthChecker`;
 const description = `Find standard strict 1RM ${exercise.name} weights for male and female lifters of all bodyweights. Calculate your gym level and percentile rank.`;
+const bodyweights = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140];
 ---
 
 <StandardsLayout
@@ -94,6 +95,22 @@ const description = `Find standard strict 1RM ${exercise.name} weights for male 
         <p class="text-[11px] text-muted-foreground leading-relaxed">
           Outstanding, highly competitive levels of relative strength. Approaching absolute human potential. Stronger than 95% of lifters.
         </p>
+      </div>
+    </div>
+
+    <div class="border-t border-border/60 mt-16 pt-10">
+      <h3 class="text-sm font-bold text-foreground uppercase tracking-wider mb-6">
+        {exercise.name} Standards by Bodyweight
+      </h3>
+      <div class="flex flex-wrap gap-2 text-xs font-semibold">
+        {bodyweights.map(bw => (
+          <a 
+            href={`/${exercise.slug}-standards-at-${bw}kg`} 
+            class="px-3.5 py-2 border border-border rounded-lg bg-card/40 text-muted-foreground hover:text-primary transition-colors"
+          >
+            {bw} kg
+          </a>
+        ))}
       </div>
     </div>
 

@@ -28,9 +28,6 @@ export const GET: APIRoute = () => {
   // Dynamic exercise main pages (old structure)
   const exerciseUrls = exercises.map(ex => `/strength-standards/${ex.slug}`);
 
-  // Dynamic exercise standards landing pages (new structure)
-  const exerciseStandardsUrls = exercises.map(ex => `/${ex.slug}-standards`);
-
   // Dynamic bodyweight-specific pages (5kg intervals from 50kg to 140kg)
   const bodyweights = [50, 55, 60, 65, 70, 75, 80, 85, 90, 95, 100, 105, 110, 115, 120, 125, 130, 135, 140];
   const bodyweightUrls: string[] = [];
@@ -42,7 +39,7 @@ export const GET: APIRoute = () => {
   }
 
   // Combine all URLs
-  const allUrls = [...staticUrls, ...exerciseUrls, ...exerciseStandardsUrls, ...bodyweightUrls];
+  const allUrls = [...staticUrls, ...exerciseUrls, ...bodyweightUrls];
 
   // Generate XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

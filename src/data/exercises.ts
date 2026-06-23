@@ -142,6 +142,24 @@ export const exercises: Exercise[] = [
     bodyweightRange: { min: 40, max: 140 }
   },
   {
+    id: 'weighted-dips',
+    slug: 'weighted-dips',
+    name: 'Weighted Dips',
+    category: 'weighted-bodyweight',
+    muscleGroup: 'Chest',
+    isCompound: true,
+    coverageWeight: 0.125,
+    description: 'An advanced upper-body pressing movement testing chest, triceps, and shoulder strength with added external load.',
+    tips: [
+      'Grip the dip bars and hoist yourself up until your arms are fully extended.',
+      'Use a secure dip belt or dumbbell between your legs.',
+      'Lower your body by bending your elbows and leaning your torso slightly forward.',
+      'Push back up with control until your elbows are locked at the top.'
+    ],
+    relatedExercises: ['dips', 'bench-press', 'overhead-press'],
+    bodyweightRange: { min: 40, max: 140 }
+  },
+  {
     id: 'dumbbell-bench-press',
     slug: 'dumbbell-bench-press',
     name: 'Dumbbell Bench Press',
@@ -258,6 +276,75 @@ export const exercises: Exercise[] = [
       'Slowly lower back down to the starting position under control.'
     ],
     relatedExercises: [],
+    bodyweightRange: { min: 40, max: 140 }
+  },
+  {
+    id: 'dumbbell-curl',
+    slug: 'dumbbell-curl',
+    name: 'Dumbbell Curl',
+    category: 'barbell',
+    muscleGroup: 'Arms',
+    isCompound: false,
+    coverageWeight: 0,
+    description: 'A classic arm isolation exercise targeting the biceps (weight entered is per single dumbbell).',
+    tips: [
+      'Keep your elbows close to your torso and stabilize your shoulders.',
+      'Curl the dumbbell while supinating your wrist (palm facing up at the top).',
+      'Lower the weight with control to full extension, avoiding body swing.'
+    ],
+    relatedExercises: ['barbell-curl', 'pull-up'],
+    bodyweightRange: { min: 40, max: 140 }
+  },
+  {
+    id: 'triceps-pushdown',
+    slug: 'triceps-pushdown',
+    name: 'Triceps Pushdown',
+    category: 'barbell',
+    muscleGroup: 'Arms',
+    isCompound: false,
+    coverageWeight: 0,
+    description: 'A popular cable machine isolation exercise targeting the triceps.',
+    tips: [
+      'Pin your elbows to your sides and lean slightly forward from the hips.',
+      'Push the bar/rope down until your arms are fully locked out at the bottom.',
+      'Control the weight as you return to the starting position, keeping elbows stationary.'
+    ],
+    relatedExercises: ['dips', 'weighted-dips', 'bench-press'],
+    bodyweightRange: { min: 40, max: 140 }
+  },
+  {
+    id: 'leg-extension',
+    slug: 'leg-extension',
+    name: 'Leg Extension',
+    category: 'barbell',
+    muscleGroup: 'Legs',
+    isCompound: false,
+    coverageWeight: 0,
+    description: 'An isolation machine exercise that targets the quadriceps.',
+    tips: [
+      'Align your knees with the pivot point of the machine.',
+      'Extend your legs fully and squeeze your quads at the peak of the contraction.',
+      'Lower the weight with control, keeping your back pressed against the seat.'
+    ],
+    relatedExercises: ['squat', 'leg-press'],
+    bodyweightRange: { min: 40, max: 140 }
+  },
+  {
+    id: 'cable-horizontal-rows',
+    slug: 'cable-horizontal-rows',
+    name: 'Cable Horizontal Rows',
+    category: 'barbell',
+    muscleGroup: 'Back',
+    isCompound: true,
+    coverageWeight: 0,
+    description: 'A compound horizontal pulling movement targeting the upper back and lats.',
+    tips: [
+      'Sit with your knees slightly bent and chest upright.',
+      'Pull the attachment toward your lower abdomen, driving your elbows backward.',
+      'Squeeze your shoulder blades together at the end of the pull.',
+      'Extend your arms completely on the return, letting your shoulders stretch forward slightly.'
+    ],
+    relatedExercises: ['deadlift', 'pull-up', 'lat-pulldown'],
     bodyweightRange: { min: 40, max: 140 }
   }
 ];

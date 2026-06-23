@@ -1,6 +1,7 @@
 // src/components/calculators/RelativeStrength.tsx
 import React, { useEffect, useState } from 'react';
 import { calculateLiftPercentile, type StrengthLevel, calculateWeightForScore } from '@/lib/calculations/percentiles';
+import { calculateFormula1RM } from '@/lib/calculations/one-rep-max';
 import { getStoredUnit, convert, type Unit } from '@/lib/formatting/units';
 import { exercises } from '@/data/exercises';
 import { GenderSelector } from '../shared/GenderSelector';
@@ -8,9 +9,13 @@ import { LevelBadge } from '../standards/LevelBadge';
 
 export const RelativeStrength: React.FC = () => {
   const [exerciseId, setExerciseId] = useState<string>('bench-press');
+
+  const selectedExercise = exercises.find((ex) => ex.id === exerciseId);
+  const exerciseName = selectedExercise ? selectedExercise.name : 'Exercise';
   const [gender, setGender] = useState<'male' | 'female'>('male');
   const [bodyweight, setBodyweight] = useState<string>('80');
   const [liftWeight, setLiftWeight] = useState<string>('100');
+  const [reps, setReps] = useState<string>('1');
   const [unit, setUnit] = useState<Unit>('kg');
 
   const [ratio, setRatio] = useState<number>(0);
@@ -40,6 +45,7 @@ export const RelativeStrength: React.FC = () => {
   useEffect(() => {
     const bwVal = parseFloat(bodyweight);
     const liftVal = parseFloat(liftWeight);
+    const repsVal = parseInt(reps) || 1;
 
     if (isNaN(bwVal) || bwVal <= 0 || isNaN(liftVal) || liftVal < 0) {
       setRatio(0);
@@ -48,17 +54,21 @@ export const RelativeStrength: React.FC = () => {
     }
 
     const bwKg = unit === 'kg' ? bwVal : convert.toKg(bwVal);
-    const liftKg = unit === 'kg' ? liftVal : convert.toKg(liftVal);
+    
+    // Estimate 1RM
+    const estimated1RM = calculateFormula1RM('epley', liftVal, repsVal);
+    const estimated1RMKg = unit === 'kg' ? estimated1RM : convert.toKg(estimated1RM);
 
     // Compute standard ratio (total weight lifted over bodyweight)
-    const isBw = exerciseId === 'pull-up' || exerciseId === 'weighted-pull-up' || exerciseId === 'dips';
-    const totalLiftedKg = isBw ? bwKg + liftKg : liftKg;
+    const isBw = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId);
+    const totalLiftedKg = isBw ? bwKg + estimated1RMKg : estimated1RMKg;
     const computedRatio = totalLiftedKg / bwKg;
 
     setRatio(computedRatio);
 
+    const mappedId = exerciseId === 'weighted-pull-up' ? 'pull-up' : (exerciseId === 'weighted-dips' ? 'dips' : exerciseId);
     const calculation = calculateLiftPercentile(
-      exerciseId === 'weighted-pull-up' ? 'pull-up' : exerciseId, 
+      mappedId, 
       gender, 
       bwKg, 
       totalLiftedKg
@@ -74,12 +84,13 @@ export const RelativeStrength: React.FC = () => {
     } else {
       setResult(null);
     }
-  }, [exerciseId, gender, bodyweight, liftWeight, unit]);
+  }, [exerciseId, gender, bodyweight, liftWeight, reps, unit]);
 
   // Generate target weights/ratios to reach other levels
   const getLevelRatios = () => {
     const bwVal = parseFloat(bodyweight) || 80;
     const bwKg = unit === 'kg' ? bwVal : convert.toKg(bwVal);
+    const repsVal = parseInt(reps) || 1;
 
     return [
       { name: 'beginner', score: 10, label: 'Beginner' },
@@ -88,17 +99,21 @@ export const RelativeStrength: React.FC = () => {
       { name: 'advanced', score: 70, label: 'Advanced' },
       { name: 'elite', score: 90, label: 'Elite' }
     ].map((l) => {
+      const mappedId = exerciseId === 'weighted-pull-up' ? 'pull-up' : (exerciseId === 'weighted-dips' ? 'dips' : exerciseId);
       const targetKg = calculateWeightForScore(
-        exerciseId === 'weighted-pull-up' ? 'pull-up' : exerciseId, 
+        mappedId, 
         gender, 
         bwKg, 
         l.score
       );
-      const isBw = exerciseId === 'pull-up' || exerciseId === 'weighted-pull-up' || exerciseId === 'dips';
+      const isBw = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId);
       
       let displayTargetKg = targetKg;
       if (isBw) {
-        displayTargetKg = Math.max(0, targetKg - bwKg);
+        const totalTargetForRepsKg = repsVal === 1 ? targetKg : targetKg / (1 + repsVal / 30);
+        displayTargetKg = Math.max(0, totalTargetForRepsKg - bwKg);
+      } else {
+        displayTargetKg = repsVal === 1 ? targetKg : targetKg / (1 + repsVal / 30);
       }
 
       const displayTargetUser = unit === 'kg' ? displayTargetKg : convert.toLb(displayTargetKg);
@@ -148,7 +163,7 @@ export const RelativeStrength: React.FC = () => {
             <GenderSelector value={gender} onChange={setGender} />
 
             {/* Inputs Row */}
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="flex flex-col space-y-2">
                 <label htmlFor="rs-bw" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                   Bodyweight ({unit.toUpperCase()})
@@ -158,7 +173,7 @@ export const RelativeStrength: React.FC = () => {
                   type="number"
                   value={bodyweight}
                   onChange={(e) => setBodyweight(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-3 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all text-center"
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all text-center"
                   placeholder="80"
                   min="30"
                 />
@@ -166,19 +181,55 @@ export const RelativeStrength: React.FC = () => {
 
               <div className="flex flex-col space-y-2">
                 <label htmlFor="rs-lift" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  {(exerciseId === 'pull-up' || exerciseId === 'weighted-pull-up' || exerciseId === 'dips') ? 'Added Weight' : 'Lift Weight'} ({unit.toUpperCase()})
+                  {['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) 
+                    ? `Added Wt` 
+                    : `Weight Lifted`} ({unit.toUpperCase()})
                 </label>
                 <input
                   id="rs-lift"
                   type="number"
                   value={liftWeight}
                   onChange={(e) => setLiftWeight(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-3 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all text-center"
+                  className="w-full rounded-xl border border-border bg-background px-3 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all text-center"
                   placeholder="100"
                   min="0"
                 />
               </div>
+
+              <div className="flex flex-col space-y-2">
+                <label htmlFor="rs-reps" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                  Reps
+                </label>
+                <div className="relative">
+                  <select
+                    id="rs-reps"
+                    value={reps}
+                    onChange={(e) => setReps(e.target.value)}
+                    className="w-full rounded-xl border border-border bg-background px-3.5 py-2.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono font-semibold appearance-none cursor-pointer pr-8 shadow-sm transition-all text-center"
+                  >
+                    {Array.from({ length: 15 }, (_, i) => i + 1).map((r) => (
+                      <option key={r} value={r.toString()} className="bg-card text-foreground">
+                        {r} {r === 1 ? 'rep' : 'reps'}
+                      </option>
+                    ))}
+                  </select>
+                  <div className="absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none text-muted-foreground">
+                    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
+                </div>
+              </div>
             </div>
+
+            {parseInt(reps) > 1 && parseFloat(liftWeight) > 0 && (
+              <div className="text-xs text-muted-foreground/80 bg-muted/20 border border-border/40 rounded-xl p-3 flex items-center justify-between font-medium">
+                <span>Estimated 1RM:</span>
+                <span className="font-mono font-bold text-primary">
+                  {Math.round(calculateFormula1RM('epley', parseFloat(liftWeight) || 0, parseInt(reps)))} {unit}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -202,8 +253,17 @@ export const RelativeStrength: React.FC = () => {
                     <LevelBadge level={result.level} className="text-xs px-2.5 py-0.5" />
                   </div>
                   <p className="text-xs text-muted-foreground max-w-xs mt-3 leading-relaxed">
-                    You lift **{ratio.toFixed(2)}x** your bodyweight, ranking higher than **{result.percentile.toFixed(1)}%** of lifters.
+                    You lift **{ratio.toFixed(2)}x** your bodyweight in the **{exerciseName}**, ranking higher than **{result.percentile.toFixed(1)}%** of lifters.
                   </p>
+
+                  {parseInt(reps) > 1 && parseFloat(liftWeight) > 0 && (
+                    <div className="mt-4 flex items-center justify-between text-xs border border-border/50 rounded-xl px-4 py-2 bg-muted/20 w-full max-w-xs">
+                      <span className="text-muted-foreground font-semibold">Estimated 1RM:</span>
+                      <span className="font-mono font-bold text-primary">
+                        {Math.round(calculateFormula1RM('epley', parseFloat(liftWeight) || 0, parseInt(reps)))} {unit}
+                      </span>
+                    </div>
+                  )}
                 </div>
 
                 {/* Percentile bar */}
@@ -223,9 +283,16 @@ export const RelativeStrength: React.FC = () => {
 
               {/* Ratios Comparison Table */}
               <div className="p-6 border border-border rounded-2xl bg-card/60 shadow-md space-y-4">
-                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider border-b border-border pb-3">
-                  Relative Strength Milestones
-                </h3>
+                <div className="border-b border-border pb-3 flex justify-between items-center">
+                  <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                    Relative Strength Milestones
+                  </h3>
+                  {parseInt(reps) > 1 && (
+                    <span className="text-[10px] text-primary font-bold uppercase tracking-wide">
+                      Target weights for {reps} reps
+                    </span>
+                  )}
+                </div>
 
                 <div className="space-y-2 font-mono text-xs">
                   {levelRatios.map((r) => {

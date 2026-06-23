@@ -116,6 +116,15 @@ export function calculateLiftPercentile(
   const standards = getStandardsForExercise(exerciseId);
   if (!standards) return undefined;
   
+  if (oneRepMaxKg <= 0) {
+    return {
+      percentile: 0,
+      score: 0,
+      level: 'beginner',
+      bwRatio: 0
+    };
+  }
+  
   const coef = gender === 'male' ? standards.male : standards.female;
   const bwRatio = oneRepMaxKg / bodyweightKg;
   

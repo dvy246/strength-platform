@@ -70,6 +70,8 @@ export function calculateStrengthIndex(input: StrengthIndexInput): StrengthIndex
     'dips': 0.125
   };
   
+  const allZero = lifts.every(l => l.weight === 0);
+  
   for (const lift of lifts) {
     const exercise = getExerciseById(lift.exerciseId);
     if (!exercise) continue;
@@ -82,7 +84,7 @@ export function calculateStrengthIndex(input: StrengthIndexInput): StrengthIndex
     // For pull-up, the weight entered represents the added weight.
     // The total weight lifted is bodyweight + added weight.
     let totalLiftedKg = estimated1RMKg;
-    if (exercise.category === 'bodyweight' || exercise.category === 'weighted-bodyweight') {
+    if (!allZero && (exercise.category === 'bodyweight' || exercise.category === 'weighted-bodyweight')) {
       totalLiftedKg = bodyweightKg + estimated1RMKg;
     }
     
@@ -241,7 +243,10 @@ export function calculateStrengthIndex(input: StrengthIndexInput): StrengthIndex
   let archetype = 'Hybrid Lifter';
   let archetypeDesc = 'You display robust strength across multiple patterns, with slight variations. A solid foundation for general physical preparation (GPP) and athletic conditioning.';
 
-  if (pushAvg !== null && pullAvg !== null && legAvg !== null) {
+  if (allZero) {
+    archetype = 'Beginner Lifter';
+    archetypeDesc = 'Enter your lift weights to discover your athlete archetype and training recommendations.';
+  } else if (pushAvg !== null && pullAvg !== null && legAvg !== null) {
     const scores = [pushAvg, pullAvg, legAvg];
     const maxVal = Math.max(...scores);
     const minVal = Math.min(...scores);

@@ -66,7 +66,7 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
     const est1RMKg = unit === 'kg' ? est1RM : convert.toKg(est1RM);
 
     // For bodyweight exercises (pull-ups / dips), total lifted weight is bodyweight + added weight
-    const isBwExercise = exerciseId === 'pull-up' || exerciseId === 'dips';
+    const isBwExercise = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId);
     const totalLiftedKg = isBwExercise ? bwKg + est1RMKg : est1RMKg;
 
     const calculation = calculateLiftPercentile(exerciseId, gender, bwKg, totalLiftedKg);
@@ -131,7 +131,7 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
     const targetKg = calculateWeightForScore(exerciseId, gender, bodyweightKgNormalized, targetScore);
     
     let displayTarget = targetKg;
-    const isBw = exerciseId === 'pull-up' || exerciseId === 'dips';
+    const isBw = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId);
     if (isBw) {
       displayTarget = Math.max(0, targetKg - bodyweightKgNormalized);
     }
@@ -250,7 +250,7 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
               {/* Weight Lifted */}
               <div className="flex flex-col space-y-2">
                 <label htmlFor="lift-weight-val" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  {(exerciseId === 'pull-up' || exerciseId === 'dips') ? 'Added Weight' : 'Weight Lifted'} ({unit.toUpperCase()})
+                  {['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'Added Weight' : 'Weight Lifted'} ({unit.toUpperCase()})
                 </label>
                 <input
                   id="lift-weight-val"
@@ -258,7 +258,7 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
                   value={liftWeight}
                   onChange={(e) => setLiftWeight(e.target.value)}
                   className="w-full rounded-xl border border-border bg-background px-3 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all"
-                  placeholder={(exerciseId === 'pull-up' || exerciseId === 'dips') ? 'e.g. 0' : 'e.g. 100'}
+                  placeholder={['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'e.g. 0' : 'e.g. 100'}
                   min="0"
                 />
               </div>
@@ -426,7 +426,7 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
                         
                         // Subtract bodyweight for pull-ups / dips to show added weight
                         let displayLiftKg = cellLiftKg;
-                        if (exerciseId === 'pull-up' || exerciseId === 'dips') {
+                        if (['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId)) {
                           displayLiftKg = Math.max(0, cellLiftKg - rowBwKg);
                         }
 
@@ -438,7 +438,7 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
                             }`}
                           >
                             {formatTableRowWeight(displayLiftKg)}
-                            {(exerciseId === 'pull-up' || exerciseId === 'dips') && displayLiftKg === 0 && (
+                            {['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) && displayLiftKg === 0 && (
                               <span className="text-[10px] text-muted-foreground ml-1">Bodyweight</span>
                             )}
                           </td>
@@ -453,7 +453,7 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
         </div>
         
         <p className="text-[11px] text-muted-foreground italic px-2">
-          {exerciseId === 'pull-up' || exerciseId === 'dips'
+          {['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId)
             ? `Note: ${exerciseName} standards represent the ADDED weight (on a belt). A value of 0 indicates pulling/pushing your own bodyweight.`
             : 'Note: Standards represent strict 1-Repetition Max (1RM) lifts. All values are rounded to the nearest integer.'}
         </p>

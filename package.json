@@ -14,7 +14,7 @@
     "lint": "eslint .",
     "format": "prettier --write \"**/*.{ts,tsx,astro}\"",
     "typecheck": "astro check",
-    "deploy": "wrangler pages deploy dist --project-name=strength-standards"
+    "deploy": "npm run build && wrangler pages deploy dist --project-name=strength-standards --branch=production --commit-dirty=true"
   },
   "dependencies": {
     "@astrojs/react": "^5",

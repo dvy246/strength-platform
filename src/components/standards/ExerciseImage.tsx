@@ -416,6 +416,33 @@ export const ExerciseImage: React.FC<ExerciseImageProps> = ({ exerciseId, classN
       );
 
     default:
-      return null;
+      return (
+        <svg className={`w-full h-full text-foreground ${className}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">
+          {renderDefs('default')}
+          {/* Tech Grid Backdrop */}
+          <rect x="5" y="5" width="90" height="90" rx="10" fill="url(#grid-default)" stroke="var(--border)" strokeWidth="1" />
+          <circle cx="50" cy="50" r="22" fill="var(--primary)" opacity="0.04" filter="url(#glow-default)" />
+          
+          {/* Stylized Glowing Dumbbell */}
+          <g transform="translate(50, 50) scale(0.9)">
+            {/* Dumbbell Shaft */}
+            <line x1="-22" y1="0" x2="22" y2="0" stroke="#232f3e" strokeWidth="4" strokeLinecap="round" />
+            <line x1="-16" y1="0" x2="16" y2="0" stroke="var(--primary)" strokeWidth="1.5" strokeLinecap="round" />
+            
+            {/* Left Plates */}
+            <rect x="-24" y="-12" width="4" height="24" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+            <rect x="-20" y="-16" width="4" height="32" rx="1.5" fill="#788591" stroke="#232f3e" strokeWidth="1.5" />
+            <rect x="-16" y="-10" width="2" height="20" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+            
+            {/* Right Plates */}
+            <rect x="14" y="-10" width="2" height="20" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+            <rect x="16" y="-16" width="4" height="32" rx="1.5" fill="#788591" stroke="#232f3e" strokeWidth="1.5" />
+            <rect x="20" y="-12" width="4" height="24" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.5" />
+
+            {/* Glowing Accent Ring */}
+            <circle cx="0" cy="0" r="8" stroke="url(#grad-default)" strokeWidth="2" fill="none" opacity="0.8" filter="url(#glow-default)" />
+          </g>
+        </svg>
+      );
   }
 };

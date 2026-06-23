@@ -32,20 +32,33 @@ const breadcrumbs = [{ name: 'About', path: '/about' }];
           In the fitness industry, generic guidelines and anecdotal evidence abound. Trainees are often left with questions: "Is my squat actually strong?", "What should a person of my weight be bench pressing?", "Is my body development balanced?"
         </p>
         <p>
-          StrengthChecker was founded to provide clear, quantitative, and scientifically-grounded answers. We believe that strength metrics should be derived from empirical data, not myths.
+          StrengthChecker was created to provide clear, quantitative, and scientifically-grounded answers. We believe that strength metrics should be derived from empirical data and transparent calculations, not subjective claims.
         </p>
 
-        <h2 class="text-xl font-bold text-foreground mt-8">Data-Driven Integrity</h2>
+        <h2 class="text-xl font-bold text-foreground mt-8">About the Project</h2>
         <p>
-          Unlike competitive websites that rely on user-submitted inputs (which are subject to reporting bias and inflation), our baseline curves are mathematically modeled using raw competition results from powerlifting meets (specifically open-raw divisions in the IPF) combined with peer-reviewed population fitness studies.
+          This platform was created to help lifters benchmark their strength using publicly available strength standard datasets and published sports science research. 
         </p>
         <p>
-          This ensures that our standards represent real-world athletic capabilities. Our log-normal statistical curves are built to reflect how bodyweight affects relative strength, honoring the physiological differences in lifters.
+          Instead of relying on unverified user-submitted entries (which are subject to reporting bias and weight inflation), we consolidate raw athletic results and perform regression analysis using log-normal probability distributions. This ensures the thresholds reflect realistic milestones for everyday lifters while remaining statistically anchored to empirical athletic results.
         </p>
 
-        <h2 class="text-xl font-bold text-foreground mt-8">The Team</h2>
+        <h2 class="text-xl font-bold text-foreground mt-8">Methodology & Reference Data</h2>
         <p>
-          We are a team of data scientists, software engineers, and strength coaches. By merging modern web design principles (Vercel-inspired dark aesthetics, high-performance static rendering, interactive React components) with rigorous math, we deliver a premium, tool-first UX that sets a new standard for fitness platforms.
+          Our calculations are modeled using:
+        </p>
+        <ul class="list-disc list-inside space-y-2 pl-2">
+          <li><strong>Raw Powerlifting Datasets</strong>: Open-raw divisions from the International Powerlifting Federation (IPF) and related databases to identify elite, advanced, and intermediate limits.</li>
+          <li><strong>Recreational Survey Studies</strong>: Surveyed statistics from fitness populations to establish standard novice and beginner thresholds.</li>
+          <li><strong>IPF GL & Wilks Coefficients</strong>: Standard formulas used to normalize lifts relative to bodyweight, accounting for the Square-Cube Law of scaling.</li>
+        </ul>
+
+        <h2 class="text-xl font-bold text-foreground mt-8">Limitations & Disclaimers</h2>
+        <p>
+          All strength standards represent strict, full-range-of-motion repetitions (e.g., squatting to parallel, chest touch on bench, full lockout on deadlifts). 
+        </p>
+        <p>
+          Please note that StrengthChecker is an independent data analysis tool. It provides statistical benchmarks based on competitive databases and recreationally modeled populations. These tools are designed to evaluate and guide training progression, and should not be used as medical advice or as a substitute for professional coaching.
         </p>
       </div>
     </Container>

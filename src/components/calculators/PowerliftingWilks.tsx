@@ -67,7 +67,7 @@ export const PowerliftingWilks: React.FC = () => {
       <div className="lg:col-span-6 space-y-6">
         <div className="p-6 border border-border rounded-2xl bg-card/60 shadow-md space-y-6">
           <div className="border-b border-border pb-3">
-            <h3 class="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
               1. Biological Parameters
             </h3>
           </div>
@@ -75,7 +75,7 @@ export const PowerliftingWilks: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-6">
             <div className="w-full sm:w-1/2">
               <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">Gender</label>
-              <GenderSelector gender={gender} onChange={setGender} />
+              <GenderSelector value={gender} onChange={setGender} />
             </div>
             <div className="w-full sm:w-1/2">
               <label htmlFor="bodyweight" className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">

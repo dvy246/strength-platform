@@ -76,7 +76,7 @@ export const OneRepMax: React.FC<OneRepMaxProps> = ({ initialExerciseId = 'bench
       const calculated1RMKg = unit === 'kg' ? calculated1RM : convert.toKg(calculated1RM);
       
       // For bodyweight exercises (pull-ups / dips), total lifted weight is bodyweight + added weight
-      const isBwExercise = exerciseId === 'pull-up' || exerciseId === 'dips';
+      const isBwExercise = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId);
       const totalLiftedKg = isBwExercise ? bwKg + calculated1RMKg : calculated1RMKg;
       
       const calculation = calculateLiftPercentile(exerciseId, gender, bwKg, totalLiftedKg);
@@ -136,7 +136,7 @@ export const OneRepMax: React.FC<OneRepMaxProps> = ({ initialExerciseId = 'bench
               {/* Weight Input */}
               <div className="flex flex-col space-y-2">
                 <label htmlFor="orm-weight" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  {(exerciseId === 'pull-up' || exerciseId === 'dips') ? 'Added Weight' : 'Weight Lifted'} ({unit.toUpperCase()})
+                  {['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'Added Weight' : 'Weight Lifted'} ({unit.toUpperCase()})
                 </label>
                 <input
                   id="orm-weight"
@@ -144,7 +144,7 @@ export const OneRepMax: React.FC<OneRepMaxProps> = ({ initialExerciseId = 'bench
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
                   className="w-full rounded-xl border border-border bg-background px-3.5 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all"
-                  placeholder={(exerciseId === 'pull-up' || exerciseId === 'dips') ? 'e.g. 0' : 'e.g. 80'}
+                  placeholder={['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'e.g. 0' : 'e.g. 80'}
                   min="0"
                 />
               </div>

@@ -71,7 +71,7 @@ const levels = [
 const getStandardsForGender = (gender: 'male' | 'female') => {
   return levels.map(lvl => {
     let wt = calculateWeightForScore(exercise.id, gender, bodyweightKg, lvl.score);
-    if (exercise.id === 'pull-up' || exercise.id === 'dips') {
+    if (['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exercise.id)) {
       wt = Math.max(0, wt - bodyweightKg);
     }
     return {
@@ -133,7 +133,7 @@ const otherExercises = exercises.filter(ex => ex.id !== exercise.id);
             <tbody class="divide-y divide-border/60">
               {maleStandards.map((item) => {
                 // Adjust for bodyweight movements (pull up / dips)
-                const isBwExercise = exercise.id === 'pull-up' || exercise.id === 'dips';
+                const isBwExercise = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exercise.id);
                 const rawWeightKg = isBwExercise ? item.weightKg + bodyweightKg : item.weightKg;
                 const ratio = rawWeightKg / bodyweightKg;
                 return (
@@ -165,7 +165,7 @@ const otherExercises = exercises.filter(ex => ex.id !== exercise.id);
             </thead>
             <tbody class="divide-y divide-border/60">
               {femaleStandards.map((item) => {
-                const isBwExercise = exercise.id === 'pull-up' || exercise.id === 'dips';
+                const isBwExercise = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exercise.id);
                 const rawWeightKg = isBwExercise ? item.weightKg + bodyweightKg : item.weightKg;
                 const ratio = rawWeightKg / bodyweightKg;
                 return (

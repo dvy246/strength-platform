@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { calculateStrengthIndex, type StrengthIndexInput, type StrengthIndexResult } from '@/lib/calculations/strength-index';
 import { getStoredUnit, type Unit } from '@/lib/formatting/units';
+import { calculateStrengthGap } from '@/lib/calculations/forecasting';
 import { GenderSelector } from '../shared/GenderSelector';
 import { ScoreGauge } from '../data-viz/ScoreGauge';
 import { PercentileBar } from '../data-viz/PercentileBar';
@@ -10,6 +11,7 @@ import { LevelBadge } from '../standards/LevelBadge';
 import { exercises } from '@/data/exercises';
 import { ProgressLadder } from '../data-viz/ProgressLadder';
 import { StrengthReport } from './StrengthReport';
+import { StrengthCard } from '@/components/data-viz/StrengthCard';
 
 export const StrengthIndex: React.FC = () => {
   const [gender, setGender] = useState<'male' | 'female'>('male');
@@ -17,18 +19,107 @@ export const StrengthIndex: React.FC = () => {
   const [age, setAge] = useState<string>('');
   const [unit, setUnit] = useState<Unit>('kg');
   
-  // Pre-fill standard compound lifts and leave some bodyweight/secondary lifts empty by default
-  const [lifts, setLifts] = useState<Record<string, { weight: string; reps: string }>>({
-    'bench-press': { weight: '100', reps: '1' },
-    'squat': { weight: '140', reps: '1' },
-    'deadlift': { weight: '180', reps: '1' },
-    'overhead-press': { weight: '60', reps: '1' },
-    'pull-up': { weight: '10', reps: '1' },
-    'dips': { weight: '15', reps: '1' },
-    'weighted-pull-up': { weight: '15', reps: '1' }
+  // Pre-fill lifts with 0 default weights dynamically
+  const [lifts, setLifts] = useState<Record<string, { weight: string; reps: string }>>(() => {
+    const initial: Record<string, { weight: string; reps: string }> = {};
+    exercises.forEach(ex => {
+      const isBw = ex.category === 'bodyweight' || ex.category === 'weighted-bodyweight';
+      initial[ex.id] = { weight: '0', reps: isBw ? '1' : '5' };
+    });
+    return initial;
   });
 
+  const [includedLifts, setIncludedLifts] = useState<Record<string, boolean>>(() => {
+    const initial: Record<string, boolean> = {};
+    const coreIds = ['bench-press', 'squat', 'deadlift', 'overhead-press', 'pull-up', 'dips'];
+    exercises.forEach(ex => {
+      initial[ex.id] = coreIds.includes(ex.id);
+    });
+    return initial;
+  });
+
+  const countIncluded = Object.entries(includedLifts)
+    .filter(([id, checked]) => checked && ['bench-press', 'squat', 'deadlift', 'overhead-press', 'pull-up', 'dips'].includes(id))
+    .length;
+
+  const [activeTab, setActiveTab] = useState<'all' | 'active' | 'core' | 'upper' | 'lower'>('all');
+
   const [result, setResult] = useState<StrengthIndexResult | null>(null);
+
+  interface HistoryEntry {
+    id: string;
+    date: string;
+    score: number;
+    level: string;
+    archetype: string;
+    lifts: Record<string, { weight: string; reps: string }>;
+    bodyweight: string;
+    gender: 'male' | 'female';
+    includedLifts?: Record<string, boolean>;
+  }
+
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [saved, setSaved] = useState(false);
+
+  const gapResult = result
+    ? calculateStrengthGap(result, gender, parseFloat(bodyweight) || 80, unit, history)
+    : null;
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('sa-strength-history');
+      if (stored) {
+        setHistory(JSON.parse(stored));
+      }
+    } catch (e) {
+      console.error('Failed to load history', e);
+    }
+  }, []);
+
+  const handleSaveToHistory = () => {
+    if (!result) return;
+    
+    const newEntry: HistoryEntry = {
+      id: Math.random().toString(36).substring(2, 9),
+      date: new Date().toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }),
+      score: result.score,
+      level: result.level,
+      archetype: result.archetype || 'Hybrid Lifter',
+      lifts: { ...lifts },
+      bodyweight,
+      gender,
+      includedLifts: { ...includedLifts }
+    };
+    
+    const updated = [newEntry, ...history].sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    setHistory(updated);
+    localStorage.setItem('sa-strength-history', JSON.stringify(updated));
+    setSaved(true);
+    setTimeout(() => setSaved(false), 2000);
+  };
+
+  const handleDeleteEntry = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updated = history.filter(h => h.id !== id);
+    setHistory(updated);
+    localStorage.setItem('sa-strength-history', JSON.stringify(updated));
+  };
+
+  const handleRestoreEntry = (entry: HistoryEntry) => {
+    setGender(entry.gender);
+    setBodyweight(entry.bodyweight);
+    setLifts(entry.lifts);
+    if (entry.includedLifts) {
+      setIncludedLifts(entry.includedLifts);
+    } else {
+      const defaultIncluded: Record<string, boolean> = {};
+      const coreIds = ['bench-press', 'squat', 'deadlift', 'overhead-press', 'pull-up', 'dips'];
+      exercises.forEach(ex => {
+        defaultIncluded[ex.id] = coreIds.includes(ex.id);
+      });
+      setIncludedLifts(defaultIncluded);
+    }
+  };
 
   // Sync unit with global unit state
   useEffect(() => {
@@ -48,7 +139,7 @@ export const StrengthIndex: React.FC = () => {
   // Recalculate whenever inputs change
   useEffect(() => {
     handleCalculate();
-  }, [gender, bodyweight, age, lifts, unit]);
+  }, [gender, bodyweight, age, lifts, includedLifts, unit]);
 
   const handleCalculate = () => {
     const bwVal = parseFloat(bodyweight);
@@ -58,7 +149,11 @@ export const StrengthIndex: React.FC = () => {
     }
 
     const validLifts = Object.entries(lifts)
-      .filter(([_, val]) => {
+      .filter(([exerciseId, val]) => {
+        // Exclude if core lift toggled off by user
+        if (exerciseId in includedLifts && !includedLifts[exerciseId]) {
+          return false;
+        }
         const wt = parseFloat(val.weight);
         return !isNaN(wt) && wt >= 0; // 0 is valid for bodyweight added load
       })
@@ -145,70 +240,144 @@ export const StrengthIndex: React.FC = () => {
 
           {/* Section 2: Fixed Lift Grid */}
           <div className="p-6 border border-border rounded-2xl bg-card/60 shadow-md space-y-6">
-            <div className="border-b border-border pb-3">
-              <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                2. Enter Your Lifts
-              </h3>
-              <p className="text-xs text-muted-foreground mt-1">
-                Enter your 1-Rep Max or weight/reps for each exercise. Leave blank if you do not perform a lift.
-              </p>
+            <div className="border-b border-border pb-3 flex flex-col xl:flex-row xl:items-center xl:justify-between gap-3">
+              <div>
+                <h3 className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                  2. Enter Your Lifts
+                </h3>
+                <p className="text-[11px] text-muted-foreground mt-0.5">
+                  Select exercises, enter 1RM weight and reps.
+                </p>
+              </div>
+              
+              {/* Filter Tabs */}
+              <div className="flex flex-wrap gap-1 p-0.5 bg-muted/20 border border-border/40 rounded-lg self-start xl:self-auto">
+                {(['all', 'active', 'core', 'upper', 'lower'] as const).map((tab) => {
+                  const label = tab === 'all' ? 'All' :
+                                tab === 'active' ? 'Active' :
+                                tab === 'core' ? 'Core' :
+                                tab === 'upper' ? 'Upper' : 'Lower';
+                  return (
+                    <button
+                      key={tab}
+                      type="button"
+                      onClick={() => setActiveTab(tab)}
+                      className={`px-2.5 py-1 text-[9px] font-black uppercase tracking-wider rounded-md transition-all cursor-pointer ${
+                        activeTab === tab
+                          ? 'bg-primary text-primary-foreground shadow-sm shadow-primary/20'
+                          : 'text-muted-foreground hover:text-foreground hover:bg-muted/10'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
-            <div className="space-y-4">
-              {exercises.map((ex) => {
-                const lift = lifts[ex.id] || { weight: '', reps: '1' };
-                const isBw = ex.category === 'bodyweight' || ex.category === 'weighted-bodyweight';
-                return (
-                  <div 
-                    key={ex.id} 
-                    className={`grid grid-cols-12 gap-3 items-center p-3 border rounded-xl transition-all duration-200 ${
-                      lift.weight !== '' 
-                        ? 'bg-muted/20 border-border/80 shadow-sm' 
-                        : 'bg-muted/5 border-border/30 opacity-70 hover:opacity-100'
-                    }`}
-                  >
-                    {/* Exercise Identifier */}
-                    <div className="col-span-12 sm:col-span-5 flex items-center space-x-3">
-                      <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs transition-colors ${
-                        lift.weight !== '' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+            {/* Scrollable Exercises List */}
+            <div className="space-y-3 max-h-[460px] overflow-y-auto pr-1.5 scroll-smooth custom-scrollbar">
+              {exercises
+                .filter((ex) => {
+                  if (activeTab === 'all') return true;
+                  if (activeTab === 'active') return !!includedLifts[ex.id];
+                  if (activeTab === 'core') return ['bench-press', 'squat', 'deadlift', 'overhead-press', 'pull-up', 'dips'].includes(ex.id);
+                  if (activeTab === 'upper') return ['Chest', 'Back', 'Shoulders', 'Arms'].includes(ex.muscleGroup);
+                  if (activeTab === 'lower') return ['Legs', 'Core'].includes(ex.muscleGroup);
+                  return true;
+                })
+                .map((ex) => {
+                  const lift = lifts[ex.id] || { weight: '0', reps: '5' };
+                  const isBw = ex.category === 'bodyweight' || ex.category === 'weighted-bodyweight';
+                  const isChecked = !!includedLifts[ex.id];
+                  return (
+                    <div 
+                      key={ex.id} 
+                      className={`grid grid-cols-12 gap-3 items-center p-3 border rounded-xl transition-all duration-200 ${
+                        !isChecked
+                          ? 'bg-muted/5 border-border/10 opacity-40 grayscale-[20%]'
+                          : lift.weight !== '' && lift.weight !== '0'
+                            ? 'bg-primary/5 border-primary/30 shadow-sm' 
+                            : 'bg-muted/5 border-border/30 opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      {/* Exercise Identifier */}
+                      <div className="col-span-12 sm:col-span-5 flex items-center space-x-3">
+                        <input
+                          type="checkbox"
+                          checked={isChecked}
+                          disabled={
+                            ['bench-press', 'squat', 'deadlift', 'overhead-press', 'pull-up', 'dips'].includes(ex.id) &&
+                            isChecked &&
+                            countIncluded <= 3
+                          }
+                          onChange={(e) => {
+                            setIncludedLifts(prev => ({
+                              ...prev,
+                              [ex.id]: e.target.checked
+                            }));
+                          }}
+                          className="w-4 h-4 rounded border-border text-primary focus:ring-primary/20 cursor-pointer transition-colors"
+                          title={
+                            ['bench-press', 'squat', 'deadlift', 'overhead-press', 'pull-up', 'dips'].includes(ex.id) &&
+                            isChecked &&
+                            countIncluded <= 3 
+                              ? "At least 3 core lifts must be included" 
+                              : "Include in Strength Index"
+                          }
+                        />
+                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center font-black text-xs transition-colors shrink-0 ${
+                          isChecked && lift.weight !== '' && lift.weight !== '0' ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'
+                        }`}>
+                          {ex.name[0]}
+                        </div>
+                        <div className="min-w-0">
+                          <h4 className="text-sm font-bold text-foreground truncate" title={ex.name}>{ex.name}</h4>
+                          <span className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-wide">{ex.muscleGroup}</span>
+                        </div>
+                      </div>
+
+                      {/* Weight Input Box */}
+                      <div className={`col-span-7 sm:col-span-4 flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all ${
+                        !isChecked ? 'opacity-40 pointer-events-none' : ''
                       }`}>
-                        {ex.name[0]}
+                        <input
+                          type="number"
+                          value={lift.weight}
+                          disabled={!isChecked}
+                          onChange={(e) => handleLiftChange(ex.id, 'weight', e.target.value)}
+                          className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono"
+                          placeholder={isBw ? 'Added Wt' : 'Lift Weight'}
+                          min="0"
+                        />
+                        <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{unit}</span>
                       </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-foreground">{ex.name}</h4>
-                        <span className="text-[10px] font-bold text-muted-foreground/80 uppercase tracking-wide">{ex.muscleGroup}</span>
+
+                      {/* Reps Input Dropdown */}
+                      <div className={`col-span-5 sm:col-span-3 flex items-center space-x-1.5 bg-background border border-border rounded-xl px-2.5 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all relative ${
+                        !isChecked ? 'opacity-40 pointer-events-none' : ''
+                      }`}>
+                        <select
+                          value={lift.reps || '1'}
+                          disabled={!isChecked}
+                          onChange={(e) => handleLiftChange(ex.id, 'reps', e.target.value)}
+                          className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono font-semibold appearance-none cursor-pointer pr-4"
+                        >
+                          {Array.from({ length: 15 }, (_, i) => i + 1).map((r) => (
+                            <option key={r} value={r.toString()} className="bg-card text-foreground">
+                              {r} {r === 1 ? 'rep' : 'reps'}
+                            </option>
+                          ))}
+                        </select>
+                        <div className="absolute right-2.5 pointer-events-none text-muted-foreground">
+                          <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </div>
                       </div>
                     </div>
-
-                    {/* Weight Input Box */}
-                    <div className="col-span-7 sm:col-span-4 flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
-                      <input
-                        type="number"
-                        value={lift.weight}
-                        onChange={(e) => handleLiftChange(ex.id, 'weight', e.target.value)}
-                        className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono"
-                        placeholder={isBw ? 'Added Wt' : 'Lift Weight'}
-                        min="0"
-                      />
-                      <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{unit}</span>
-                    </div>
-
-                    {/* Reps Input Box */}
-                    <div className="col-span-5 sm:col-span-3 flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
-                      <input
-                        type="number"
-                        value={lift.reps}
-                        onChange={(e) => handleLiftChange(ex.id, 'reps', e.target.value)}
-                        className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono text-center"
-                        placeholder="1"
-                        min="1"
-                        max="30"
-                      />
-                      <span className="text-[10px] text-muted-foreground font-semibold">reps</span>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })}
             </div>
           </div>
         </div>
@@ -229,6 +398,107 @@ export const StrengthIndex: React.FC = () => {
                   <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Classification:</span>
                   <LevelBadge level={result.level} className="text-xs" />
                 </div>
+
+                <button
+                  onClick={handleSaveToHistory}
+                  disabled={saved}
+                  className={`mt-4 w-full inline-flex items-center justify-center gap-2 rounded-xl px-4 py-2 text-xs font-bold transition-all shadow-sm active:scale-[0.98] cursor-pointer ${
+                    saved 
+                      ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' 
+                      : 'bg-primary text-primary-foreground hover:bg-primary/90 border border-transparent'
+                  }`}
+                >
+                  {saved ? (
+                    <>
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="3">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                      </svg>
+                      Saved to Log!
+                    </>
+                  ) : (
+                    <>
+                      <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5">
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+                      </svg>
+                      Save Assessment to Log
+                    </>
+                  )}
+                </button>
+              </div>
+
+              {/* Next Milestone & Gap Analysis */}
+              {gapResult && (
+                gapResult.pointsNeeded > 0 ? (
+                  <div className="p-5 border border-primary/20 rounded-2xl bg-primary/[0.02] space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <span className="text-[10px] font-bold text-primary uppercase tracking-widest">Next Milestone</span>
+                        <h4 className="text-sm font-extrabold text-foreground">
+                          Reach {gapResult.nextLevelLabel}
+                        </h4>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider block">Needs</span>
+                        <span className="text-xs font-mono font-bold text-primary">+{gapResult.pointsNeeded} pts</span>
+                      </div>
+                    </div>
+
+                    {/* Gaps List */}
+                    <div className="space-y-2">
+                      <span className="text-[9px] font-bold text-muted-foreground uppercase tracking-widest block">Required Lift Increases</span>
+                      <div className="grid grid-cols-2 gap-2">
+                        {gapResult.gaps
+                          .filter((g) => g.gap > 0)
+                          .map((g) => (
+                            <div key={g.exerciseId} className="flex justify-between items-center p-2 rounded-xl bg-muted/5 border border-border/30 text-xs">
+                              <span className="text-muted-foreground truncate mr-2" title={g.exerciseName}>
+                                {g.exerciseName}
+                              </span>
+                              <span className="font-bold text-foreground font-mono">
+                                +{g.gap}{unit}
+                              </span>
+                            </div>
+                          ))}
+                      </div>
+                    </div>
+
+                    {/* Timeline Estimate */}
+                    <div className="flex items-center justify-between border-t border-border/40 pt-3 text-xs">
+                      <span className="text-muted-foreground font-semibold flex items-center gap-1">
+                        Estimated Timeline
+                        {gapResult.timeline.isCustom && (
+                          <span className="text-[9px] text-emerald-400 bg-emerald-500/10 px-1 py-0.5 rounded font-bold" title={`Based on your historical progress rate of ${gapResult.timeline.userRate} pts/month`}>
+                            Personalized
+                          </span>
+                        )}
+                      </span>
+                      <span className="font-extrabold text-primary bg-primary/10 px-2.5 py-0.5 rounded-lg border border-primary/10">
+                        {gapResult.timeline.formattedRange}
+                      </span>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="p-5 border border-emerald-500/20 rounded-2xl bg-emerald-500/[0.02] text-center space-y-2">
+                    <div className="w-10 h-10 rounded-full bg-emerald-500/10 text-emerald-400 flex items-center justify-center mx-auto text-lg">
+                      🏆
+                    </div>
+                    <h4 className="text-sm font-extrabold text-foreground">Peak Strength Status</h4>
+                    <p className="text-xs text-muted-foreground leading-relaxed">
+                      You have achieved or exceeded our elite benchmarks. Focus on maintenance and micro-loading to push the absolute limits of human power.
+                    </p>
+                  </div>
+                )
+              )}
+
+              {/* Shareable Strength Card */}
+              <div className="border-t border-border/60 pt-5">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest block mb-3">Shareable Lifting Profile</span>
+                <StrengthCard
+                  result={result}
+                  gender={gender}
+                  bodyweight={parseFloat(bodyweight) || 80}
+                  unit={unit}
+                />
               </div>
 
               {/* Grid: Radar and Details Stacked Elegantly */}
@@ -332,9 +602,181 @@ export const StrengthIndex: React.FC = () => {
             gender={gender}
             bodyweight={parseFloat(bodyweight) || 80}
             unit={unit}
+            history={history}
           />
         </div>
       )}
+
+      {/* Strength History & Timeline Progression Tracker */}
+      <div className="rounded-2xl border border-border bg-card/60 shadow-md p-6 space-y-6 mt-8">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-border pb-4">
+          <div>
+            <h4 className="text-base font-bold text-foreground">Strength Progress Journal</h4>
+            <p className="text-xs text-muted-foreground mt-1">
+              Your saved assessments are stored locally in your browser. Bookmark this page to log new check-ins.
+            </p>
+          </div>
+          {history.length > 1 && (
+            <div className="flex items-center gap-2 bg-muted/20 border border-border/60 rounded-xl px-3 py-1 text-xs">
+              <span className="text-muted-foreground">Progression:</span>
+              <span className="font-mono font-black text-emerald-400">
+                {(history[0].score - history[history.length - 1].score) >= 0 ? '+' : ''}
+                {(history[0].score - history[history.length - 1].score).toFixed(1)} pts
+              </span>
+            </div>
+          )}
+        </div>
+
+        {history.length > 0 ? (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* Progression Chart (Spans 7) */}
+            <div className="lg:col-span-7 space-y-4 w-full">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
+                Strength Index Timeline
+              </span>
+              
+              {/* Responsive SVG Chart */}
+              <div className="p-4 rounded-xl border border-border/50 bg-muted/10">
+                {history.length >= 2 ? (
+                  (() => {
+                    const width = 500;
+                    const height = 140;
+                    const padding = 20;
+                    const chartWidth = width - padding * 2;
+                    const chartHeight = height - padding * 2;
+                    const sorted = [...history].reverse(); // chronological
+                    const maxScore = Math.max(...sorted.map(h => h.score));
+                    const minScore = Math.min(...sorted.map(h => h.score));
+                    const yMin = Math.max(0, minScore - 2);
+                    const yMax = Math.min(100, maxScore + 2);
+                    const yRange = yMax - yMin;
+
+                    const points = sorted.map((h, i) => {
+                      const x = padding + (i * chartWidth) / (sorted.length - 1);
+                      const y = padding + chartHeight - ((h.score - yMin) / yRange) * chartHeight;
+                      return { x, y, ...h };
+                    });
+
+                    const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+                    const areaD = `${pathD} L ${points[points.length - 1].x} ${height - padding} L ${points[0].x} ${height - padding} Z`;
+
+                    return (
+                      <div className="relative">
+                        <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto overflow-visible select-none">
+                          <defs>
+                            <linearGradient id="chart-grad" x1="0" y1="0" x2="1" y2="0">
+                              <stop offset="0%" stopColor="var(--primary)" />
+                              <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.8" />
+                            </linearGradient>
+                            <linearGradient id="area-grad" x1="0" y1="0" x2="0" y2="1">
+                              <stop offset="0%" stopColor="var(--primary)" stopOpacity="0.25" />
+                              <stop offset="100%" stopColor="var(--primary)" stopOpacity="0.0" />
+                            </linearGradient>
+                          </defs>
+
+                          {/* Grid Lines */}
+                          <line x1={padding} y1={padding} x2={width - padding} y2={padding} stroke="var(--border)" strokeWidth="0.5" strokeDasharray="3,3" />
+                          <line x1={padding} y1={padding + chartHeight / 2} x2={width - padding} y2={padding + chartHeight / 2} stroke="var(--border)" strokeWidth="0.5" strokeDasharray="3,3" />
+                          <line x1={padding} y1={height - padding} x2={width - padding} y2={height - padding} stroke="var(--border)" strokeWidth="0.5" />
+
+                          {/* Area under the curve */}
+                          <path d={areaD} fill="url(#area-grad)" />
+
+                          {/* Line Path */}
+                          <path d={pathD} fill="none" stroke="url(#chart-grad)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+
+                          {/* Dots */}
+                          {points.map((p) => (
+                            <g key={p.id} className="group/dot cursor-pointer">
+                              <circle
+                                cx={p.x}
+                                cy={p.y}
+                                r="4"
+                                fill="var(--primary)"
+                                stroke="var(--card)"
+                                strokeWidth="1.5"
+                                className="transition-all duration-200 group-hover/dot:r-6"
+                              />
+                              <circle
+                                cx={p.x}
+                                cy={p.y}
+                                r="8"
+                                fill="var(--primary)"
+                                opacity="0"
+                                className="group-hover/dot:opacity-20 transition-all"
+                              />
+                            </g>
+                          ))}
+                        </svg>
+                        <div className="flex justify-between mt-2 text-[10px] text-muted-foreground font-mono px-2">
+                          <span>{points[0].date}</span>
+                          <span>{points[points.length - 1].date}</span>
+                        </div>
+                      </div>
+                    );
+                  })()
+                ) : (
+                  <div className="h-[120px] flex items-center justify-center text-center text-xs text-muted-foreground leading-relaxed">
+                    📈 Progression line graph will unlock once you save 2 or more assessments.
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* List of Entries (Spans 5) */}
+            <div className="lg:col-span-5 space-y-4 w-full">
+              <span className="text-xs font-bold text-muted-foreground uppercase tracking-wider block">
+                Saved Check-Ins ({history.length})
+              </span>
+              <div className="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                {history.map((entry) => (
+                  <div
+                    key={entry.id}
+                    onClick={() => handleRestoreEntry(entry)}
+                    className="p-3 border border-border hover:border-primary/40 rounded-xl bg-card hover:bg-muted/10 transition-all cursor-pointer flex items-center justify-between gap-4 group"
+                    title="Click to load this profile back into inputs"
+                  >
+                    <div>
+                      <span className="text-[10px] font-mono font-bold text-muted-foreground">{entry.date}</span>
+                      <h5 className="text-xs font-bold text-foreground mt-0.5">{entry.archetype}</h5>
+                      <span className="text-[9px] uppercase font-bold text-muted-foreground/60">{entry.gender} • {entry.bodyweight} {unit}</span>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="text-right">
+                        <span className="text-sm font-black text-primary block font-mono">{entry.score.toFixed(1)}</span>
+                        <span className="text-[9px] text-muted-foreground capitalize font-bold">{entry.level}</span>
+                      </div>
+                      <button
+                        onClick={(e) => handleDeleteEntry(entry.id, e)}
+                        className="text-muted-foreground/40 hover:text-red-400 p-1.5 rounded-lg hover:bg-red-500/10 transition-colors"
+                        title="Delete log entry"
+                      >
+                        <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="p-8 border border-dashed border-border/80 rounded-2xl text-center max-w-2xl mx-auto space-y-4">
+            <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center mx-auto">
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <div className="space-y-1">
+              <h5 className="text-sm font-bold text-foreground">Start Your Strength Journey Log</h5>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                Save your assessments to map your lifting progression over time. Return here to log new personal records, analyze shifts in your athlete archetype, and watch your composite score grow.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
