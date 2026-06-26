@@ -1,7 +1,9 @@
 // src/components/calculators/StrengthIndex.tsx
 import React, { useEffect, useState } from 'react';
 import { calculateStrengthIndex, type StrengthIndexInput, type StrengthIndexResult } from '@/lib/calculations/strength-index';
-import { getStoredUnit, type Unit } from '@/lib/formatting/units';
+import { getStoredUnit, setStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { UnitDropdown } from '@/components/shared/UnitDropdown';
+import { useRef } from 'react';
 import { calculateStrengthGap } from '@/lib/calculations/forecasting';
 import { GenderSelector } from '../shared/GenderSelector';
 import { ScoreGauge } from '../data-viz/ScoreGauge';
@@ -121,13 +123,45 @@ export const StrengthIndex: React.FC = () => {
     }
   };
 
-  // Sync unit with global unit state
+  const prevUnitRef = useRef<Unit>('kg');
+
+  // Sync unit with global unit state and convert values on changes
   useEffect(() => {
-    setUnit(getStoredUnit());
+    const initialUnit = getStoredUnit();
+    prevUnitRef.current = initialUnit;
+    setUnit(initialUnit);
 
     const handleUnitChange = (e: Event) => {
       const customEvent = e as CustomEvent<Unit>;
-      setUnit(customEvent.detail);
+      const newUnit = customEvent.detail;
+      const prevUnit = prevUnitRef.current;
+
+      if (newUnit !== prevUnit) {
+        setBodyweight(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val <= 0) return prev;
+          const converted = newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val);
+          return converted.toString();
+        });
+
+        setLifts(prev => {
+          const updated = { ...prev };
+          Object.keys(updated).forEach(exId => {
+            const wt = parseFloat(updated[exId].weight);
+            if (!isNaN(wt) && wt > 0) {
+              const convertedWt = newUnit === 'kg' ? convert.toKg(wt) : convert.toLb(wt);
+              updated[exId] = {
+                ...updated[exId],
+                weight: convertedWt.toString()
+              };
+            }
+          });
+          return updated;
+        });
+
+        prevUnitRef.current = newUnit;
+        setUnit(newUnit);
+      }
     };
 
     window.addEventListener('sa:unit-change', handleUnitChange);
@@ -208,16 +242,19 @@ export const StrengthIndex: React.FC = () => {
               
               <div className="flex flex-col space-y-2">
                 <label htmlFor="si-bw" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  Bodyweight ({unit.toUpperCase()})
+                  Bodyweight
                 </label>
-                <input
-                  id="si-bw"
-                  type="number"
-                  value={bodyweight}
-                  onChange={(e) => setBodyweight(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-3.5 py-2 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all"
-                  placeholder="e.g. 80"
-                />
+                <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                  <input
+                    id="si-bw"
+                    type="number"
+                    value={bodyweight}
+                    onChange={(e) => setBodyweight(e.target.value)}
+                    className="w-full bg-transparent px-3.5 py-2 text-sm text-foreground focus:outline-none font-mono font-semibold"
+                    placeholder="e.g. 80"
+                  />
+                  <UnitDropdown value={unit} onChange={setStoredUnit} />
+                </div>
               </div>
 
               <div className="flex flex-col space-y-2">
@@ -338,7 +375,7 @@ export const StrengthIndex: React.FC = () => {
                       </div>
 
                       {/* Weight Input Box */}
-                      <div className={`col-span-7 sm:col-span-4 flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all ${
+                      <div className={`col-span-7 sm:col-span-4 flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all ${
                         !isChecked ? 'opacity-40 pointer-events-none' : ''
                       }`}>
                         <input
@@ -346,11 +383,11 @@ export const StrengthIndex: React.FC = () => {
                           value={lift.weight}
                           disabled={!isChecked}
                           onChange={(e) => handleLiftChange(ex.id, 'weight', e.target.value)}
-                          className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono"
+                          className="w-full bg-transparent pl-3 py-1.5 text-xs text-foreground focus:outline-none font-mono"
                           placeholder={isBw ? 'Added Wt' : 'Lift Weight'}
                           min="0"
                         />
-                        <span className="text-[10px] text-muted-foreground font-bold uppercase tracking-wider">{unit}</span>
+                        <UnitDropdown value={unit} onChange={setStoredUnit} />
                       </div>
 
                       {/* Reps Input Dropdown */}

@@ -2,7 +2,9 @@
 import React, { useEffect, useState } from 'react';
 import { calculateLiftPercentile, calculateWeightForScore, getLevelLabel, type StrengthLevel } from '@/lib/calculations/percentiles';
 import { calculateAverage1RM } from '@/lib/calculations/one-rep-max';
-import { getStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { getStoredUnit, setStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { UnitDropdown } from '@/components/shared/UnitDropdown';
+import { useRef } from 'react';
 import { GenderSelector } from '../shared/GenderSelector';
 import { LevelBadge } from './LevelBadge';
 
@@ -30,13 +32,37 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
     bwRatio: number;
   } | null>(null);
 
-  // Sync unit with global unit state
+  const prevUnitRef = useRef<Unit>('kg');
+
+  // Sync unit with global unit state and convert values on changes
   useEffect(() => {
-    setUnit(getStoredUnit());
+    const initialUnit = getStoredUnit();
+    prevUnitRef.current = initialUnit;
+    setUnit(initialUnit);
 
     const handleUnitChange = (e: Event) => {
       const customEvent = e as CustomEvent<Unit>;
-      setUnit(customEvent.detail);
+      const newUnit = customEvent.detail;
+      const prevUnit = prevUnitRef.current;
+
+      if (newUnit !== prevUnit) {
+        setBodyweight(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val <= 0) return prev;
+          const converted = newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val);
+          return converted.toString();
+        });
+
+        setLiftWeight(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val < 0) return prev;
+          const converted = newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val);
+          return converted.toString();
+        });
+
+        prevUnitRef.current = newUnit;
+        setUnit(newUnit);
+      }
     };
 
     window.addEventListener('sa:unit-change', handleUnitChange);
@@ -217,16 +243,19 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
             <div className="flex flex-col space-y-3">
               <div className="flex justify-between items-center">
                 <label htmlFor="si-bw-slider" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  Bodyweight ({unit.toUpperCase()})
+                  Bodyweight
                 </label>
-                <input
-                  type="number"
-                  value={bodyweight}
-                  onChange={(e) => setBodyweight(e.target.value)}
-                  className="w-20 rounded-lg border border-border bg-background px-2.5 py-1 text-xs text-foreground font-mono text-center focus:outline-none focus:border-primary"
-                  min="30"
-                  max="200"
-                />
+                <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                  <input
+                    type="number"
+                    value={bodyweight}
+                    onChange={(e) => setBodyweight(e.target.value)}
+                    className="w-20 bg-transparent px-2.5 py-1 text-xs text-foreground font-mono text-center focus:outline-none"
+                    min="30"
+                    max="200"
+                  />
+                  <UnitDropdown value={unit} onChange={setStoredUnit} />
+                </div>
               </div>
               <input
                 id="si-bw-slider"
@@ -250,17 +279,20 @@ export const ExerciseStandardsDashboard: React.FC<ExerciseStandardsDashboardProp
               {/* Weight Lifted */}
               <div className="flex flex-col space-y-2">
                 <label htmlFor="lift-weight-val" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  {['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'Added Weight' : 'Weight Lifted'} ({unit.toUpperCase()})
+                  {['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'Added Weight' : 'Weight Lifted'}
                 </label>
-                <input
-                  id="lift-weight-val"
-                  type="number"
-                  value={liftWeight}
-                  onChange={(e) => setLiftWeight(e.target.value)}
-                  className="w-full rounded-xl border border-border bg-background px-3 py-1.5 text-sm text-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono shadow-sm transition-all"
-                  placeholder={['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'e.g. 0' : 'e.g. 100'}
-                  min="0"
-                />
+                <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                  <input
+                    id="lift-weight-val"
+                    type="number"
+                    value={liftWeight}
+                    onChange={(e) => setLiftWeight(e.target.value)}
+                    className="w-full bg-transparent px-3 py-1.5 text-sm text-foreground focus:outline-none font-mono"
+                    placeholder={['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exerciseId) ? 'e.g. 0' : 'e.g. 100'}
+                    min="0"
+                  />
+                  <UnitDropdown value={unit} onChange={setStoredUnit} />
+                </div>
               </div>
 
               {/* Repetitions */}

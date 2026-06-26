@@ -2,6 +2,8 @@
 import React, { useEffect, useState } from 'react';
 import { calculateIdealBodyweight, type IdealBodyweightResult } from '@/lib/calculations/ideal-bodyweight';
 import { getStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { HeightUnitDropdown } from '@/components/shared/HeightUnitDropdown';
+import { useRef } from 'react';
 import { GenderSelector } from '../shared/GenderSelector';
 
 export const IdealBodyweight: React.FC = () => {
@@ -12,15 +14,51 @@ export const IdealBodyweight: React.FC = () => {
   const [activity, setActivity] = useState<'sedentary' | 'light' | 'moderate' | 'active' | 'very-active'>('moderate');
   const [unit, setUnit] = useState<Unit>('kg');
 
+  const [heightUnit, setHeightUnit] = useState<'cm' | 'ft-in'>('cm');
+  const [heightFt, setHeightFt] = useState<string>('5');
+  const [heightInchesPart, setHeightInchesPart] = useState<string>('11');
+
   const [result, setResult] = useState<IdealBodyweightResult | null>(null);
 
-  // Sync unit with global unit state
+  const valuesRef = useRef({ heightCm, heightFt, heightInchesPart });
+  
   useEffect(() => {
-    setUnit(getStoredUnit());
+    valuesRef.current = { heightCm, heightFt, heightInchesPart };
+  }, [heightCm, heightFt, heightInchesPart]);
+
+  // Sync unit with global unit state and convert values on changes
+  useEffect(() => {
+    const initialUnit = getStoredUnit();
+    setUnit(initialUnit);
+    setHeightUnit(initialUnit === 'kg' ? 'cm' : 'ft-in');
 
     const handleUnitChange = (e: Event) => {
       const customEvent = e as CustomEvent<Unit>;
-      setUnit(customEvent.detail);
+      const newUnit = customEvent.detail;
+      setUnit(newUnit);
+
+      const nextHeightUnit = newUnit === 'kg' ? 'cm' : 'ft-in';
+      setHeightUnit(nextHeightUnit);
+
+      const vals = valuesRef.current;
+      if (nextHeightUnit === 'ft-in') {
+        const cm = parseFloat(vals.heightCm);
+        if (!isNaN(cm) && cm > 0) {
+          const inches = cm / 2.54;
+          const ft = Math.floor(inches / 12);
+          const inchPart = Math.round(inches % 12);
+          setHeightFt(ft.toString());
+          setHeightInchesPart(inchPart.toString());
+        }
+      } else {
+        const ft = parseFloat(vals.heightFt);
+        const inch = parseFloat(vals.heightInchesPart);
+        if (!isNaN(ft) && ft > 0) {
+          const totalInches = ft * 12 + (isNaN(inch) ? 0 : inch);
+          const cmVal = Math.round(totalInches * 2.54);
+          setHeightCm(cmVal.toString());
+        }
+      }
     };
 
     window.addEventListener('sa:unit-change', handleUnitChange);
@@ -29,9 +67,41 @@ export const IdealBodyweight: React.FC = () => {
     };
   }, []);
 
+  const handleHeightUnitChange = (newHeightUnit: 'cm' | 'ft-in') => {
+    if (newHeightUnit === heightUnit) return;
+
+    if (newHeightUnit === 'ft-in') {
+      const cm = parseFloat(heightCm);
+      if (!isNaN(cm) && cm > 0) {
+        const inches = cm / 2.54;
+        const ft = Math.floor(inches / 12);
+        const inchPart = Math.round(inches % 12);
+        setHeightFt(ft.toString());
+        setHeightInchesPart(inchPart.toString());
+      }
+    } else {
+      const ft = parseFloat(heightFt);
+      const inch = parseFloat(heightInchesPart);
+      if (!isNaN(ft) && ft > 0) {
+        const totalInches = ft * 12 + (isNaN(inch) ? 0 : inch);
+        const cmVal = Math.round(totalInches * 2.54);
+        setHeightCm(cmVal.toString());
+      }
+    }
+    setHeightUnit(newHeightUnit);
+  };
+
   // Compute results whenever inputs change
   useEffect(() => {
-    const hVal = parseFloat(heightCm);
+    let hVal = 0;
+    if (heightUnit === 'cm') {
+      hVal = parseFloat(heightCm);
+    } else {
+      const ft = parseFloat(heightFt) || 0;
+      const inch = parseFloat(heightInchesPart) || 0;
+      hVal = (ft * 12 + inch) * 2.54;
+    }
+
     const ageVal = parseInt(age);
 
     if (isNaN(hVal) || hVal < 100 || hVal > 250) {
@@ -48,14 +118,9 @@ export const IdealBodyweight: React.FC = () => {
     });
 
     setResult(calculated);
-  }, [gender, heightCm, age, experience, activity]);
+  }, [gender, heightCm, heightUnit, heightFt, heightInchesPart, age, experience, activity]);
 
-  const cmToFtIn = (cm: number) => {
-    const inches = cm / 2.54;
-    const feet = Math.floor(inches / 12);
-    const remainingInches = Math.round(inches % 12);
-    return `${feet}'${remainingInches}"`;
-  };
+
 
   const formatWeight = (kg: number) => {
     const value = unit === 'kg' ? kg : convert.toLb(kg);
@@ -81,25 +146,53 @@ export const IdealBodyweight: React.FC = () => {
             <div className="grid grid-cols-2 gap-4">
               <div className="flex flex-col space-y-2">
                 <div className="flex justify-between items-center">
-                  <label htmlFor="ibw-height" className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
+                  <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
                     Height
                   </label>
-                  <span className="text-[10px] text-muted-foreground/60 font-mono">
-                    {heightCm ? cmToFtIn(parseFloat(heightCm)) : ''}
-                  </span>
+                  <HeightUnitDropdown value={heightUnit} onChange={handleHeightUnitChange} />
                 </div>
-                <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
-                  <input
-                    id="ibw-height"
-                    type="number"
-                    value={heightCm}
-                    onChange={(e) => setHeightCm(e.target.value)}
-                    className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono"
-                    min="100"
-                    max="250"
-                  />
-                  <span className="text-xs text-muted-foreground font-bold font-mono">cm</span>
-                </div>
+                {heightUnit === 'cm' ? (
+                  <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                    <input
+                      id="ibw-height"
+                      type="number"
+                      value={heightCm}
+                      onChange={(e) => setHeightCm(e.target.value)}
+                      className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono font-semibold"
+                      placeholder="e.g. 180"
+                      min="100"
+                      max="250"
+                    />
+                    <span className="text-[10px] text-muted-foreground font-bold uppercase">cm</span>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
+                    <div className="flex items-center space-x-1 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                      <input
+                        type="number"
+                        value={heightFt}
+                        onChange={(e) => setHeightFt(e.target.value)}
+                        className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono font-semibold text-center"
+                        placeholder="ft"
+                        min="1"
+                        max="8"
+                      />
+                      <span className="text-[10px] text-muted-foreground font-bold uppercase">ft</span>
+                    </div>
+                    <div className="flex items-center space-x-1 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                      <input
+                        type="number"
+                        value={heightInchesPart}
+                        onChange={(e) => setHeightInchesPart(e.target.value)}
+                        className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono font-semibold text-center"
+                        placeholder="in"
+                        min="0"
+                        max="11"
+                      />
+                      <span className="text-[10px] text-muted-foreground font-bold uppercase">in</span>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="flex flex-col space-y-2">

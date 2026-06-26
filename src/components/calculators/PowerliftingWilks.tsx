@@ -1,7 +1,9 @@
 // src/components/calculators/PowerliftingWilks.tsx
 import React, { useEffect, useState } from 'react';
 import { calculateAllPowerliftingScores, type PowerliftingScoreResult } from '@/lib/calculations/powerlifting-score';
-import { getStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { getStoredUnit, setStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { UnitDropdown } from '@/components/shared/UnitDropdown';
+import { useRef } from 'react';
 import { GenderSelector } from '../shared/GenderSelector';
 
 export const PowerliftingWilks: React.FC = () => {
@@ -18,13 +20,53 @@ export const PowerliftingWilks: React.FC = () => {
   const [unit, setUnit] = useState<Unit>('kg');
   const [scores, setScores] = useState<PowerliftingScoreResult>({ wilks: 0, dots: 0, ipfGl: 0 });
 
-  // Sync unit with global unit state
+  const prevUnitRef = useRef<Unit>('kg');
+
+  // Sync unit with global unit state and convert values on changes
   useEffect(() => {
-    setUnit(getStoredUnit());
+    const initialUnit = getStoredUnit();
+    prevUnitRef.current = initialUnit;
+    setUnit(initialUnit);
 
     const handleUnitChange = (e: Event) => {
       const customEvent = e as CustomEvent<Unit>;
-      setUnit(customEvent.detail);
+      const newUnit = customEvent.detail;
+      const prevUnit = prevUnitRef.current;
+
+      if (newUnit !== prevUnit) {
+        setBodyweight(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val <= 0) return prev;
+          return (newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val)).toString();
+        });
+
+        setSquat(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val <= 0) return prev;
+          return (newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val)).toString();
+        });
+
+        setBench(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val <= 0) return prev;
+          return (newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val)).toString();
+        });
+
+        setDeadlift(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val <= 0) return prev;
+          return (newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val)).toString();
+        });
+
+        setManualTotal(prev => {
+          const val = parseFloat(prev);
+          if (isNaN(val) || val <= 0) return prev;
+          return (newUnit === 'kg' ? convert.toKg(val) : convert.toLb(val)).toString();
+        });
+
+        prevUnitRef.current = newUnit;
+        setUnit(newUnit);
+      }
     };
 
     window.addEventListener('sa:unit-change', handleUnitChange);
@@ -81,17 +123,17 @@ export const PowerliftingWilks: React.FC = () => {
               <label htmlFor="bodyweight" className="block text-xs font-bold text-muted-foreground uppercase tracking-wider mb-2">
                 Bodyweight
               </label>
-              <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+              <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                 <input
                   type="number"
                   id="bodyweight"
                   value={bodyweight}
                   onChange={(e) => setBodyweight(e.target.value)}
-                  className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono font-semibold"
+                  className="w-full bg-transparent px-3 py-1.5 text-sm text-foreground focus:outline-none font-mono font-semibold"
                   placeholder="e.g. 80"
                   min="0"
                 />
-                <span className="text-xs text-muted-foreground font-bold uppercase">{unit}</span>
+                <UnitDropdown value={unit} onChange={setStoredUnit} />
               </div>
             </div>
           </div>
@@ -116,62 +158,62 @@ export const PowerliftingWilks: React.FC = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Back Squat</label>
-                <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                   <input
                     type="number"
                     value={squat}
                     onChange={(e) => setSquat(e.target.value)}
-                    className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono text-center font-semibold"
+                    className="w-full bg-transparent px-3 py-1.5 text-xs text-foreground focus:outline-none font-mono text-center font-semibold"
                     placeholder="e.g. 140"
                     min="0"
                   />
-                  <span className="text-[10px] text-muted-foreground font-bold uppercase">{unit}</span>
+                  <UnitDropdown value={unit} onChange={setStoredUnit} />
                 </div>
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Bench Press</label>
-                <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                   <input
                     type="number"
                     value={bench}
                     onChange={(e) => setBench(e.target.value)}
-                    className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono text-center font-semibold"
+                    className="w-full bg-transparent px-3 py-1.5 text-xs text-foreground focus:outline-none font-mono text-center font-semibold"
                     placeholder="e.g. 100"
                     min="0"
                   />
-                  <span className="text-[10px] text-muted-foreground font-bold uppercase">{unit}</span>
+                  <UnitDropdown value={unit} onChange={setStoredUnit} />
                 </div>
               </div>
 
               <div className="space-y-1.5">
                 <label className="text-[10px] font-bold text-muted-foreground uppercase tracking-wide">Deadlift</label>
-                <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                   <input
                     type="number"
                     value={deadlift}
                     onChange={(e) => setDeadlift(e.target.value)}
-                    className="w-full bg-transparent text-xs text-foreground focus:outline-none font-mono text-center font-semibold"
+                    className="w-full bg-transparent px-3 py-1.5 text-xs text-foreground focus:outline-none font-mono text-center font-semibold"
                     placeholder="e.g. 180"
                     min="0"
                   />
-                  <span className="text-[10px] text-muted-foreground font-bold uppercase">{unit}</span>
+                  <UnitDropdown value={unit} onChange={setStoredUnit} />
                 </div>
               </div>
             </div>
           ) : (
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-muted-foreground uppercase tracking-wider">Combined Total (3-Lift)</label>
-              <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-2.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+              <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                 <input
                   type="number"
                   value={manualTotal}
                   onChange={(e) => setManualTotal(e.target.value)}
-                  className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono font-semibold"
+                  className="w-full bg-transparent px-3 py-1.5 text-sm text-foreground focus:outline-none font-mono font-semibold"
                   placeholder="e.g. 420"
                   min="0"
                 />
-                <span className="text-xs text-muted-foreground font-bold uppercase">{unit}</span>
+                <UnitDropdown value={unit} onChange={setStoredUnit} />
               </div>
             </div>
           )}

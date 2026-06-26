@@ -1,6 +1,6 @@
-// src/components/calculators/VO2MaxCalculator.tsx
-import React, { useEffect, useState } from 'react';
-import { getStoredUnit, type Unit } from '@/lib/formatting/units';
+import React, { useEffect, useState, useRef } from 'react';
+import { getStoredUnit, setStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { UnitDropdown } from '@/components/shared/UnitDropdown';
 import { GenderSelector } from '../shared/GenderSelector';
 
 interface VO2MaxProps {
@@ -41,13 +41,55 @@ export const VO2MaxCalculator: React.FC<VO2MaxProps> = ({ initialMethod = 'coope
 
   const [result, setResult] = useState<VO2MaxResult | null>(null);
 
-  // Sync unit with global unit state
+  const prevUnitRef = useRef<Unit>('kg');
+  const valuesRef = useRef({ weight, cooperDistance });
+
+  // Keep valuesRef updated
   useEffect(() => {
-    setUnit(getStoredUnit());
+    valuesRef.current = { weight, cooperDistance };
+  }, [weight, cooperDistance]);
+
+  // Sync unit with global unit state and convert values on changes
+  useEffect(() => {
+    const initialUnit = getStoredUnit();
+    prevUnitRef.current = initialUnit;
+    setUnit(initialUnit);
 
     const handleUnitChange = (e: Event) => {
       const customEvent = e as CustomEvent<Unit>;
-      setUnit(customEvent.detail);
+      const newUnit = customEvent.detail;
+      const prevUnit = prevUnitRef.current;
+
+      if (newUnit !== prevUnit) {
+        const vals = valuesRef.current;
+
+        // Convert weight
+        const wtVal = parseFloat(vals.weight);
+        if (!isNaN(wtVal) && wtVal > 0) {
+          const convertedWeight = newUnit === 'kg' ? convert.toKg(wtVal) : convert.toLb(wtVal);
+          setWeight(convertedWeight.toString());
+        }
+
+        // Convert cooper distance
+        const distVal = parseFloat(vals.cooperDistance);
+        if (!isNaN(distVal) && distVal > 0) {
+          if (newUnit === 'kg') {
+            // Convert miles to meters
+            const meters = Math.round(distVal * 1609.34);
+            setCooperDistance(meters.toString());
+          } else {
+            // Convert meters to miles
+            const miles = Math.round((distVal * 0.000621371) * 100) / 100;
+            setCooperDistance(miles.toString());
+          }
+        } else {
+          // Fallback default fallback for placeholder matching
+          setCooperDistance(newUnit === 'kg' ? '2500' : '1.55');
+        }
+
+        prevUnitRef.current = newUnit;
+        setUnit(newUnit);
+      }
     };
 
     window.addEventListener('sa:unit-change', handleUnitChange);
@@ -55,15 +97,6 @@ export const VO2MaxCalculator: React.FC<VO2MaxProps> = ({ initialMethod = 'coope
       window.removeEventListener('sa:unit-change', handleUnitChange);
     };
   }, []);
-
-  // Update Cooper default distance when unit changes to keep placeholders sensible
-  useEffect(() => {
-    if (unit === 'kg') {
-      setCooperDistance('2500'); // 2500 meters
-    } else {
-      setCooperDistance('1.55'); // 1.55 miles
-    }
-  }, [unit]);
 
   // Estimate max heart rate automatically if toggled
   useEffect(() => {
@@ -315,19 +348,19 @@ export const VO2MaxCalculator: React.FC<VO2MaxProps> = ({ initialMethod = 'coope
 
             <div className="space-y-1.5">
               <label htmlFor="weight" className="block text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                Weight ({unit === 'kg' ? 'kg' : 'lb'})
+                Weight
               </label>
-              <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+              <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                 <input
                   type="number"
                   id="weight"
                   value={weight}
                   onChange={(e) => setWeight(e.target.value)}
-                  className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono font-semibold"
+                  className="w-full bg-transparent px-3 py-1.5 text-sm text-foreground focus:outline-none font-mono font-semibold"
                   placeholder="e.g. 75"
                   min="1"
                 />
-                <span className="text-[10px] text-muted-foreground font-bold uppercase">{unit === 'kg' ? 'kg' : 'lb'}</span>
+                <UnitDropdown value={unit} onChange={setStoredUnit} />
               </div>
             </div>
           </div>
@@ -348,9 +381,9 @@ export const VO2MaxCalculator: React.FC<VO2MaxProps> = ({ initialMethod = 'coope
               </p>
               <div className="space-y-1.5">
                 <label htmlFor="cooperDistance" className="block text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                  Distance ({unit === 'kg' ? 'Meters' : 'Miles'})
+                  Distance
                 </label>
-                <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-2.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+                <div className="flex items-center bg-background border border-border rounded-xl px-3 py-2.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                   <input
                     type="number"
                     id="cooperDistance"
@@ -361,7 +394,7 @@ export const VO2MaxCalculator: React.FC<VO2MaxProps> = ({ initialMethod = 'coope
                     step={unit === 'kg' ? '10' : '0.01'}
                     min="0"
                   />
-                  <span className="text-xs text-muted-foreground font-bold uppercase">{unit === 'kg' ? 'm' : 'mi'}</span>
+                  <span className="text-xs text-muted-foreground font-bold uppercase font-mono">{unit === 'kg' ? 'm' : 'mi'}</span>
                 </div>
               </div>
             </div>

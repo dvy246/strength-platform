@@ -1,6 +1,7 @@
-// src/components/calculators/BodyFatCalculator.tsx
-import React, { useEffect, useState } from 'react';
-import { getStoredUnit, type Unit } from '@/lib/formatting/units';
+import React, { useEffect, useState, useRef } from 'react';
+import { getStoredUnit, setStoredUnit, convert, type Unit } from '@/lib/formatting/units';
+import { UnitDropdown } from '@/components/shared/UnitDropdown';
+import { HeightUnitDropdown } from '@/components/shared/HeightUnitDropdown';
 import { GenderSelector } from '../shared/GenderSelector';
 
 interface BodyFatResult {
@@ -37,17 +38,87 @@ export const BodyFatCalculator: React.FC = () => {
 
   const [result, setResult] = useState<BodyFatResult | null>(null);
 
-  // Sync unit with global unit state
+  const prevUnitRef = useRef<Unit>('kg');
+  const valuesRef = useRef({
+    weightKg, neckCm, waistCm, hipCm,
+    weightLb, neckIn, waistIn, hipIn,
+    heightCm, heightFt, heightInchesPart
+  });
+
+  // Keep valuesRef updated
   useEffect(() => {
-    const currentUnit = getStoredUnit();
-    setUnit(currentUnit);
-    setHeightUnit(currentUnit === 'kg' ? 'cm' : 'ft-in');
+    valuesRef.current = {
+      weightKg, neckCm, waistCm, hipCm,
+      weightLb, neckIn, waistIn, hipIn,
+      heightCm, heightFt, heightInchesPart
+    };
+  }, [weightKg, neckCm, waistCm, hipCm, weightLb, neckIn, waistIn, hipIn, heightCm, heightFt, heightInchesPart]);
+
+  // Sync unit with global unit state and convert values on changes
+  useEffect(() => {
+    const initialUnit = getStoredUnit();
+    prevUnitRef.current = initialUnit;
+    setUnit(initialUnit);
+    setHeightUnit(initialUnit === 'kg' ? 'cm' : 'ft-in');
 
     const handleUnitChange = (e: Event) => {
       const customEvent = e as CustomEvent<Unit>;
       const newUnit = customEvent.detail;
-      setUnit(newUnit);
-      setHeightUnit(newUnit === 'kg' ? 'cm' : 'ft-in');
+      const prevUnit = prevUnitRef.current;
+
+      if (newUnit !== prevUnit) {
+        const vals = valuesRef.current;
+
+        if (newUnit === 'lb') {
+          // Convert metric to imperial
+          const kg = parseFloat(vals.weightKg);
+          if (!isNaN(kg) && kg > 0) setWeightLb(convert.toLb(kg).toString());
+
+          const nCm = parseFloat(vals.neckCm);
+          if (!isNaN(nCm) && nCm > 0) setNeckIn((Math.round((nCm / 2.54) * 10) / 10).toString());
+
+          const wCm = parseFloat(vals.waistCm);
+          if (!isNaN(wCm) && wCm > 0) setWaistIn((Math.round((wCm / 2.54) * 10) / 10).toString());
+
+          const hCm = parseFloat(vals.hipCm);
+          if (!isNaN(hCm) && hCm > 0) setHipIn((Math.round((hCm / 2.54) * 10) / 10).toString());
+
+          setHeightUnit('ft-in');
+          const htCm = parseFloat(vals.heightCm);
+          if (!isNaN(htCm) && htCm > 0) {
+            const inches = htCm / 2.54;
+            const ft = Math.floor(inches / 12);
+            const inchPart = Math.round(inches % 12);
+            setHeightFt(ft.toString());
+            setHeightInchesPart(inchPart.toString());
+          }
+        } else {
+          // Convert imperial to metric
+          const lb = parseFloat(vals.weightLb);
+          if (!isNaN(lb) && lb > 0) setWeightKg(convert.toKg(lb).toString());
+
+          const nIn = parseFloat(vals.neckIn);
+          if (!isNaN(nIn) && nIn > 0) setNeckCm((Math.round((nIn * 2.54) * 10) / 10).toString());
+
+          const wIn = parseFloat(vals.waistIn);
+          if (!isNaN(wIn) && wIn > 0) setWaistCm((Math.round((wIn * 2.54) * 10) / 10).toString());
+
+          const hIn = parseFloat(vals.hipIn);
+          if (!isNaN(hIn) && hIn > 0) setHipCm((Math.round((hIn * 2.54) * 10) / 10).toString());
+
+          setHeightUnit('cm');
+          const ft = parseFloat(vals.heightFt);
+          const inch = parseFloat(vals.heightInchesPart);
+          if (!isNaN(ft) && ft > 0) {
+            const totalInches = ft * 12 + (isNaN(inch) ? 0 : inch);
+            const cmVal = Math.round(totalInches * 2.54);
+            setHeightCm(cmVal.toString());
+          }
+        }
+
+        prevUnitRef.current = newUnit;
+        setUnit(newUnit);
+      }
     };
 
     window.addEventListener('sa:unit-change', handleUnitChange);
@@ -55,6 +126,30 @@ export const BodyFatCalculator: React.FC = () => {
       window.removeEventListener('sa:unit-change', handleUnitChange);
     };
   }, []);
+
+  const handleHeightUnitChange = (newHeightUnit: 'cm' | 'ft-in') => {
+    if (newHeightUnit === heightUnit) return;
+
+    if (newHeightUnit === 'ft-in') {
+      const cm = parseFloat(heightCm);
+      if (!isNaN(cm) && cm > 0) {
+        const inches = cm / 2.54;
+        const ft = Math.floor(inches / 12);
+        const inchPart = Math.round(inches % 12);
+        setHeightFt(ft.toString());
+        setHeightInchesPart(inchPart.toString());
+      }
+    } else {
+      const ft = parseFloat(heightFt);
+      const inch = parseFloat(heightInchesPart);
+      if (!isNaN(ft) && ft > 0) {
+        const totalInches = ft * 12 + (isNaN(inch) ? 0 : inch);
+        const cmVal = Math.round(totalInches * 2.54);
+        setHeightCm(cmVal.toString());
+      }
+    }
+    setHeightUnit(newHeightUnit);
+  };
 
   // Calculate results on change
   useEffect(() => {
@@ -253,33 +348,26 @@ export const BodyFatCalculator: React.FC = () => {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="space-y-1.5">
               <label htmlFor="weight" className="block text-xs font-bold text-muted-foreground uppercase tracking-wider">
-                Weight ({unit === 'kg' ? 'kg' : 'lb'})
+                Weight
               </label>
-              <div className="flex items-center space-x-2 bg-background border border-border rounded-xl px-3 py-1.5 focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
+              <div className="flex items-center bg-background border border-border rounded-xl focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all">
                 <input
                   type="number"
                   id="weight"
                   value={unit === 'kg' ? weightKg : weightLb}
                   onChange={(e) => unit === 'kg' ? setWeightKg(e.target.value) : setWeightLb(e.target.value)}
-                  className="w-full bg-transparent text-sm text-foreground focus:outline-none font-mono font-semibold"
+                  className="w-full bg-transparent px-3 py-1.5 text-sm text-foreground focus:outline-none font-mono font-semibold"
                   placeholder={unit === 'kg' ? 'e.g. 75' : 'e.g. 165'}
                   min="1"
                 />
-                <span className="text-[10px] text-muted-foreground font-bold uppercase">{unit === 'kg' ? 'kg' : 'lb'}</span>
+                <UnitDropdown value={unit} onChange={setStoredUnit} />
               </div>
             </div>
 
             <div className="space-y-1.5">
               <div className="flex justify-between items-center">
                 <label className="block text-xs font-bold text-muted-foreground uppercase tracking-wider">Height</label>
-                <select
-                  value={heightUnit}
-                  onChange={(e) => setHeightUnit(e.target.value as 'cm' | 'ft-in')}
-                  className="text-[10px] font-bold text-primary bg-background border border-border rounded px-1.5 py-0.5 focus:outline-none cursor-pointer font-mono"
-                >
-                  <option value="cm">cm</option>
-                  <option value="ft-in">ft / in</option>
-                </select>
+                <HeightUnitDropdown value={heightUnit} onChange={handleHeightUnitChange} />
               </div>
 
               {heightUnit === 'cm' ? (
