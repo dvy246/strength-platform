@@ -1,0 +1,264 @@
+---
+// src/pages/compare/dots-vs-wilks-vs-ipf-gl.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { PowerliftingScoreComparison } from '@/components/calculators/PowerliftingScoreComparison';
+import { buildWebApplicationSchema } from '@/lib/seo/schema';
+import { buildCanonical } from '@/lib/seo/meta';
+
+const canonicalUrl = buildCanonical('/compare/dots-vs-wilks-vs-ipf-gl');
+
+const webAppSchema = buildWebApplicationSchema(
+  'DOTS vs Wilks vs IPF GL Calculator',
+  'Calculate and compare your powerlifting score across all three major coefficient systems — DOTS, Wilks, and IPF GL. Understand which formula your federation uses and how they differ.',
+  canonicalUrl
+);
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  'mainEntity': [
+    {
+      '@type': 'Question',
+      'name': 'What is a powerlifting coefficient system?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'A powerlifting coefficient system is a mathematical formula used to normalize and compare the performance of lifters across different bodyweight classes and genders. Because lighter lifters can lift more relative to their bodyweight, and heavier lifters can lift more absolute weight, these coefficients create a level playing field by calculating a score that represents relative efficiency.'
+      }
+    },
+    {
+      '@type': 'Question',
+      'name': 'Which powerlifting formula is the most accurate?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Accuracy depends on the distribution of bodyweights. The DOTS formula is widely considered the most mathematically balanced for general raw powerlifting because it reduces the bias towards extreme lightweight and super heavyweight lifters. The IPF GL formula is highly accurate for IPF-affiliated lifters as it is dynamically tuned to their specific raw and equipped competition databases using exponential curves.'
+      }
+    },
+    {
+      '@type': 'Question',
+      'name': 'What is considered a good powerlifting coefficient score?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'For Wilks and DOTS, a score of 300 is considered a good intermediate level, 350-400 indicates a highly competitive regional or national class lifter, and 450+ is elite or world-class. For IPF GL, the scale is different: 50 is an average raw lifter, 75-85 represents competitive national level, and 100+ is world-class.'
+      }
+    },
+    {
+      '@type': 'Question',
+      'name': 'Why did the International Powerlifting Federation (IPF) replace Wilks with IPF GL points?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'The IPF replaced the Wilks formula in 2019 because statistical analysis of modern competition databases showed that Wilks gave an unfair advantage to lifters at the very low and very high ends of the bodyweight spectrum. The IPF GL formula uses exponential scaling instead of polynomials to prevent unrealistic scores at the extremes.'
+      }
+    },
+    {
+      '@type': 'Question',
+      'name': 'How does changing the bodyweight unit (kg vs. lbs) affect my score?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'Changing the display unit does not affect the calculation. Mathematical formulas like Wilks, DOTS, and IPF GL are calculated strictly using kilograms. When you input your weights in pounds (lbs), the calculator automatically converts them to kilograms to ensure mathematical accuracy.'
+      }
+    },
+    {
+      '@type': 'Question',
+      'name': 'Can I directly compare a Wilks score to a DOTS score?',
+      'acceptedAnswer': {
+        '@type': 'Answer',
+        'text': 'No, you cannot compare them directly. While both formulas scale raw scores to a similar baseline (where a 500-point score is exceptional), the polynomial equations and coefficients differ. A lifter might score 380 in Wilks and 365 in DOTS. Always compare scores within the same coefficient system.'
+      }
+    }
+  ]
+};
+
+const breadcrumbItems = [
+  { name: 'Compare', path: '/compare' },
+  { name: 'DOTS vs Wilks vs IPF GL', path: '/compare/dots-vs-wilks-vs-ipf-gl' }
+];
+---
+
+<PageLayout
+  title="DOTS vs Wilks vs IPF GL Calculator | Compare Powerlifting Scores"
+  description="Calculate and compare your powerlifting score across all three major coefficient systems — DOTS, Wilks, and IPF GL. Understand which formula your federation uses and how they differ."
+  canonicalPath="/compare/dots-vs-wilks-vs-ipf-gl"
+>
+  <StructuredData slot="head" schema={[webAppSchema, faqSchema]} />
+
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbItems} />
+      
+      <div class="mt-4 mb-8">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">
+          DOTS vs Wilks vs IPF GL: Powerlifting Score Comparison
+        </h1>
+        <p class="text-muted-foreground text-sm md:text-base mt-2 max-w-3xl leading-relaxed">
+          Input your maximum lifts and bodyweight to simultaneously compute your score across the three major coefficient systems. See how they stack up, understand their mathematical differences, and find out which formula your federation uses.
+        </p>
+      </div>
+
+      {/* The Interactive React Island */}
+      <div class="bg-card/40 border border-border p-6 rounded-3xl shadow-sm mb-12">
+        <PowerliftingScoreComparison client:load />
+      </div>
+
+      {/* Side-by-Side Grid Layout for Editorial Content */}
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        {/* Main Editorial Article */}
+        <div class="lg:col-span-8 space-y-10 text-foreground">
+          <article class="prose prose-invert max-w-none space-y-6">
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">What Are Powerlifting Coefficient Systems?</h2>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                In powerlifting, absolute strength is not the only metric of success. If a 120 kg (264 lb) lifter and a 60 kg (132 lb) lifter both squat 200 kg (440 lb), their feats are not equal. The lighter lifter has squatted 3.3 times their bodyweight, while the heavier lifter has squatted 1.6 times theirs. Conversely, comparing them purely on bodyweight ratio is also flawed; due to biological scaling laws (the square-cube law), smaller organisms are naturally stronger relative to their mass.
+              </p>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                To solve this problem, sports scientists and powerlifting federations use <strong>coefficient systems</strong>. These are mathematical formulas designed to normalize performance across different bodyweight classes and genders. By applying a coefficient to a lifter's total (the sum of their maximum squat, bench press, and deadlift), they calculate a standardized score. This score enables organizers to select a single "Best Lifter" champion from an entire meet, regardless of weight class.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">1. The Wilks Score: The Historical Benchmark</h2>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                The <strong>Wilks Score</strong> (or Wilks Coefficient) is the most famous system in powerlifting history. Developed by Robert Wilks in 1995 for the International Powerlifting Federation (IPF), it uses a fifth-order polynomial equation to estimate a lifter's capacity relative to their scale weight. The formula features different sets of coefficients for men and women.
+              </p>
+              <blockquote class="border-l-4 border-primary pl-4 py-1 italic text-muted-foreground text-xs my-4 bg-muted/20 rounded-r-lg">
+                Wilks (1995) formula: Robert Wilks, coefficients published in the IPF Technical Rules Book prior to its replacement in 2020.
+              </blockquote>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                For over two decades, Wilks was the undisputed standard. However, as databases grew, statistical biases became evident. Research showed that the Wilks formula gave a slight but consistent mathematical advantage to ultra-lightweight lifters (under 60 kg) and super heavyweight lifters (over 125 kg), leaving middleweight lifters at a disadvantage.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">2. The DOTS Formula: The Modern Balance</h2>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                The <strong>DOTS Score</strong> (Dynamically Objective Team Scoring) was introduced by Jäger & Pock in 2013 to address the known shortcomings of Wilks. Instead of a fifth-order polynomial, DOTS employs a fourth-order polynomial function with clamped ranges to prevent wild curve fluctuations at extreme bodyweights.
+              </p>
+              <blockquote class="border-l-4 border-primary pl-4 py-1 italic text-muted-foreground text-xs my-4 bg-muted/20 rounded-r-lg">
+                DOTS formula: Jäger & Pock, 2013 (Dynamically Objective Team Scoring).
+              </blockquote>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                DOTS is designed to ensure that the average score remains mathematically uniform across all weight classes. Because it does not penalize middleweights or over-reward super heavyweights, it has become the standard formula for major raw powerlifting federations, including the United States Powerlifting Association (USPA) and USA Powerlifting (USAPL).
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">3. IPF GL Points: The Exponential Solution</h2>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                In 2019, the International Powerlifting Federation (IPF) officially retired Wilks. Instead of adopting DOTS, they commissioned a custom formula: <strong>IPF GL Points</strong> (Good Lift Points). Designed by the IPF Technical Committee, this system deviates from polynomials entirely, using exponential decay functions.
+              </p>
+              <blockquote class="border-l-4 border-primary pl-4 py-1 italic text-muted-foreground text-xs my-4 bg-muted/20 rounded-r-lg">
+                IPF GL Points: IPF Technical Rules Book 2020 (Goodlift Points).
+              </blockquote>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                By utilizing exponential curves, the IPF GL system ensures that the score growth decreases smoothly as bodyweight rises, eliminating the arbitrary peaks and valleys associated with polynomial equations. Crucially, the IPF GL system features distinct parameters for raw (unequipped) versus equipped lifting, acknowledging that supportive gear alters leverage and scaling dynamics.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">Side-by-Side System Comparison</h2>
+              <div class="overflow-x-auto">
+                <table class="min-w-full divide-y divide-border border border-border rounded-xl overflow-hidden text-xs">
+                  <thead class="bg-muted/40">
+                    <tr>
+                      <th class="px-4 py-3 text-left font-bold text-foreground">Metric</th>
+                      <th class="px-4 py-3 text-left font-bold text-foreground">Wilks Score (1995)</th>
+                      <th class="px-4 py-3 text-left font-bold text-foreground">DOTS Score (2013)</th>
+                      <th class="px-4 py-3 text-left font-bold text-foreground">IPF GL Points (2020)</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-border bg-card/20">
+                    <tr>
+                      <td class="px-4 py-3 font-semibold text-foreground">Equation Type</td>
+                      <td class="px-4 py-3 text-muted-foreground">5th-Order Polynomial</td>
+                      <td class="px-4 py-3 text-muted-foreground">4th-Order Polynomial</td>
+                      <td class="px-4 py-3 text-muted-foreground">Exponential Curve</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-semibold text-foreground">Key Advantage</td>
+                      <td class="px-4 py-3 text-muted-foreground">Deep historical comparison database</td>
+                      <td class="px-4 py-3 text-muted-foreground">Excellent balance for raw lifters</td>
+                      <td class="px-4 py-3 text-muted-foreground">Tailored for raw vs. equipped lifts</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-semibold text-foreground">Federation Usage</td>
+                      <td class="px-4 py-3 text-muted-foreground">Legacy meets, local clubs</td>
+                      <td class="px-4 py-3 text-muted-foreground">USPA, USAPL, WRPF</td>
+                      <td class="px-4 py-3 text-muted-foreground">IPF, EPF, and global affiliates</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-3 font-semibold text-foreground">Scaling Baseline</td>
+                      <td class="px-4 py-3 text-muted-foreground">~300 (Good), ~400 (Club Elite)</td>
+                      <td class="px-4 py-3 text-muted-foreground">~300 (Good), ~400 (Club Elite)</td>
+                      <td class="px-4 py-3 text-muted-foreground">~50 (Good), ~80 (Club Elite)</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">Which System Should You Use?</h2>
+              <p class="text-muted-foreground text-sm leading-relaxed">
+                If you are preparing for a powerlifting competition, you should train and track your progress using the formula adopted by your specific federation:
+              </p>
+              <ul class="list-disc list-inside text-muted-foreground text-sm space-y-2 pl-2">
+                <li><strong>USA Powerlifting (USAPL) & USPA:</strong> Track your <strong>DOTS Score</strong>. These federations utilize DOTS to select best lifter awards.</li>
+                <li><strong>IPF and USAPL (Equipped):</strong> Track your <strong>IPF GL Points</strong>. The international body uses GL points for all classic and equipped world championships.</li>
+                <li><strong>Historical Comparisons:</strong> Use the <strong>Wilks Score</strong> if you are comparing your lifts against historical data or lifting records set before 2019.</li>
+              </ul>
+            </section>
+          </article>
+        </div>
+
+        {/* Sidebar widgets */}
+        <aside class="lg:col-span-4 space-y-6">
+          <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-6">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Coefficient Utilities</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Compare your powerlifting scores against other relative metrics on our platform:
+            </p>
+            <div class="border-t border-border pt-4 text-xs font-semibold space-y-3">
+              <a href="/calculators/wilks-calculator" class="block text-primary hover:underline">
+                Standalone Wilks Calculator →
+              </a>
+              <a href="/calculators/relative-strength" class="block text-primary hover:underline">
+                Relative Strength Analyzer →
+              </a>
+              <a href="/calculators/strength-index" class="block text-primary hover:underline">
+                Calculate Your Strength Index →
+              </a>
+            </div>
+          </div>
+
+          <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+            <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Rulebook Resources</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Formulas are updated in accordance with the latest technical rules:
+            </p>
+            <ul class="text-xs text-muted-foreground space-y-2 list-disc list-inside">
+              <li>IPF Technical Rules (v2024)</li>
+              <li>USAPL Rulebook guidelines</li>
+              <li>USPA Rulebook specifications</li>
+            </ul>
+          </div>
+        </aside>
+      </div>
+
+      {/* FAQ Section */}
+      <section class="mt-16 pt-12 border-t border-border space-y-8">
+        <h2 class="text-2xl font-bold text-foreground">Frequently Asked Questions</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {faqSchema.mainEntity.map(faq => (
+            <div class="p-5 border border-border bg-card/20 rounded-xl space-y-2">
+              <h4 class="text-sm font-bold text-foreground">{faq.name}</h4>
+              <p class="text-muted-foreground text-xs leading-relaxed">{faq.acceptedAnswer.text}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+    </Container>
+  </Section>
+</PageLayout>

@@ -1,6 +1,7 @@
 // src/pages/sitemap.xml.ts
 import type { APIRoute } from 'astro';
 import { exercises } from '@/data/exercises';
+import { glossaryTerms } from '@/data/glossary';
 
 export const GET: APIRoute = () => {
   const domain = 'https://strengthchecker.com';
@@ -13,6 +14,7 @@ export const GET: APIRoute = () => {
     '/strength-standards',
     '/calculators',
     '/calculators/strength-index',
+    '/glossary',
     '/calculators/one-rep-max-calculator',
     '/calculators/ideal-bodyweight',
     '/calculators/relative-strength',
@@ -22,6 +24,10 @@ export const GET: APIRoute = () => {
     '/calculators/pull-ups-one-rep-max-calculator',
     '/calculators/body-fat-calculator',
     '/calculators/wilks-calculator',
+    '/compare/dots-vs-wilks-vs-ipf-gl',
+    '/calculators/strength-ratio-checker',
+    '/calculators/strength-standards-by-age',
+    '/guides/ideal-strength-ratios',
     '/calculators/vo2-max-calculator',
     '/calculators/cooper-test-vo2-max-calculator',
     '/calculators/rockport-vo2-max-calculator',
@@ -45,8 +51,11 @@ export const GET: APIRoute = () => {
     }
   }
 
+  // Dynamic glossary terms
+  const glossaryUrls = glossaryTerms.map(term => `/glossary/${term.slug}`);
+
   // Combine all URLs
-  const allUrls = [...staticUrls, ...exerciseUrls, ...bodyweightUrls];
+  const allUrls = [...staticUrls, ...exerciseUrls, ...bodyweightUrls, ...glossaryUrls];
 
   // Generate XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>

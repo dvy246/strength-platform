@@ -1,0 +1,67 @@
+---
+// src/pages/calculators/strength-ratio-checker.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { StrengthRatioChecker } from '@/components/calculators/StrengthRatioChecker';
+---
+
+<CalculatorLayout
+  title="Strength Ratio Checker | Calculate Lift Ratios & Balance | StrengthChecker"
+  description="Check your lift ratios and physical balance across squat, bench, deadlift, overhead press, and barbell row. Find muscle imbalances and training tips."
+  calculatorName="Strength Ratio Checker"
+  canonicalPath="/calculators/strength-ratio-checker"
+>
+  <div slot="calculator">
+    <StrengthRatioChecker client:load />
+  </div>
+
+  <div slot="sidebar" class="space-y-6">
+    <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Why Ratios Matter</h3>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Muscle and strength imbalances are a major cause of chronic joint pain and athletic plateaus. If your horizontal push (bench press) significantly outpaces your pull (barbell row), it can cause your shoulders to roll forward, increasing the risk of rotator cuff impingements.
+      </p>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Similarly, a deadlift that is too strong relative to the squat can suggest hamstring dominance, which may overload your lower back when squatting.
+      </p>
+    </div>
+
+    <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Symmetry Guides</h3>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Learn more about the science of physical ratios and how to structure your training routines:
+      </p>
+      <a href="/guides/ideal-strength-ratios" class="block text-xs font-semibold text-primary hover:underline">
+        Read Our Guide to Ideal Strength Ratios →
+      </a>
+    </div>
+  </div>
+
+  {/* Editorial Methodology Section */}
+  <div class="space-y-6">
+    <h2 class="text-2xl font-bold text-foreground">Understanding Your Strength Ratios</h2>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Skeletal muscle symmetry is a key component of long-term joint integrity and force transfer. While it is natural to have variations in performance based on your limb lengths (for example, long arms favor deadlifts but make bench pressing harder), extreme deviations from standard ratios often point to training imbalances.
+    </p>
+
+    <h3 class="text-lg font-bold text-foreground mt-4">The Standard Proportional Targets</h3>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Our calculator compares your 1RM lifts against established benchmarks in exercise science:
+    </p>
+    <ul class="list-disc list-inside text-muted-foreground text-sm space-y-2 pl-2">
+      <li><strong>Bench Press vs Squat (75%):</strong> Your horizontal pressing power is typically three-quarters of your back squat strength. Significant deviation suggests leg or chest dominance.</li>
+      <li><strong>Overhead Press vs Bench (60%):</strong> Your vertical shoulder pressing strength should hover around 60% of your horizontal bench press capacity.</li>
+      <li><strong>Deadlift vs Squat (120%):</strong> A deadlift is usually 20% heavier than a back squat, reflecting the larger posterior chain recruitment.</li>
+      <li><strong>Barbell Row vs Bench (100%):</strong> Your pulling capacity should be equal to your pushing capacity to stabilize your shoulder joints.</li>
+    </ul>
+
+    <h3 class="text-lg font-bold text-foreground mt-6">How to Fix Muscle Imbalances</h3>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      If the calculator indicates that a lift is "Underdeveloped," it is recommended to adjust your training block:
+    </p>
+    <ol class="list-decimal list-inside text-muted-foreground text-sm space-y-2 pl-2">
+      <li><strong>Adjust Volume:</strong> Increase the number of weekly working sets for the lagging movement category.</li>
+      <li><strong>Move First:</strong> Perform your lagging exercises at the beginning of your training session when your central nervous system is fresh.</li>
+      <li><strong>Improve Form:</strong> Ensure you are using a full range of motion. Cutting depth on squats or bouncing bench presses creates false numbers.</li>
+    </ol>
+  </div>
+</CalculatorLayout>

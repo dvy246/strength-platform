@@ -122,12 +122,66 @@ const breadcrumbs = [{ name: 'Calculators', path: '/calculators' }];
               Calculate your Wilks score, DOTS score, and IPF GL points dynamically. Compare your relative powerlifting performance.
             </p>
           </div>
-          <div class="mt-8">
+          <div class="mt-8 flex flex-wrap gap-3">
             <a
               href="/calculators/wilks-calculator"
               class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
             >
               Calculate Wilks
+            </a>
+            <a
+              href="/compare/dots-vs-wilks-vs-ipf-gl"
+              class="inline-flex items-center justify-center rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/10 transition-all"
+            >
+              Compare Formulas
+            </a>
+          </div>
+        </div>
+
+        {/* Strength Ratio Card */}
+        <div class="flex flex-col justify-between p-8 border border-border rounded-2xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-mono">Symmetry</span>
+            <h2 class="text-2xl font-bold text-foreground mt-3 group-hover:text-primary transition-colors">
+              Strength Ratio Checker
+            </h2>
+            <p class="text-muted-foreground text-sm mt-3 leading-relaxed">
+              Check your relative balance across core lifts (squat, bench, deadlift, overhead press, rows) to identify muscle imbalances and joint risks.
+            </p>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-3">
+            <a
+              href="/calculators/strength-ratio-checker"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
+            >
+              Check Ratios
+            </a>
+            <a
+              href="/guides/ideal-strength-ratios"
+              class="inline-flex items-center justify-center rounded-lg border border-primary/20 bg-primary/5 px-4 py-2.5 text-xs font-bold text-primary hover:bg-primary/10 transition-all"
+            >
+              View Ratios Guide
+            </a>
+          </div>
+        </div>
+
+        {/* Strength Standards by Age Card */}
+        <div class="flex flex-col justify-between p-8 border border-border rounded-2xl bg-card hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-widest text-muted-foreground font-mono">Demographics</span>
+            <h2 class="text-2xl font-bold text-foreground mt-3 group-hover:text-primary transition-colors">
+              Strength Standards by Age
+            </h2>
+            <p class="text-muted-foreground text-sm mt-3 leading-relaxed">
+              Calculate your age-adjusted strength standards using the official McCulloch coefficients. Compare your squat, bench, and deadlift within your age bracket.
+            </p>
+          </div>
+          <div class="mt-8">
+            <a
+              href="/calculators/strength-standards-by-age"
+              class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
+            >
+              Calculate by Age
             </a>
           </div>
         </div>
@@ -191,6 +245,31 @@ const breadcrumbs = [{ name: 'Calculators', path: '/calculators' }];
               class="inline-flex items-center justify-center rounded-lg border border-border bg-muted/50 px-4 py-2.5 text-xs font-bold text-foreground hover:bg-muted transition-all"
             >
               Calculate VO₂ Max
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* Learning Resources */}
+      <div class="mt-16 pt-12 border-t border-border space-y-6">
+        <h2 class="text-2xl font-bold text-foreground">Learning Resources</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-3">
+            <h3 class="text-lg font-bold text-foreground">Strength Training Glossary</h3>
+            <p class="text-muted-foreground text-sm leading-relaxed">
+              Explore plain-English definitions of essential training and powerlifting terminology like 1RM, RPE, RIR, Wilks, and progressive overload.
+            </p>
+            <a href="/glossary" class="inline-flex items-center text-xs font-bold text-primary hover:underline mt-2">
+              Browse Glossary →
+            </a>
+          </div>
+          <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-3">
+            <h3 class="text-lg font-bold text-foreground">Testing Methodology</h3>
+            <p class="text-muted-foreground text-sm leading-relaxed">
+              Understand the science behind our calculations. Learn how we normalize and evaluate physical standards for general and athletic populations.
+            </p>
+            <a href="/methodology" class="inline-flex items-center text-xs font-bold text-primary hover:underline mt-2">
+              Read Methodology →
             </a>
           </div>
         </div>

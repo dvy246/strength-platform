@@ -1,0 +1,157 @@
+---
+// src/pages/glossary/[term].astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { glossaryTerms, type GlossaryTerm } from '@/data/glossary';
+import { buildCanonical } from '@/lib/seo/meta';
+
+export async function getStaticPaths() {
+  return glossaryTerms.map(term => ({
+    params: { term: term.slug },
+    props: { termData: term }
+  }));
+}
+
+interface Props {
+  termData: GlossaryTerm;
+}
+
+const { termData } = Astro.props;
+
+const canonicalUrl = buildCanonical(`/glossary/${termData.slug}`);
+
+// DefinedTerm schema
+const definedTermSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'DefinedTerm',
+  '@id': canonicalUrl,
+  'name': termData.term,
+  'description': termData.shortDefinition,
+  'url': canonicalUrl,
+  'inDefinedTermSet': {
+    '@type': 'DefinedTermSet',
+    '@id': buildCanonical('/glossary'),
+    'name': 'Strength Training Glossary',
+    'url': buildCanonical('/glossary')
+  }
+};
+
+const breadcrumbItems = [
+  { name: 'Glossary', path: '/glossary' },
+  { name: termData.term, path: `/glossary/${termData.slug}` }
+];
+
+// Helper to find related term names
+const getRelatedTermName = (slug: string) => {
+  const match = glossaryTerms.find(t => t.slug === slug);
+  return match ? match.term : slug;
+};
+---
+
+<PageLayout
+  title={`What is ${termData.term}? | Strength Training Glossary`}
+  description={`${termData.shortDefinition} Learn the full definition, practical application, and example of ${termData.term} in strength training.`}
+  canonicalPath={`/glossary/${termData.slug}`}
+>
+  <StructuredData slot="head" schema={definedTermSchema} />
+
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbItems} />
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mt-6">
+        {/* Main Content Area */}
+        <div class="lg:col-span-8 space-y-8 text-foreground">
+          <article class="prose prose-invert max-w-none">
+            <h1 class="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight mb-6">
+              What is {termData.term}?
+            </h1>
+            
+            <div class="p-5 border border-border bg-card/40 rounded-2xl mb-8">
+              <h2 class="text-xs font-bold uppercase tracking-wider text-muted-foreground mb-2">
+                Quick Definition
+              </h2>
+              <p class="text-sm font-semibold text-foreground leading-relaxed">
+                {termData.shortDefinition}
+              </p>
+            </div>
+
+            <div class="text-muted-foreground text-sm md:text-base leading-relaxed space-y-4">
+              {termData.fullDefinition.split('. ').map((sentence, idx, arr) => {
+                // Return paragraphs for grouping sentences together for readability
+                if (idx % 3 === 0 && idx < arr.length - 1) {
+                  return (
+                    <p class="mb-4">
+                      {arr.slice(idx, idx + 3).join('. ')}.
+                    </p>
+                  );
+                }
+                return null;
+              })}
+            </div>
+          </article>
+
+          {/* Citations/Sources Section */}
+          {termData.sources && termData.sources.length > 0 && (
+            <div class="pt-8 border-t border-border mt-12 space-y-4">
+              <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">
+                Scientific Sources & References
+              </h3>
+              <ul class="text-xs text-muted-foreground space-y-2 pl-4 list-disc list-inside">
+                {termData.sources.map(source => (
+                  <li>
+                    <strong>{source.name}</strong> ({source.year})
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+
+        {/* Sidebar Panel */}
+        <aside class="lg:col-span-4 space-y-6">
+          {/* Related Calculators */}
+          {termData.relatedCalculators && termData.relatedCalculators.length > 0 && (
+            <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-foreground">
+                Relevant Calculators
+              </h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                Apply {termData.term} using our free diagnostic lifting tools:
+              </p>
+              <div class="border-t border-border pt-4 text-xs font-semibold space-y-3">
+                {termData.relatedCalculators.map(calc => (
+                  <a href={calc.href} class="block text-primary hover:underline cursor-pointer">
+                    {calc.name} →
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Related Glossary Terms */}
+          {termData.relatedTerms && termData.relatedTerms.length > 0 && (
+            <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+              <h3 class="text-xs font-bold uppercase tracking-wider text-foreground">
+                Related Terms
+              </h3>
+              <p class="text-xs text-muted-foreground leading-relaxed">
+                Explore definitions for related training concepts:
+              </p>
+              <div class="border-t border-border pt-4 text-xs font-semibold space-y-3">
+                {termData.relatedTerms.map(slug => (
+                  <a href={`/glossary/${slug}`} class="block text-primary hover:underline cursor-pointer">
+                    {getRelatedTermName(slug)} →
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
+        </aside>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

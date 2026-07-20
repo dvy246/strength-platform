@@ -1,0 +1,149 @@
+---
+// src/pages/guides/ideal-strength-ratios.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { buildCanonical } from '@/lib/seo/meta';
+
+const canonicalUrl = buildCanonical('/guides/ideal-strength-ratios');
+
+const articleSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  '@id': `${canonicalUrl}#article`,
+  'isPartOf': {
+    '@type': 'WebPage',
+    '@id': canonicalUrl,
+    'url': canonicalUrl,
+    'name': 'Ideal Strength Ratios: Balancing the Big Lifts | StrengthChecker'
+  },
+  'headline': 'Ideal Strength Ratios: Balancing the Big Lifts',
+  'description': 'Learn the ideal strength ratios between bench press, squat, deadlift, and overhead press. Discover how to identify and correct muscle imbalances for joint health.',
+  'inLanguage': 'en-US',
+  'publisher': {
+    '@id': 'https://strengthchecker.com/#organization'
+  }
+};
+
+const breadcrumbItems = [
+  { name: 'Calculators', path: '/calculators' },
+  { name: 'Ideal Strength Ratios', path: '/guides/ideal-strength-ratios' }
+];
+---
+
+<PageLayout
+  title="Ideal Strength Ratios: Bench, Squat, Deadlift, & OHP"
+  description="Learn the ideal strength ratios between bench press, squat, deadlift, and overhead press. Discover how to identify and correct muscle imbalances for joint health."
+  canonicalPath="/guides/ideal-strength-ratios"
+>
+  <StructuredData slot="head" schema={articleSchema} />
+
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbItems} />
+
+      <div class="mt-4 mb-8 max-w-3xl">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-foreground tracking-tight leading-tight">
+          Ideal Strength Ratios: Balancing the Big Lifts
+        </h1>
+        <p class="text-muted-foreground text-sm md:text-base mt-3 leading-relaxed">
+          How does your bench press compare to your back squat? Are your shoulders strong enough to support your bench press volume? Learn the mathematical ratios that define a balanced, injury-resistant body.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        {/* Main Article Content */}
+        <div class="lg:col-span-8 text-foreground space-y-8">
+          <article class="prose prose-invert max-w-none space-y-6 text-sm md:text-base leading-relaxed">
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">Why Do Strength Ratios Matter?</h2>
+              <p class="text-muted-foreground">
+                In the pursuit of maximum absolute strength, it is easy to favor the exercises we excel at and neglect the ones we dislike. A lifter with highly efficient leverages for pressing may bench press three times a week while squatting only once. Over months and years, this selective loading creates structural imbalances across joints.
+              </p>
+              <p class="text-muted-foreground">
+                Muscle and strength asymmetry is a leading contributor to chronic lifting injuries, particularly in the shoulder girdle and lower back. If your anterior muscles (chest and anterior deltoids) are significantly stronger than your posterior stabilizers (rhomboids, traps, and rotator cuffs), your shoulder joint loses structural centering. This leads to forward-rolling shoulders and impingement. By analyzing your ratios, you can target weaknesses before they manifest as injuries.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">The Baseline Strength Proportions</h2>
+              <p class="text-muted-foreground">
+                While every individual possesses unique biomechanical factors (such as femur length or arm span) that alter leverage, sports science databases have established average, healthy ratios for recreational and competitive lifters. These are generally scaled to a standard baseline:
+              </p>
+              
+              <div class="p-5 border border-border bg-card/20 rounded-2xl space-y-4 my-6">
+                <h4 class="text-xs font-bold uppercase tracking-wider text-primary">Summary of Ideal Proportions</h4>
+                <ul class="space-y-3.5 pl-2 list-disc list-inside text-muted-foreground text-xs">
+                  <li><strong>Bench Press vs Squat (75%):</strong> If you squat 300 lbs, your bench press should hover around 225 lbs.</li>
+                  <li><strong>Overhead Press vs Bench Press (60%):</strong> If you bench press 200 lbs, your overhead press should be around 120 lbs.</li>
+                  <li><strong>Deadlift vs Squat (120%):</strong> Your deadlift is typically 20% heavier than your back squat, indicating posterior chain dominance.</li>
+                  <li><strong>Barbell Row vs Bench Press (100%):</strong> To stabilize your shoulder joints, your horizontal pulling strength should match your horizontal pressing strength.</li>
+                </ul>
+              </div>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">1. Press vs Squat: Upper vs Lower Balance</h2>
+              <p class="text-muted-foreground">
+                The ratio between your bench press and squat measures the balance between your upper-body pushing power and lower-body knee extension capacity. A bench press that exceeds 80% of your squat indicates a heavy upper-body focus, often seen in recreational lifters who skip leg sessions. Conversely, a bench press under 65% of your squat is common in field-sport athletes who prioritize lower-body force production. For balanced health, aim to bench press approximately three-quarters of your squat.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">2. Overhead Press vs Bench: Horizontal vs Vertical Pressing</h2>
+              <p class="text-muted-foreground">
+                The overhead press (vertical push) is a demanding movement that relies heavily on shoulder stability and core bracing. The bench press (horizontal push) leverages the chest and triceps to move heavier loads. The standard ratio is 60%. If your overhead press is under 50% of your bench, you may have under-developed anterior deltoids and poor thoracic mobility. If it exceeds 70%, your chest pressing may be lagging.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">3. Deadlift vs Squat: Posterior vs Anterior Chain</h2>
+              <p class="text-muted-foreground">
+                The squat and deadlift are the primary lower-body compound movements. The squat is quad-dominant (anterior chain), while the deadlift is hip-dominant (posterior chain). Because the deadlift recruits more overall muscle mass (including the lats and spinal erectors), most lifters deadlift 20% more than they squat. If your deadlift is close to or equal to your squat, your hamstrings and glutes are lagging. If your deadlift is more than 35% heavier than your squat, focus on squat technique and quad development.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">4. Pull vs Push: The Shoulder Joint Safeguard</h2>
+              <p class="text-muted-foreground">
+                The most critical ratio for joint health is the 1:1 ratio between horizontal pulling (Barbell Row or total weighted pull-up) and horizontal pressing (Bench Press). Bench pressing pulls the humerus forward. To counteract this stress, your upper back (lats, traps, rhomboids) must pull the humerus back into the socket. For every set of pressing, you should perform at least one equivalent set of pulling.
+              </p>
+            </section>
+
+            <section class="space-y-4">
+              <h2 class="text-2xl font-bold text-foreground">Conclusion & Next Steps</h2>
+              <p class="text-muted-foreground">
+                Imbalances are not permanent. By monitoring your lifting proportions, you can adjust your training blocks to address weaknesses and build a highly symmetric, resilient frame. Use our interactive tool to check your scores now:
+              </p>
+              <div class="pt-4">
+                <a href="/calculators/strength-ratio-checker" class="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/95 px-5 py-3 text-xs font-bold shadow-md cursor-pointer transition-all">
+                  Run Ratio Check →
+                </a>
+              </div>
+            </section>
+          </article>
+        </div>
+
+        {/* Sidebar Panel */}
+        <aside class="lg:col-span-4 space-y-6">
+          <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-foreground">Ratio Utilities</h3>
+            <p class="text-xs text-muted-foreground leading-relaxed">
+              Use our calculators to check and track your relative strength scores:
+            </p>
+            <div class="border-t border-border pt-4 text-xs font-semibold space-y-3">
+              <a href="/calculators/strength-ratio-checker" class="block text-primary hover:underline cursor-pointer">
+                Strength Ratio Checker →
+              </a>
+              <a href="/calculators/strength-index" class="block text-primary hover:underline cursor-pointer">
+                Overall Strength Index →
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

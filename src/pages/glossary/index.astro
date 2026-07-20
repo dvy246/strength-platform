@@ -1,0 +1,85 @@
+---
+// src/pages/glossary/index.astro
+import PageLayout from '@/layouts/PageLayout.astro';
+import Container from '@/components/layout/Container.astro';
+import Section from '@/components/layout/Section.astro';
+import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
+import StructuredData from '@/components/seo/StructuredData.astro';
+import { glossaryTerms } from '@/data/glossary';
+
+const canonicalPath = '/glossary';
+
+// ItemList schema of all glossary terms
+const itemListSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'ItemList',
+  'name': 'Strength Training Glossary',
+  'description': 'Plain-English definitions of essential strength training terms, including 1RM, RPE, RIR, progressive overload, and coefficient scores.',
+  'itemListElement': glossaryTerms.map((term, index) => ({
+    '@type': 'ListItem',
+    'position': index + 1,
+    'url': `https://strengthchecker.com/glossary/${term.slug}`,
+    'name': term.term
+  }))
+};
+
+const breadcrumbItems = [
+  { name: 'Glossary', path: '/glossary' }
+];
+---
+
+<PageLayout
+  title="Strength Training Glossary: Essential Terms Defined | StrengthChecker"
+  description="Plain-English definitions of essential strength training terms — 1RM, RPE, RIR, DOTS, Wilks, progressive overload, and more. Reference guide for lifters."
+  canonicalPath={canonicalPath}
+>
+  <StructuredData slot="head" schema={itemListSchema} />
+
+  <Section class="pt-6 md:pt-10">
+    <Container>
+      <Breadcrumbs items={breadcrumbItems} />
+
+      <div class="mt-4 mb-10 text-center max-w-3xl mx-auto space-y-4">
+        <h1 class="text-3xl md:text-5xl font-extrabold text-foreground tracking-tight">
+          Strength Training Glossary
+        </h1>
+        <p class="text-muted-foreground text-sm md:text-base leading-relaxed">
+          Demystifying the terminology of strength training, powerlifting coefficients, and athletic coaching. Explore plain-English definitions with practical examples, and link directly to relevant tools like our <a href="/calculators/strength-index" class="text-primary hover:underline font-semibold">Strength Index Calculator</a>, <a href="/calculators/wilks-calculator" class="text-primary hover:underline font-semibold">Wilks Calculator</a>, and <a href="/calculators/relative-strength" class="text-primary hover:underline font-semibold">Relative Strength Analyzer</a>.
+        </p>
+      </div>
+
+      {/* Grid List of 15 Terms */}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        {glossaryTerms.map(term => (
+          <div class="flex flex-col justify-between p-6 border border-border bg-card rounded-2xl shadow-sm hover:border-primary/40 hover:shadow-md transition-all duration-300 group">
+            <div>
+              <h2 class="text-lg font-bold text-foreground group-hover:text-primary transition-colors">
+                {term.term}
+              </h2>
+              <p class="text-muted-foreground text-xs mt-2.5 leading-relaxed">
+                {term.shortDefinition}
+              </p>
+            </div>
+            
+            <div class="mt-6 pt-4 border-t border-border/60">
+              <a
+                href={`/glossary/${term.slug}`}
+                class="inline-flex items-center text-xs font-bold text-primary hover:underline cursor-pointer"
+              >
+                Read full explanation →
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Visible YMYL Disclaimer */}
+      <div class="p-6 border border-border/80 bg-muted/20 rounded-2xl max-w-4xl mx-auto text-center space-y-2">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-foreground">Disclaimer</h3>
+        <p class="text-[11px] text-muted-foreground leading-relaxed">
+          This glossary provides general educational definitions of strength training terms. Content is for informational purposes only and does not constitute medical or training advice. Consult a certified coach or medical professional before starting any physical training or loading protocol.
+        </p>
+      </div>
+    </Container>
+  </Section>
+</PageLayout>

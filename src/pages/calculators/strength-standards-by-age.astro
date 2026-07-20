@@ -1,0 +1,64 @@
+---
+// src/pages/calculators/strength-standards-by-age.astro
+import CalculatorLayout from '@/layouts/CalculatorLayout.astro';
+import { AgeAdjustedStandards } from '@/components/calculators/AgeAdjustedStandards';
+---
+
+<CalculatorLayout
+  title="Age-Adjusted Strength Standards | Calculate Strength by Age"
+  description="Calculate your age-adjusted strength standards using the official McCulloch coefficients. Compare your bench press, squat, and deadlift within your age bracket."
+  calculatorName="Strength Standards by Age"
+  canonicalPath="/calculators/strength-standards-by-age"
+>
+  <div slot="calculator">
+    <AgeAdjustedStandards client:load />
+  </div>
+
+  <div slot="sidebar" class="space-y-6">
+    <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">The Aging Curve</h3>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Biological strength capacity peaks in the mid-20s and early 30s. From age 40, physiological changes like declining motor unit density and muscle cross-sectional area lead to a gradual reduction in absolute strength capacity.
+      </p>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        Comparing a 55-year-old athlete to a 25-year-old athlete on an absolute scale is mathematically unfair. Age-adjusted coefficients solve this by scaling thresholds down to equalize performance benchmarks.
+      </p>
+    </div>
+
+    <div class="p-6 border border-border bg-card rounded-2xl shadow-sm space-y-4">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-foreground">Federation Standards</h3>
+      <p class="text-xs text-muted-foreground leading-relaxed">
+        This calculator utilizes the McCulloch coefficient system, which is the official age scaling standard used by USA Powerlifting (USAPL) and other world-class powerlifting organizations to recognize masters accomplishments.
+      </p>
+    </div>
+  </div>
+
+  {/* Methodology & Background */}
+  <div class="space-y-6 text-foreground">
+    <h2 class="text-2xl font-bold text-foreground">How Age-Adjusted Strength Standards Work</h2>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Sarcopenia—the age-related loss of skeletal muscle mass and strength—begins around age 30 but accelerates significantly after age 40. Studies in exercise physiology demonstrate that lifters typically experience a 0.5% to 1.5% decrease in absolute muscle force generation per year.
+    </p>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      To account for this natural decline, sport scientists developed age-scaling formulas. The most widely adopted model is the <strong>McCulloch coefficient system</strong>. Much like the Wilks or DOTS scores normalize bodyweight, the McCulloch multipliers scale standards down as a lifter ages.
+    </p>
+
+    <h3 class="text-lg font-bold text-foreground mt-4">Understanding the Scaling Math</h3>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      The McCulloch coefficients act as offset factors for physical standards. At age 40, the coefficient is 1.000 (no adjustment). At age 50, the coefficient is 0.915, meaning the required weight to reach any standard tier (e.g. Intermediate) is reduced by 8.5%.
+    </p>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Conversely, when calculating a lifter's placement, their actual lift weight is divided by the coefficient to yield their "Open Division equivalent" lift. If a 60-year-old lifter deadlifts 180 kg (McCulloch = 0.810), their lift is evaluated as a 222.2 kg deadlift in open-division standards, reflecting their exceptional relative capacity.
+    </p>
+
+    <h3 class="text-lg font-bold text-foreground mt-6">Safety Tips for Masters Lifters</h3>
+    <p class="text-muted-foreground text-sm leading-relaxed">
+      Training as an older athlete requires a greater focus on recovery and structural integrity:
+    </p>
+    <ol class="list-decimal list-inside text-muted-foreground text-sm space-y-2 pl-2">
+      <li><strong>Manage Joint Stress:</strong> Prioritize warm-ups, progressive joint loading, and correct exercise technique to prevent connective tissue strain.</li>
+      <li><strong>Autoregulate Intensity:</strong> Use subjective markers like RPE and Reps in Reserve (RIR) to adjust loading dynamically on days when joint fatigue or recovery is sub-optimal.</li>
+      <li><strong>Increase Recovery:</strong> Ensure proper protein intake and sleep quality, as muscle tissue remodeling and neural recovery take longer as we age.</li>
+    </ol>
+  </div>
+</CalculatorLayout>
