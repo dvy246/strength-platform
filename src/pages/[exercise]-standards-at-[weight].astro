@@ -43,7 +43,7 @@ const { exercise, bodyweightKg } = Astro.props;
 const bodyweightLb = Math.round(convert.toLb(bodyweightKg));
 const isBwExercise = ['pull-up', 'weighted-pull-up', 'dips', 'weighted-dips'].includes(exercise.id);
 
-const title = `${exercise.name} Standards at ${bodyweightKg}kg (${bodyweightLb} lb) Bodyweight | StrengthChecker`;
+const title = `${exercise.name} Standards at ${bodyweightKg}kg (${bodyweightLb} lb) Bodyweight`;
 const description = `Discover standard ${exercise.name} weights for male and female lifters at ${bodyweightKg} kg (${bodyweightLb} lbs) bodyweight. View raw percentiles and distribution curves.`;
 
 const canonicalPath = `/${exercise.slug}-standards-at-${bodyweightKg}kg`;

@@ -54,8 +54,14 @@ export const GET: APIRoute = () => {
   // Dynamic glossary terms
   const glossaryUrls = glossaryTerms.map(term => `/glossary/${term.slug}`);
 
-  // Combine all URLs
-  const allUrls = [...staticUrls, ...exerciseUrls, ...bodyweightUrls, ...glossaryUrls];
+  const allUrls: string[] = [...staticUrls, ...exerciseUrls, ...bodyweightUrls, ...glossaryUrls];
+
+  // Normalize URL with trailing slash for HTML routes
+  const normalizeUrl = (path: string): string => {
+    if (!path || path === '') return `${domain}/`;
+    const clean = path.startsWith('/') ? path : `/${path}`;
+    return `${domain}${clean.endsWith('/') ? clean : `${clean}/`}`;
+  };
 
   // Generate XML
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
@@ -64,9 +70,9 @@ export const GET: APIRoute = () => {
     .map(
       url => `
   <url>
-    <loc>${domain}${url}</loc>
+    <loc>${normalizeUrl(url)}</loc>
     <changefreq>${url === '' || url.includes('calculator') ? 'weekly' : 'monthly'}</changefreq>
-    <priority>${url === '' ? '1.0' : url.includes('calculator') || url.includes('/strength-standards') && !url.includes('-at-') ? '0.8' : '0.6'}</priority>
+    <priority>${url === '' ? '1.0' : url.includes('calculator') || (url.includes('/strength-standards') && !url.includes('-at-')) ? '0.8' : '0.6'}</priority>
   </url>`
     )
     .join('')}

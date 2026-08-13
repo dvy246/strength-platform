@@ -285,7 +285,7 @@ export const OneRepMax: React.FC<OneRepMaxProps> = ({ initialExerciseId = 'bench
                 </div>
                 <div className="pt-2">
                   <a
-                    href={`/strength-standards/${selectedExercise?.slug}`}
+                    href={`/strength-standards/${selectedExercise?.slug}/`}
                     className="inline-flex items-center text-xs font-bold text-primary hover:underline hover:text-primary/95 group"
                   >
                     <span>View full {selectedExercise?.name} standards tables</span>

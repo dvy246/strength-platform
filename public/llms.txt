@@ -1,0 +1,34 @@
+# StrengthChecker (strengthchecker.com)
+
+> StrengthChecker is a fast, scientifically grounded, ad-free strength intelligence and biometric analytics platform. It provides empirical strength standards, 1-Repetition Maximum (1RM) estimators, powerlifting coefficient scoring (DOTS, Wilks 2020, IPF GL), body composition metrics, and cardiovascular VO2 Max testing protocols.
+
+## Core Capabilities & Tools
+
+### Strength Standards & Percentile Rankings
+- **Strength Standards Directory**: https://strengthchecker.com/strength-standards/
+- **Methodology**: Evaluated via log-normal probability distribution curves modeled on competitive drug-tested powerlifting meets and athletic survey datasets.
+- **Tiers**: Beginner (top 95%), Novice (top 85%), Intermediate (top 50%), Advanced (top 20%), Elite (top 5%).
+- **Covered Exercises**: Bench Press, Back Squat, Deadlift, Overhead Press, Pull-Ups, Dips, Incline Bench Press, Incline Dumbbell Press, Dumbbell Bench Press, Dumbbell Curl, Dumbbell Lateral Raise, Barbell Curl, Lat Pulldown, Cable Rows, Leg Press, Leg Extension, Triceps Pushdown, Weighted Sit-Ups.
+
+### Powerlifting & Composite Scoring
+- **Strength Index Calculator**: https://strengthchecker.com/calculators/strength-index/ (Composite 0–100 score normalized for bodyweight, age, and gender).
+- **Powerlifting Wilks & DOTS Calculator**: https://strengthchecker.com/calculators/wilks-calculator/ (DOTS, Wilks 2020, IPF GL points).
+- **DOTS vs Wilks vs IPF GL Comparison**: https://strengthchecker.com/compare/dots-vs-wilks-vs-ipf-gl/
+- **Strength Ratio & Symmetry Checker**: https://strengthchecker.com/calculators/strength-ratio-checker/
+
+### 1-Repetition Maximum (1RM) Estimators
+- **One Rep Max Calculator**: https://strengthchecker.com/calculators/one-rep-max-calculator/
+- **Bench Press 1RM**: https://strengthchecker.com/calculators/bench-press-one-rep-max-calculator/
+- **Squat 1RM**: https://strengthchecker.com/calculators/squat-one-rep-max-calculator/
+- **Deadlift 1RM**: https://strengthchecker.com/calculators/deadlift-one-rep-max-calculator/
+- **Pull-Ups 1RM**: https://strengthchecker.com/calculators/pull-ups-one-rep-max-calculator/
+- **Supported Formulas**: Epley (1985), Brzycki (1993), Lander (1985), Lombardi (1989), Mayhew et al. (1992), O'Conner et al. (1989), Wathan (1994).
+
+### Body Composition & Cardiovascular Analytics
+- **Body Fat Percentage Calculator**: https://strengthchecker.com/calculators/body-fat-calculator/ (US Navy Tape Method).
+- **Ideal Bodyweight Calculator**: https://strengthchecker.com/calculators/ideal-bodyweight/ (Devine, Robinson, Miller, Hamwi).
+- **VO2 Max Aerobic Calculator**: https://strengthchecker.com/calculators/vo2-max-calculator/ (Cooper 12-Min, Rockport 1-Mile Walk, 1.5-Mile Run, Heart Rate Ratio).
+
+## Mathematical Foundations & Methodology
+- Detailed documentation of formulas, regression parameters, and references: https://strengthchecker.com/methodology/
+- Full AI documentation manifest: https://strengthchecker.com/llms-full.txt

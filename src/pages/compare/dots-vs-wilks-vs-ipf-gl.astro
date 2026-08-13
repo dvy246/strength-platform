@@ -6,7 +6,7 @@ import Section from '@/components/layout/Section.astro';
 import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
 import StructuredData from '@/components/seo/StructuredData.astro';
 import { PowerliftingScoreComparison } from '@/components/calculators/PowerliftingScoreComparison';
-import { buildWebApplicationSchema } from '@/lib/seo/schema';
+import { buildWebApplicationSchema, buildArticleSchema } from '@/lib/seo/schema';
 import { buildCanonical } from '@/lib/seo/meta';
 
 const canonicalUrl = buildCanonical('/compare/dots-vs-wilks-vs-ipf-gl');
@@ -15,6 +15,14 @@ const webAppSchema = buildWebApplicationSchema(
   'DOTS vs Wilks vs IPF GL Calculator',
   'Calculate and compare your powerlifting score across all three major coefficient systems — DOTS, Wilks, and IPF GL. Understand which formula your federation uses and how they differ.',
   canonicalUrl
+);
+
+const articleSchema = buildArticleSchema(
+  'DOTS vs Wilks vs IPF GL: Powerlifting Formulas Compared',
+  'A technical comparison of DOTS, Wilks 2020, and IPF GL points formulas. Learn how each coefficient models bodyweight and scales athletic performance.',
+  '/compare/dots-vs-wilks-vs-ipf-gl',
+  '2025-01-20',
+  '2026-08-14'
 );
 
 const faqSchema = {
@@ -79,11 +87,11 @@ const breadcrumbItems = [
 ---
 
 <PageLayout
-  title="DOTS vs Wilks vs IPF GL Calculator | Compare Powerlifting Scores"
-  description="Calculate and compare your powerlifting score across all three major coefficient systems — DOTS, Wilks, and IPF GL. Understand which formula your federation uses and how they differ."
+  title="DOTS vs Wilks vs IPF GL Calculator (Formula Comparison)"
+  description="Compare your powerlifting total across DOTS, Wilks 2020, and IPF GL coefficient systems simultaneously. Learn mathematical differences and federation standards."
   canonicalPath="/compare/dots-vs-wilks-vs-ipf-gl"
 >
-  <StructuredData slot="head" schema={[webAppSchema, faqSchema]} />
+  <StructuredData slot="head" schema={[webAppSchema, articleSchema, faqSchema]} />
 
   <Section class="pt-6 md:pt-10">
     <Container>

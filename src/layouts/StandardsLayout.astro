@@ -5,7 +5,7 @@ import Container from '@/components/layout/Container.astro';
 import Section from '@/components/layout/Section.astro';
 import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
 import StructuredData from '@/components/seo/StructuredData.astro';
-import { buildWebApplicationSchema } from '@/lib/seo/schema';
+import { buildWebApplicationSchema, buildDatasetSchema } from '@/lib/seo/schema';
 import { buildCanonical } from '@/lib/seo/meta';
 
 import { ExerciseImage } from '@/components/standards/ExerciseImage';
@@ -26,7 +26,7 @@ interface Props {
 const { exercise, title, description, canonicalPath, ogImagePath } = Astro.props;
 
 const fallbackTitle = `${exercise.name} Standards & Strength Percentiles | StrengthChecker`;
-const fallbackDesc = `Discover Bench Press strength standards for male and female lifters. Find your strength level, 1RM percentiles, and bodyweight ratios.`;
+const fallbackDesc = `Discover standard ${exercise.name} weights for male and female lifters across all bodyweights. Calculate your gym level and percentile rank.`;
 
 const currentPath = canonicalPath || `/strength-standards/${exercise.slug}`;
 const absoluteUrl = buildCanonical(currentPath);
@@ -34,6 +34,12 @@ const webAppSchema = buildWebApplicationSchema(
   `${exercise.name} Standards Calculator`,
   description || fallbackDesc,
   absoluteUrl
+);
+
+const datasetSchema = buildDatasetSchema(
+  `${exercise.name} Strength Standards Dataset`,
+  `Statistical log-normal distribution strength benchmarks for ${exercise.name} categorized by bodyweight, gender, and experience tiers.`,
+  currentPath
 );
 
 const breadcrumbItems = [
@@ -48,7 +54,7 @@ const breadcrumbItems = [
   canonicalPath={currentPath}
   ogImagePath={ogImagePath}
 >
-  <StructuredData slot="head" schema={webAppSchema} />
+  <StructuredData slot="head" schema={[webAppSchema, datasetSchema]} />
 
   <Section class="pt-6 md:pt-10">
     <Container>

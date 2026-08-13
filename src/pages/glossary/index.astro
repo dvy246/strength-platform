@@ -7,6 +7,8 @@ import Breadcrumbs from '@/components/seo/Breadcrumbs.astro';
 import StructuredData from '@/components/seo/StructuredData.astro';
 import { glossaryTerms } from '@/data/glossary';
 
+import { buildCanonical } from '@/lib/seo/meta';
+
 const canonicalPath = '/glossary';
 
 // ItemList schema of all glossary terms
@@ -18,7 +20,7 @@ const itemListSchema = {
   'itemListElement': glossaryTerms.map((term, index) => ({
     '@type': 'ListItem',
     'position': index + 1,
-    'url': `https://strengthchecker.com/glossary/${term.slug}`,
+    'url': buildCanonical(`/glossary/${term.slug}`),
     'name': term.term
   }))
 };
@@ -29,7 +31,7 @@ const breadcrumbItems = [
 ---
 
 <PageLayout
-  title="Strength Training Glossary: Essential Terms Defined | StrengthChecker"
+  title="Strength Training Glossary — Essential Terms Defined"
   description="Plain-English definitions of essential strength training terms — 1RM, RPE, RIR, DOTS, Wilks, progressive overload, and more. Reference guide for lifters."
   canonicalPath={canonicalPath}
 >

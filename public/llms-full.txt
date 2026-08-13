@@ -1,0 +1,76 @@
+# StrengthChecker — Technical Specification & Calculation Manifest
+
+## 1. One-Repetition Maximum (1RM) Estimations
+
+Given a lifted weight \(w\) in kilograms or pounds and completed repetitions \(r\) (valid for \(1 \le r \le 12\)):
+
+- **Epley (1985)**:
+  \[ 1\text{RM} = w \cdot \left(1 + \frac{r}{30}\right) \]
+- **Brzycki (1993)**:
+  \[ 1\text{RM} = w \cdot \frac{36}{37 - r} \]
+- **Lander (1985)**:
+  \[ 1\text{RM} = \frac{100 \cdot w}{101.3 - 2.67123 \cdot r} \]
+- **Lombardi (1989)**:
+  \[ 1\text{RM} = w \cdot r^{0.10} \]
+- **Mayhew et al. (1992)**:
+  \[ 1\text{RM} = \frac{100 \cdot w}{52.2 + 41.9 \cdot e^{-0.055 \cdot r}} \]
+- **O'Conner et al. (1989)**:
+  \[ 1\text{RM} = w \cdot (1 + 0.025 \cdot r) \]
+- **Wathan (1994)**:
+  \[ 1\text{RM} = \frac{100 \cdot w}{48.8 + 53.8 \cdot e^{-0.075 \cdot r}} \]
+
+---
+
+## 2. Powerlifting Normalization Coefficients
+
+### DOTS (Dynamic Object Total Score)
+Evaluates lifter efficiency by scaling three-lift total \(T\) relative to bodyweight \(BW\) (in kg):
+\[ \text{DOTS} = \frac{500 \cdot T}{a_0 + a_1 \cdot BW + a_2 \cdot BW^2 + a_3 \cdot BW^3 + a_4 \cdot BW^4} \]
+
+- **Male Parameters**:
+  \(a_0 = -307.272\), \(a_1 = 24.3724\), \(a_2 = -0.17094\), \(a_3 = 0.000676\), \(a_4 = -0.00000108\)
+- **Female Parameters**:
+  \(a_0 = -57.96288\), \(a_1 = 13.6175\), \(a_2 = -0.112665\), \(a_3 = 0.000515856\), \(a_4 = -0.0000010706\)
+
+### IPF GL Formula
+\[ \text{IPF GL Points} = 100 \cdot \frac{T}{A - B \cdot e^{-C \cdot BW}} \]
+- **Raw Male**: \(A = 1199.72839\), \(B = 1025.18162\), \(C = 0.00921\)
+- **Raw Female**: \(A = 610.32796\), \(B = 1045.59282\), \(C = 0.03048\)
+
+---
+
+## 3. Strength Standards Statistical Distribution
+
+Standards are computed using a continuous log-normal distribution model:
+\[ \ln\left(\frac{1\text{RM}}{BW}\right) \sim \mathcal{N}\left(\mu(BW), \sigma(BW)^2\right) \]
+Where:
+\[ \mu(BW) = a_0 + a_1 \cdot \ln(BW) \]
+\[ \sigma(BW) = b_0 + b_1 \cdot \ln(BW) \]
+
+Percentile score \(P\) is evaluated via the standard cumulative distribution function:
+\[ z = \frac{\ln(1\text{RM} / BW) - \mu(BW)}{\sigma(BW)}, \quad P = \Phi(z) \]
+
+---
+
+## 4. Cardiovascular & VO2 Max Testing Protocols
+
+- **Cooper 12-Minute Test (1968)**:
+  \[ \text{VO}_2\text{ Max (ml/kg/min)} = \frac{d_{\text{meters}} - 504.9}{44.73} \]
+- **Heart Rate Ratio (Uth et al., 2004)**:
+  \[ \text{VO}_2\text{ Max} \approx 15.3 \cdot \frac{\text{HR}_{\max}}{\text{HR}_{\text{rest}}} \]
+- **Rockport 1-Mile Walk (Kline et al., 1987)**:
+  \[ \text{VO}_2\text{ Max} = 132.853 - (0.0769 \cdot \text{weight}_{\text{lb}}) - (0.3877 \cdot \text{age}) + (6.315 \cdot \text{gender}_{\text{male}=1,\text{female}=0}) - (3.2649 \cdot t_{\text{minutes}}) - (0.1565 \cdot \text{HR}_{\text{end}}) \]
+- **1.5-Mile Run (George et al., 1993)**:
+  \[ \text{VO}_2\text{ Max} = 88.02 - (0.1656 \cdot \text{weight}_{\text{kg}}) - (2.76 \cdot t_{\text{minutes}}) + (3.716 \cdot \text{gender}_{\text{male}=1,\text{female}=0}) \]
+
+---
+
+## 5. Website Structure & Endpoints
+
+- Primary Hub: https://strengthchecker.com/
+- Strength Standards: https://strengthchecker.com/strength-standards/
+- All Calculators: https://strengthchecker.com/calculators/
+- Scientific Methodology: https://strengthchecker.com/methodology/
+- Contact & Support: https://strengthchecker.com/contact/
+- Legal Terms: https://strengthchecker.com/terms/
+- Privacy: https://strengthchecker.com/privacy/
