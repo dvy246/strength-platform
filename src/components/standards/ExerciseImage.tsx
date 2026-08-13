@@ -415,6 +415,48 @@ export const ExerciseImage: React.FC<ExerciseImageProps> = ({ exerciseId, classN
         </svg>
       );
 
+    case 'dumbbell-lateral-raise':
+      return (
+        <svg className={`w-full h-full text-foreground ${className}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">
+          {renderDefs('dumbbell-lateral-raise')}
+          <rect x="5" y="5" width="90" height="90" rx="10" fill="url(#grid-dumbbell-lateral-raise)" stroke="var(--border)" strokeWidth="1" />
+          <circle cx="50" cy="35" r="26" fill="var(--primary)" opacity="0.04" filter="url(#glow-dumbbell-lateral-raise)" />
+
+          {/* Lifter Body Silhouette */}
+          <circle cx="50" cy="20" r="4.5" fill="#ebb075" stroke="#232f3e" strokeWidth="2" />
+          {/* Torso */}
+          <path d="M 43 27 L 57 27 L 55 56 L 45 56 Z" fill="#3b82f6" stroke="#232f3e" strokeWidth="2" />
+          {/* Legs */}
+          <line x1="46" y1="56" x2="43" y2="86" stroke="#232f3e" strokeWidth="4" strokeLinecap="round" />
+          <line x1="54" y1="56" x2="57" y2="86" stroke="#232f3e" strokeWidth="4" strokeLinecap="round" />
+          
+          {/* Arms Raised to Shoulder Height */}
+          <path d="M 43 29 L 26 31 L 14 33" fill="none" stroke="#ebb075" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 43 29 L 26 31 L 14 33" fill="none" stroke="#232f3e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+
+          <path d="M 57 29 L 74 31 L 86 33" fill="none" stroke="#ebb075" strokeWidth="4.5" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M 57 29 L 74 31 L 86 33" fill="none" stroke="#232f3e" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+
+          {/* Left Dumbbell */}
+          <line x1="14" y1="25" x2="14" y2="41" stroke="#232f3e" strokeWidth="2.5" strokeLinecap="round" />
+          <rect x="10" y="23" width="8" height="3" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.2" />
+          <rect x="10" y="40" width="8" height="3" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.2" />
+
+          {/* Right Dumbbell */}
+          <line x1="86" y1="25" x2="86" y2="41" stroke="#232f3e" strokeWidth="2.5" strokeLinecap="round" />
+          <rect x="82" y="23" width="8" height="3" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.2" />
+          <rect x="82" y="40" width="8" height="3" rx="1" fill="#929ca6" stroke="#232f3e" strokeWidth="1.2" />
+
+          {/* Target Lateral Deltoids Glowing Highlight */}
+          <circle cx="41" cy="29" r="4.5" fill="none" stroke="url(#grad-dumbbell-lateral-raise)" strokeWidth="4" filter="url(#glow-dumbbell-lateral-raise)" />
+          <circle cx="59" cy="29" r="4.5" fill="none" stroke="url(#grad-dumbbell-lateral-raise)" strokeWidth="4" filter="url(#glow-dumbbell-lateral-raise)" />
+
+          {/* Motion Arrows */}
+          <path d="M 28 54 Q 16 48 14 37" fill="none" stroke="var(--primary)" strokeWidth="1.2" strokeDasharray="2 2" markerEnd="url(#arrow-dumbbell-lateral-raise)" />
+          <path d="M 72 54 Q 84 48 86 37" fill="none" stroke="var(--primary)" strokeWidth="1.2" strokeDasharray="2 2" markerEnd="url(#arrow-dumbbell-lateral-raise)" />
+        </svg>
+      );
+
     default:
       return (
         <svg className={`w-full h-full text-foreground ${className}`} viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="1.5">

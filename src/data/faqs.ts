@@ -436,3 +436,22 @@ export const idealWeightFAQs: FAQItem[] = [
     answer: "Yes. Losing excess body fat while maintaining muscle mass increases your lift-to-bodyweight ratios and improves your relative strength score."
   }
 ];
+
+export const lateralRaiseFAQs: FAQItem[] = [
+  {
+    question: "What is a good weight for dumbbell lateral raises?",
+    answer: "For an average male (around 80kg / 176 lbs), an intermediate dumbbell lateral raise standard is approximately 12–14 kg (26–31 lbs) per hand for strict reps. For an average female (around 60kg / 132 lbs), an intermediate standard is 5–7 kg (11–15 lbs) per hand."
+  },
+  {
+    question: "How are lateral raise strength standards calculated?",
+    answer: "Standards represent the weight of a single dumbbell lifted with strict form (slight elbow bend, no excessive torso swing) to shoulder height, evaluated using log-normal probability models against athletic training populations."
+  },
+  {
+    question: "Why are dumbbell lateral raises harder to progress than compound presses?",
+    answer: "Lateral raises isolate the lateral deltoid with a long lever arm (arm extended outward). Because the moment arm is long and the muscle is relatively small, small 1–2 kg increases represent large percentage increases in torque required at the shoulder joint."
+  },
+  {
+    question: "What muscles do dumbbell lateral raises work?",
+    answer: "The primary muscle targeted is the lateral deltoid (side delt), responsible for shoulder abduction and shoulder capping/width. Secondary stabilizers include the anterior deltoid, supraspinatus, upper trapezius, and serratus anterior."
+  }
+];

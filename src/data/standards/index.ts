@@ -16,6 +16,7 @@ import { dumbbellCurlStandards } from './dumbbell-curl';
 import { tricepsPushdownStandards } from './triceps-pushdown';
 import { legExtensionStandards } from './leg-extension';
 import { cableHorizontalRowsStandards } from './cable-horizontal-rows';
+import { dumbbellLateralRaiseStandards } from './dumbbell-lateral-raise';
 import type { ExerciseStandardsData } from './types';
 
 export const allStandards: Record<string, ExerciseStandardsData> = {
@@ -37,7 +38,8 @@ export const allStandards: Record<string, ExerciseStandardsData> = {
   'dumbbell-curl': dumbbellCurlStandards,
   'triceps-pushdown': tricepsPushdownStandards,
   'leg-extension': legExtensionStandards,
-  'cable-horizontal-rows': cableHorizontalRowsStandards
+  'cable-horizontal-rows': cableHorizontalRowsStandards,
+  'dumbbell-lateral-raise': dumbbellLateralRaiseStandards
 };
 
 

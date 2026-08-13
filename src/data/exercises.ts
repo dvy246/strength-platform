@@ -84,7 +84,7 @@ export const exercises: Exercise[] = [
       'Press the bar in a straight line, pulling your head back slightly to clear the bar.',
       'Lock out the bar directly overhead with your head pushed forward.'
     ],
-    relatedExercises: ['bench-press', 'dips'],
+    relatedExercises: ['bench-press', 'dips', 'dumbbell-lateral-raise'],
     bodyweightRange: { min: 40, max: 140 }
   },
   {
@@ -345,6 +345,25 @@ export const exercises: Exercise[] = [
       'Extend your arms completely on the return, letting your shoulders stretch forward slightly.'
     ],
     relatedExercises: ['deadlift', 'pull-up', 'lat-pulldown'],
+    bodyweightRange: { min: 40, max: 140 }
+  },
+  {
+    id: 'dumbbell-lateral-raise',
+    slug: 'dumbbell-lateral-raise',
+    name: 'Dumbbell Lateral Raise',
+    category: 'barbell',
+    muscleGroup: 'Shoulders',
+    isCompound: false,
+    coverageWeight: 0,
+    description: 'An isolation exercise targeting the lateral deltoids to build shoulder width, upper-body taper, and capping (weight entered is per single dumbbell).',
+    tips: [
+      'Stand with feet shoulder-width apart, holding dumbbells at your sides with a neutral grip.',
+      'Keep a slight bend in your elbows and lean your torso slightly forward.',
+      'Raise the dumbbells outward and up until your elbows reach shoulder height.',
+      'Lead with your elbows and avoid using momentum or shrugging your traps.',
+      'Lower the weights under control back to the starting position.'
+    ],
+    relatedExercises: ['overhead-press', 'dumbbell-bench-press'],
     bodyweightRange: { min: 40, max: 140 }
   }
 ];
