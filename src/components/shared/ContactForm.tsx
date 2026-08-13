@@ -36,7 +36,7 @@ export function ContactForm() {
 
   const buildMailtoUrl = () => {
     const categoryLabel = CATEGORIES.find((c) => c.id === category)?.label || "Inquiry"
-    const fullSubject = `[${categoryLabel}] ${subject.trim() || "StrengthAtlas Inquiry"}`
+    const fullSubject = `[${categoryLabel}] ${subject.trim() || "StrengthChecker Inquiry"}`
     const bodyContent = `Name: ${name}
 Email: ${email}
 Category: ${categoryLabel}
@@ -45,7 +45,7 @@ Message:
 ${message}
 
 ---
-Sent via StrengthAtlas Contact Form`
+Sent via StrengthChecker Contact Form`
 
     return `mailto:${supportEmail}?subject=${encodeURIComponent(fullSubject)}&body=${encodeURIComponent(bodyContent)}`
   }

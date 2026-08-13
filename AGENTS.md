@@ -1,6 +1,6 @@
 # AGENTS.md — Strength Intelligence Platform
 
-Welcome to the **Strength Intelligence Platform** (working title: *StrengthAtlas* / *Strength Standards*). This document serves as the primary technical specification, architectural guide, and operational runbook for AI agents and human contributors working across this codebase.
+Welcome to **StrengthChecker** ([strengthchecker.com](https://strengthchecker.com)). This document serves as the primary technical specification, architectural guide, and operational runbook for AI agents and human contributors working across this codebase.
 
 ---
 
