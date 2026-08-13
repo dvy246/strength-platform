@@ -25,6 +25,7 @@ export interface GapResult {
   timeline: {
     formattedRange: string;
     isCustom: boolean;
+    userRate?: number;
   };
 }
 
@@ -95,6 +96,7 @@ export function calculateStrengthGap(
   // Calculate timeline
   let formattedRange = defaultTimelines[level] || 'Ongoing progression';
   let isCustom = false;
+  let userRate: number | undefined;
 
   if (history && history.length >= 1) {
     const historyPoints = history
@@ -128,6 +130,7 @@ export function calculateStrengthGap(
         // Keep custom projections reasonable: between 0.5 months and 4 years (48 months)
         if (monthsNeeded >= 0.5 && monthsNeeded <= 48) {
           isCustom = true;
+          userRate = Math.round(pointsPerDay * 30.4375 * 10) / 10;
           const minMonths = Math.max(1, Math.round(monthsNeeded * 0.8));
           const maxMonths = Math.round(monthsNeeded * 1.2);
 
@@ -147,7 +150,8 @@ export function calculateStrengthGap(
     gaps,
     timeline: {
       formattedRange,
-      isCustom
+      isCustom,
+      userRate
     }
   };
 }

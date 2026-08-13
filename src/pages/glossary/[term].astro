@@ -80,7 +80,7 @@ const getRelatedTermName = (slug: string) => {
             </div>
 
             <div class="text-muted-foreground text-sm md:text-base leading-relaxed space-y-4">
-              {termData.fullDefinition.split('. ').map((sentence, idx, arr) => {
+              {termData.fullDefinition.split('. ').map((_, idx, arr) => {
                 // Return paragraphs for grouping sentences together for readability
                 if (idx % 3 === 0 && idx < arr.length - 1) {
                   return (

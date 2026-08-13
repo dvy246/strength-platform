@@ -1,8 +1,8 @@
 // src/components/calculators/AgeAdjustedStandards.tsx
 import React, { useEffect, useState, useRef } from 'react';
-import { exercises, type Exercise } from '@/data/exercises';
-import { calculateLiftPercentile, calculateWeightForScore, getLevelLabel, type StrengthLevel } from '@/lib/calculations/percentiles';
-import { getMcCullochCoefficient, getAgeAdjustedWeight } from '@/data/age-factors';
+import { exercises } from '@/data/exercises';
+import { calculateLiftPercentile, calculateWeightForScore, getLevelLabel } from '@/lib/calculations/percentiles';
+import { getMcCullochCoefficient } from '@/data/age-factors';
 import { getStoredUnit, setStoredUnit, convert, type Unit } from '@/lib/formatting/units';
 import { UnitDropdown } from '@/components/shared/UnitDropdown';
 import { GenderSelector } from '../shared/GenderSelector';
